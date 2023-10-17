@@ -1,0 +1,72 @@
+.root {
+	-fx-background-color: black;
+}
+
+#btnLogin {
+	-fx-background-color: #19ff3c;
+	-fx-cursor: hand;
+}
+
+#btnLogin:hover {
+	-fx-background-color: yellow;
+}
+
+#imageViewBackground {
+	-fx-background-radius: 80.0 60.0 40.0 20.0;
+}
+
+#FromImage {
+	-fx-background-color: #1E1922;
+}
+
+#txtUser,
+#txtPass,
+#txtUserForgot,
+#txtAuth,
+#txtPassForgot {
+	-fx-background-color: none;
+	-fx-border-color: white;
+	-fx-border-width: 1.75px;
+	-fx-border-radius: 10.0px;
+}
+
+#txtUserForgot:focused,
+#txtUser:focused {
+	-fx-background-color: white;
+	-fx-border-radius: 10.0px;
+	-fx-background-color: linear-gradient(to bottom, derive(-fx-text-box-border, -10.0%), -fx-text-box-border),
+    linear-gradient(from 0.0px 0.0px to 0.0px 5.0px, derive(-fx-control-inner-background, -9.0%), -fx-control-inner-background);
+	-fx-background-insets: 0.0, 1.0;
+	-fx-background-radius: 10.0px;
+}
+
+#txtPassForgot:focused,
+#txtAuth:focused,
+#txtPass:focused {
+	-fx-background-color: white;
+	-fx-border-radius: 10.0px;
+	-fx-background-color: linear-gradient(to bottom, derive(-fx-text-box-border, -10.0%), -fx-text-box-border),
+    linear-gradient(from 0.0px 0.0px to 0.0px 5.0px, derive(-fx-control-inner-background, -9.0%), -fx-control-inner-background);
+	-fx-background-insets: 0.0, 1.0;
+	-fx-background-radius: 10.0px;
+}
+
+#txtAuth:focused,
+#txtPassForgot:focused, 
+#txtUserForgot:focused {
+	-fx-text-fill: black;
+}
+
+#forgotPassword:hover {
+	-fx-text-fill: yellow;
+}
+
+#recHome:hover,
+#recStaff:hover,
+#recService:hover,
+#recProduct:hover,
+#recRevenue:hover,
+#recBill:hover {
+	-fx-background-color: white;
+}
+

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1368.0" stylesheets="@styleLogin.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.LoginController">
+   <children>
+      <ImageView fx:id="imageViewBackground" fitHeight="698.0" fitWidth="984.0" layoutX="42.0" layoutY="36.0" pickOnBounds="true" style="-fx-border-radius: 30px;">
+         <image>
+            <Image url="@backgroundLogin.jpg" />
+         </image>
+      </ImageView>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="579.0" layoutX="876.0" layoutY="92.0" stroke="BLACK" strokeType="INSIDE" width="484.0" />
+      <ImageView fx:id="FromImage" fitHeight="579.0" fitWidth="474.0" layoutX="876.0" layoutY="92.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" smooth="false">
+         <image>
+            <Image url="@backgroundFrom.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="1002.0" layoutY="152.0" text="Đăng nhập" textFill="WHITE">
+         <font>
+            <Font name="Roboto Medium" size="50.0" />
+         </font>
+      </Label>
+      <Label layoutX="972.0" layoutY="234.0" text="How to i get started lorem ipsum dolor at?" textFill="WHITE">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtUser" layoutX="936.0" layoutY="295.0" prefHeight="52.0" prefWidth="364.0" promptText="Tên đăng nhập" stylesheets="@styleLogin.css">
+         <font>
+            <Font size="17.0" />
+         </font></TextField>
+      <Button fx:id="btnLogin" layoutX="1055.0" layoutY="462.0" mnemonicParsing="false" onAction="#LoginEvent" prefHeight="52.0" prefWidth="125.0" style="-fx-background-radius: 10px;" stylesheets="@styleLogin.css" text="Login Now">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <PasswordField fx:id="txtPass" layoutX="940.0" layoutY="372.0" prefHeight="52.0" prefWidth="364.0" promptText="Mật khẩu" stylesheets="@styleLogin.css">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </PasswordField>
+      <Rectangle fx:id="rectangelTitle" arcHeight="40.0" arcWidth="40.0" height="94.0" layoutX="42.0" layoutY="586.0" stroke="#ffffff33" strokeType="INSIDE" strokeWidth="0.0" styleClass="styleLogin" width="298.0">
+         <fill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0" opacity="0.20000000298023224" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="0.4983333349227905" blue="0.30000001192092896" opacity="0.5" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill></Rectangle>
+      <Label fx:id="forgotPassword" alignment="CENTER" contentDisplay="CENTER" layoutX="1048.0" layoutY="558.0" onMouseClicked="#openForgotPassword" prefHeight="27.0" prefWidth="155.0" stylesheets="@styleLogin.css" text="Quên mật khẩu" textAlignment="CENTER" textFill="#fcf8f8" textOverrun="LEADING_ELLIPSIS">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Line endX="-145.4000244140625" endY="13.399993896484375" layoutX="1140.0" layoutY="572.0" startX="108.199951171875" startY="13.399993896484375" stroke="#c9c9c9" />
+   </children>
+</AnchorPane>

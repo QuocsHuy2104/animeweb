@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="399.0" prefWidth="805.0" style="-fx-background-color: #333;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ForgotPassController">
+   <children>
+      <ImageView fx:id="imgView" fitHeight="335.0" fitWidth="495.0" layoutX="40.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@backgroundLogin.jpg" />
+         </image>
+      </ImageView>
+      <Button fx:id="btnAuth" alignment="CENTER" layoutX="609.0" layoutY="300.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#validate" prefHeight="34.0" prefWidth="117.0" text="Xác nhận">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <TextField fx:id="txtUserForgot" layoutX="550.0" layoutY="94.0" prefHeight="41.0" prefWidth="234.0" promptText="Tên đăng nhập" style="-fx-text-inner-color: white;" stylesheets="@styleLogin.css">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </TextField>
+      <PasswordField fx:id="txtPassForgot" layoutX="550.0" layoutY="164.0" prefHeight="42.0" prefWidth="234.0" promptText="Mật khẩu mới" style="-fx-text-inner-color: white;" stylesheets="@styleLogin.css">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </PasswordField>
+      <PasswordField fx:id="txtAuth" layoutX="550.0" layoutY="234.0" prefHeight="42.0" prefWidth="234.0" promptText="Mật khẩu mới" style="-fx-text-inner-color: white;" stylesheets="@styleLogin.css">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </PasswordField>
+      <Label fx:id="lblTitle" alignment="CENTER" layoutX="536.0" layoutY="32.0" prefHeight="58.0" prefWidth="262.0" text="Quên mật khẩu" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

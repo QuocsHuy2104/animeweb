@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="399.0" prefWidth="805.0" style="-fx-background-color: #333;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="335.0" fitWidth="495.0" layoutX="33.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@backgroundLogin.jpg" />
+         </image>
+      </ImageView>
+      <Label alignment="CENTER" layoutX="536.0" layoutY="32.0" prefHeight="58.0" prefWidth="262.0" text="Đổi Mật Khẩu" textAlignment="CENTER" textFill="WHITE">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtUser" layoutX="537.0" layoutY="90.0" prefHeight="31.0" prefWidth="261.0" promptText="Tên đăng nhập">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </TextField>
+      <PasswordField fx:id="txtCurrentPass" layoutX="536.0" layoutY="130.0" prefHeight="31.0" prefWidth="261.0" promptText="Mật khẩu">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </PasswordField>
+      <PasswordField fx:id="txtNewPass" layoutX="536.0" layoutY="170.0" prefHeight="31.0" prefWidth="262.0" promptText="Mật khẩu mới">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </PasswordField>
+      <PasswordField fx:id="txtAgainPass" layoutX="536.0" layoutY="210.0" prefHeight="31.0" prefWidth="262.0" promptText="Xác nhận mật khẩu">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </PasswordField>
+      <Button fx:id="btnOK" alignment="CENTER" layoutX="611.0" layoutY="278.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="110.0" text="OK">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+   </children>
+</AnchorPane>
