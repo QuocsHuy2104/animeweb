@@ -1,0 +1,20 @@
+.root {
+	-fx-background-color: black;
+}
+
+#btnLogin {
+	-fx-background-color: #19ff3c;
+	-fx-cursor: hand;
+}
+
+#btnLogin:hover {
+	-fx-background-color: yellow;
+}
+
+#imageViewBackground {
+	-fx-background-radius: 80 60 40 20;
+}
+
+#FromImage {
+	-fx-background-color: #1E1922;
+}
