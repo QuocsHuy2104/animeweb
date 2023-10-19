@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="273.0" prefWidth="722.0" style="-fx-background-color: #333;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AboutControler">
+   <children>
+      <ImageView fitHeight="198.0" fitWidth="206.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../image/logo.png" />
+         </image>
+      </ImageView>
+      <Text fill="WHITE" layoutX="214.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Studio Application sản phẩm này dành cho các cá nhân và doanh nghiệp muốn làm về studio ." />
+      <Text fill="WHITE" layoutX="214.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Phiên bản: 2023-10 (1.0.0)" />
+      <Text fill="WHITE" layoutX="214.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Id bản dựng: 20230608-1333" />
+      <Text fill="WHITE" layoutX="214.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="(c) Sản phẩm này thuộc bản quyền của Group ARB." />
+      <Text fill="WHITE" layoutX="214.0" layoutY="171.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sản phẩm được phát triển bởi chúng tôi." />
+      <Button fx:id="btnClose" alignment="CENTER" layoutX="614.0" layoutY="233.0" mnemonicParsing="false" onAction="#close" prefHeight="33.0" prefWidth="98.0" style="-fx-background-color: nan; -fx-border-color: #fff; -fx-border-radius: 10px;" text="Close" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Text layoutX="15.0" layoutY="254.0" stroke="#f70f0f" strokeType="OUTSIDE" strokeWidth="0.0" text="Information: 0398948675">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <fill>
+            <LinearGradient endX="0.9053030303030303" endY="1.0" startX="0.09090909903699704" startY="0.424242453141646">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.9684210419654846" green="0.1291228085756302" blue="0.8984795212745667" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.2346978485584259" green="0.9052631855010986" blue="0.7711501121520996" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Text>
+   </children>
+</AnchorPane>

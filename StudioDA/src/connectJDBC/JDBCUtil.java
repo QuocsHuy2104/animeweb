@@ -9,7 +9,7 @@ public class JDBCUtil {
 		Connection conn = null;
 
 		String url = "jdbc:sqlserver://LAPTOP-DTHD\\TESTSERVER:1433;"
-				+ "user=sa;password=0398948675;databaseName=Studio;encrypt=false";
+				+ "user=sa;password=0398948675;databaseName=STUDIO;encrypt=false";
 
 		try {
 			conn = DriverManager.getConnection(url);
