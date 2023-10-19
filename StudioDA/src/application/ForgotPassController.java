@@ -1,5 +1,7 @@
 package application;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -37,6 +39,7 @@ public class ForgotPassController {
 			txtUserForgot.setStyle("-fx-border-color: white ; -fx-border-width: 2px ; -fx-text-inner-color: white;");
 			txtPassForgot.setStyle("-fx-border-color: white ; -fx-border-width: 2px ; -fx-text-inner-color: white;");
 			txtAuth.setStyle("-fx-border-color: white ; -fx-border-width: 2px ; -fx-text-inner-color: white;");
+			return;
 		}
 		
 		if (txtUserForgot.getText().equals("")) {
@@ -59,48 +62,57 @@ public class ForgotPassController {
 			txtAuth.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;-fx-text-inner-color: white;");
 		}
 		
-//		Connection conn = JDBCUtil.getConnection();
-//		try {
-//			PreparedStatement pst = conn.prepareStatement("select * from login where username = ?");
-//			pst.setString(1, txtUserForgot.getText());
-//			ResultSet rs = pst.executeQuery();
-//			while (rs.next()) {
-//				if (!txtUserForgot.getText().equals(rs.getString("username"))) {
-//					lblError.setText("Tên đăng nhập không tồn tại");
-//					return;
-//				}
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("select manv from nhanvien");
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
 				
-//				if (txtUserForgot.getText().equals(rs.getString("username"))) {
-//					new Thread(new Runnable() {
-//						
-//						@Override
-//						public void run() {
-//							for (int i = 40; i <= 300; i++) {
-//								imgView.setLayoutX(i);
-//								Thread.sleep(3);
-//							}
-//						}
-//					}).start();
-//					
-//					lblTitle.setVisible(false);
-//					txtUserForgot.setVisible(false);
-//					txtPassForgot.setVisible(false);
-//					txtAuth.setVisible(false);
-//					btnAuth.setVisible(false);
-//				}	
+				if (txtUserForgot.getText().equals(rs.getString("manv"))) {
+					
+					PreparedStatement pst1 = conn.prepareStatement("update nhanvien set pass = ? where manv = ?");
+					pst1.setString(1, txtAuth.getText());
+					pst1.setString(2, txtUserForgot.getText());
+					int result = pst1.executeUpdate();
+					
+					new Thread(new Runnable() {
+						
+						@Override
+						public void run() {
+							for (int i = 40; i <= 300; i++) {
+								imgView.setLayoutX(i);
+								try {
+									Thread.sleep(3);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+							}
+						}
+					}).start();
+					
+					lblTitle.setVisible(false);
+					txtUserForgot.setVisible(false);
+					txtPassForgot.setVisible(false);
+					txtAuth.setVisible(false);
+					btnAuth.setVisible(false);
+				}
+				
+				if (!txtUserForgot.getText().equals(rs.getString("manv"))) {
+					txtUserForgot.setPromptText("Tên đăng nhập không tồn tại");
+					return;
+				}
 		
-//			}
-//			
-//			pst.close();
-//			rs.close();
-//			JDBCUtil.closeConnection(conn);
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-		
-		
-		
+			}
+			
+			pst.close();
+			rs.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
 		
 	}
+	
+	
 	
 }
