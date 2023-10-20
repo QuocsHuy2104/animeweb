@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import connectJDBC.JDBCUtil;
@@ -40,13 +41,12 @@ import model.NhanVienModel;
 
 public class HomeController implements Initializable {
 
-	private String sql;
-
 	@FXML
 	private ImageView ImageMenu, imageSignout, ImageMenuBar, imageHeart;
 
 	@FXML
-	private Pane MenuPane, ContentPane, paneSetting, paneStaff, paneHome, paneClient, paneProduct, paneRevenue, paneBill;
+	private Pane MenuPane, ContentPane, paneSetting, paneStaff, paneHome, paneClient, paneProduct, paneRevenue,
+			paneBill;
 
 	@FXML
 	private Rectangle menuBar, recHome, recStaff, recService, recProduct, recRevenue, recBill;
@@ -70,7 +70,7 @@ public class HomeController implements Initializable {
 	private ComboBox<String> cbbBackground;
 
 	@FXML
-	private TableView<NhanVienModel> tblStaff;
+	private TableView<NhanVienModel> tableStaff;
 
 	@FXML
 	private TableColumn<NhanVienModel, String> idCol;
@@ -86,35 +86,19 @@ public class HomeController implements Initializable {
 
 	@FXML
 	private TableColumn<NhanVienModel, Float> wageCol;
-	
+
 	@FXML
 	private LineChart myLineChart;
 
-	@FXML
-	public void refreshTable() {
-		NhanVienList.clear();
+	Connection conn = null;
 
-		sql = "select * from nhanvien";
-		try {
-			PreparedStatement pst = JDBCUtil.getConnection().prepareStatement(sql);
-			ResultSet rs = pst.executeQuery();
-			while (rs.next()) {
-				NhanVienList.add(new NhanVienModel(rs.getString("MaNV"), rs.getString("TenNV"), rs.getString("DiaChi"),
-						rs.getString("SDT"), rs.getFloat("Luong"), rs.getDate("NgayNhan"), rs.getString("pass"),
-						rs.getBoolean("vaitro")));
-				tblStaff.setItems(NhanVienList);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	ObservableList<NhanVienModel> NhanVienList = FXCollections.observableArrayList();
+	private ObservableList<NhanVienModel> staff;
 
 	Stage stage;
 	Scene scene;
 	Parent root1;
+
+	// Code Handle event from
 
 	public void zoomOut() {
 		new Thread(new Runnable() {
@@ -131,10 +115,10 @@ public class HomeController implements Initializable {
 			}
 		}).start();
 	}
-	
+
 	public void zoomIn() {
 		new Thread(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				for (int i = 110; i <= 176; i++) {
@@ -196,21 +180,6 @@ public class HomeController implements Initializable {
 
 	}
 
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(new PieChart.Data("Satff", 10),
-				new PieChart.Data("Service", 23), new PieChart.Data("Product", 100));
-
-		pieChartData.forEach(
-				data -> data.nameProperty().bind(Bindings.concat(data.getName(), " amount ", data.pieValueProperty())));
-
-		pieChart.getData().addAll(pieChartData);
-
-		cbbBackground.getItems().setAll("Default", "White smoke");
-		
-		//loadTable();
-	}
-
 	public void convertScene() {
 
 	}
@@ -227,22 +196,6 @@ public class HomeController implements Initializable {
 
 	public void closeSetting() {
 		paneSetting.setVisible(false);
-	}
-
-	public void changepass() {
-
-		stage = (Stage) root.getScene().getWindow();
-		stage.close();
-
-		try {
-			Parent staff = FXMLLoader.load(getClass().getResource("ChangePass.fxml"));
-			stage = new Stage();
-			Scene scene = new Scene(staff);
-			stage.setScene(scene);
-			stage.show();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
 	}
 
 	public void changeBackground() {
@@ -307,6 +260,37 @@ public class HomeController implements Initializable {
 		title.setText("Pages / Khách hàng");
 	}
 
+	// End Code Handle event from
+
+	// Begin code show Stage
+
+	// screen open about ('GIỚI THIỆU')
+	public void openAbout() {
+		try {
+			Parent about = FXMLLoader.load(getClass().getResource("About.fxml"));
+			stage = new Stage();
+			Scene scene = new Scene(about);
+			stage.setScene(scene);
+			stage.show();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	// screen insert staff ('THÊM NHÂN VIÊN')
+	public void openAddStaff() {
+		try {
+			Parent deltais = FXMLLoader.load(getClass().getResource("DeltaisStaff.fxml"));
+			stage = new Stage();
+			Scene scene = new Scene(deltais);
+			stage.setScene(scene);
+			stage.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// screen open Login ('ĐĂNG NHẬP')
 	public void openLogin() {
 		stage = (Stage) root.getScene().getWindow();
 		stage.close();
@@ -322,42 +306,83 @@ public class HomeController implements Initializable {
 		}
 	}
 
-	public void loadTable() {
+	// screen open Change password ('ĐỔI MẬT KHẨU')
+	public void changepass() {
 
-		Connection conn = JDBCUtil.getConnection();
+		stage = (Stage) root.getScene().getWindow();
+		stage.close();
 
-		refreshTable();
-
-		idCol.setCellValueFactory(new PropertyValueFactory<>("maNV"));
-		nameCol.setCellValueFactory(new PropertyValueFactory<>("tenNV"));
-		addressCol.setCellValueFactory(new PropertyValueFactory<>("diaChi"));
-		phoneCol.setCellValueFactory(new PropertyValueFactory<>("soDT"));
-		wageCol.setCellValueFactory(new PropertyValueFactory<>("luong"));
-
-	}
-
-	public void openAddStaff() {
 		try {
-			Parent deltais = FXMLLoader.load(getClass().getResource("DeltaisStaff.fxml"));
+			Parent staff = FXMLLoader.load(getClass().getResource("ChangePass.fxml"));
 			stage = new Stage();
-			Scene scene = new Scene(deltais);
+			Scene scene = new Scene(staff);
 			stage.setScene(scene);
 			stage.show();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
+	}
+
+	// End code show Stage
+	
+	
+	// Begin handle code back end
+
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
+
+		setPieChart();
+
+		cbbBackground.getItems().setAll("Default", "White smoke");
+
+		conn = JDBCUtil.getConnection();
+
+		staff = FXCollections.observableArrayList();
+		setCellTable();
+		loadDataStaff();
+	}
+
+	// set column table Staff ('NHÂN VIÊN')
+	public void setCellTable() {
+		idCol.setCellValueFactory(new PropertyValueFactory<NhanVienModel, String>("maNV"));
+		nameCol.setCellValueFactory(new PropertyValueFactory<NhanVienModel, String>("tenNV"));
+		addressCol.setCellValueFactory(new PropertyValueFactory<NhanVienModel, String>("diaChi"));
+		phoneCol.setCellValueFactory(new PropertyValueFactory<NhanVienModel, String>("soDT"));
+		wageCol.setCellValueFactory(new PropertyValueFactory<NhanVienModel, Float>("luong"));
 	}
 	
-	public void openAbout() {
+	// load data from database enter table in screen
+
+	public void loadDataStaff() {
 		try {
-			Parent about = FXMLLoader.load(getClass().getResource("About.fxml"));
-			stage = new Stage();
-			Scene scene = new Scene(about);
-			stage.setScene(scene);
-			stage.show();
-		} catch (IOException ex) {
-			ex.printStackTrace();
+			PreparedStatement pst = conn.prepareStatement("Select * from nhanvien");
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				staff.add(new NhanVienModel(rs.getString("MaNV"), rs.getString("TenNV"), rs.getString("DIACHI"),
+						rs.getString("SDT"), rs.getFloat("Luong"), rs.getDate("NGAYNHAN"), rs.getString("pass"),
+						rs.getBoolean("vaitro")));
+			}
+			tableStaff.setItems(staff);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		JDBCUtil.closeConnection(conn);
 	}
 
+	// set PieChart
+	
+	public void setPieChart() {
+		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(new PieChart.Data("Satff", 10),
+				new PieChart.Data("Service", 23), new PieChart.Data("Product", 100));
+
+		pieChartData.forEach(
+				data -> data.nameProperty().bind(Bindings.concat(data.getName(), " amount ", data.pieValueProperty())));
+
+		pieChart.getData().addAll(pieChartData);
+	}
+	
+	// load data pieChart
+
+	public void loadPieChar() {
+	}
 }

@@ -275,7 +275,7 @@
 						</SplitPane>
 					</children>
 				</Pane>
-				<Pane fx:id="paneStaff" layoutX="11.0" layoutY="61.0" prefHeight="507.0" prefWidth="580.0" visible="false">
+				<Pane fx:id="paneStaff" layoutX="11.0" layoutY="61.0" prefHeight="507.0" prefWidth="580.0">
 					<children>
 						<TableView fx:id="tableStaff" layoutX="14.0" layoutY="18.0" prefHeight="421.0" prefWidth="552.0">
 							<columns>
@@ -285,6 +285,9 @@
 								<TableColumn fx:id="phoneCol" prefWidth="115.99993896484375" style="-fx-alignment: center;" text="Số Điện Thoại" />
 								<TableColumn fx:id="wageCol" prefWidth="120.0" style="-fx-alignment: center;" text="Lương" />
 							</columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
 						</TableView>
 						<FlowPane fx:id="ControllStaff" alignment="CENTER" hgap="10.0" layoutX="294.0" layoutY="448.0" prefHeight="45.0" prefWidth="272.0" vgap="20.0">
 							<children>

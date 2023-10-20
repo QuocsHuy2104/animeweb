@@ -1,9 +1,12 @@
 package utilities;
 
-import model.NhanVienModel;
 
 public class Auth {
 	
-	public static int user = 0;
-	
+	public static boolean roles ;
+
+
+    public static boolean isManager() {
+        return roles = true;
+    }
 }
