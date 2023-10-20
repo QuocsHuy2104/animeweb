@@ -44,7 +44,6 @@ public class LoginController {
 		// check username
 		if (txtUser.getText().equals("")) {
 			txtUser.setPromptText("Vui lòng nhập tên đăng nhập");
-			return;
 		}
 		// check password
 		if (txtPass.getText().equals("")) {
@@ -58,14 +57,16 @@ public class LoginController {
 		Connection conn = JDBCUtil.getConnection();
 
 		try {
-			PreparedStatement pst = conn.prepareStatement("select manv, pass, vaitro from nhanvien");
+			PreparedStatement pst = conn.prepareStatement("select * from nhanvien");
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 				String manv = rs.getString("manv");
 				String matkhau = rs.getString("pass");
-				int vaitro = rs.getInt("vaitro");
+				if (rs.getInt("vaitro") == 1) {
+					Auth.roles = true;
+				} else Auth.roles = false;
 				
-				Auth.user = vaitro;
+				
 				if (txtUser.getText().equals(manv) && txtPass.getText().equals(matkhau)) {
 					stage = (Stage) root.getScene().getWindow();
 					stage.close();
@@ -76,17 +77,31 @@ public class LoginController {
 						Scene scene = new Scene(forgot);
 						stage.setScene(scene);
 						stage.show();
-
 					} catch (IOException ex) {
 						ex.printStackTrace();
 					}
-				} else if (!txtPass.getText().equals(matkhau)){
-					Alert alert = new Alert(AlertType.ERROR);
-					alert.setTitle("ERROR");
-					alert.setHeaderText("Message error");
-					alert.setContentText("Mật khẩu không trùng khớp");
+					return;
+				} 
+				
+				// "ten dang nhap khong ton tai"
+				if (!manv.equals(txtUser.getText())) {
+					Alert alert = new Alert(AlertType.WARNING);
+					alert.setTitle("WARNING");
+					alert.setHeaderText("Message warning");
+					alert.setContentText("Tên đăng nhập không tồn tại");
 					alert.show();
 				}
+				
+				// sai mat khau
+				if (!txtPass.getText().equals(matkhau)){
+					Alert alert = new Alert(AlertType.WARNING);
+					alert.setTitle("WARNING");
+					alert.setHeaderText("Message warning");
+					alert.setContentText("Mật khẩu không chính xác");
+					alert.show();
+					return;
+				}
+								
 			}
 			
 		} catch (SQLException ex) {
