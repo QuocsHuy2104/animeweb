@@ -6,9 +6,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+import IDAO.IHoaDon;
+import IDAO.IKhachHang;
+import IDAO.INhanVien;
+import IDAO.ISanPham;
 import connectJDBC.JDBCUtil;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -37,7 +42,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import model.DonHangModel;
+import model.KhachHangModel;
 import model.NhanVienModel;
+import model.SanPhamModel;
 
 public class HomeController implements Initializable {
 
@@ -68,6 +76,8 @@ public class HomeController implements Initializable {
 
 	@FXML
 	private ComboBox<String> cbbBackground;
+	
+	// Table Staff
 
 	@FXML
 	private TableView<NhanVienModel> tableStaff;
@@ -86,13 +96,77 @@ public class HomeController implements Initializable {
 
 	@FXML
 	private TableColumn<NhanVienModel, Float> wageCol;
+	
+	// Table Client
+	
+	@FXML
+	private TableView<KhachHangModel> tableClient;
+	
+	@FXML
+	private TableColumn<KhachHangModel, String> idClientCol;
+
+	@FXML
+	private TableColumn<KhachHangModel, String> nameClientCol;
+
+	@FXML
+	private TableColumn<KhachHangModel, String> addressClientCol;
+
+	@FXML
+	private TableColumn<KhachHangModel, String> phoneClientCol;
+
+	@FXML
+	private TableColumn<KhachHangModel, Boolean> genderClientCol;
+	
+	// Table Product
+	
+	@FXML
+	private TableView<SanPhamModel> tableProduct;
+	
+	@FXML
+	private TableColumn<SanPhamModel, String> idProCol;
+
+	@FXML
+	private TableColumn<SanPhamModel, String> nameProCol;
+
+	@FXML
+	private TableColumn<SanPhamModel, Float> wageProCol;
+
+	@FXML
+	private TableColumn<SanPhamModel, String> markProCol;
+
+	@FXML
+	private TableColumn<SanPhamModel, String> serviceProCol;
+	
+	// Table Product
+	
+		@FXML
+		private TableView<DonHangModel> tableBill;
+		
+		@FXML
+		private TableColumn<DonHangModel, String> idBillCol;
+
+		@FXML
+		private TableColumn<DonHangModel, String> nameBillCol;
+
+		@FXML
+		private TableColumn<DonHangModel, String> nameServiceBillCol;
+
+		@FXML
+		private TableColumn<DonHangModel, Date> dayBillCol;
+
+		@FXML
+		private TableColumn<DonHangModel, Float> paidBillCol;
 
 	@FXML
 	private LineChart myLineChart;
 
-	Connection conn = null;
-
 	private ObservableList<NhanVienModel> staff;
+	
+	private ObservableList<KhachHangModel> client;
+	
+	private ObservableList<SanPhamModel> product;
+	
+	private ObservableList<DonHangModel> bill;
 
 	Stage stage;
 	Scene scene;
@@ -220,6 +294,7 @@ public class HomeController implements Initializable {
 		paneRevenue.setVisible(false);
 		paneBill.setVisible(false);
 		title.setText("Pages / Nhân viên");
+		
 	}
 
 	public void openProduct() {
@@ -335,15 +410,22 @@ public class HomeController implements Initializable {
 
 		cbbBackground.getItems().setAll("Default", "White smoke");
 
-		conn = JDBCUtil.getConnection();
-
-		staff = FXCollections.observableArrayList();
 		setCellTable();
 		loadDataStaff();
+		
+		setClientTable();
+		loadDataClient();
+		
+		setProductTable();
+		loadDataProduct();
+		
+//		setBillTable();
+//		loadDataBill();
 	}
 
 	// set column table Staff ('NHÂN VIÊN')
 	public void setCellTable() {
+		staff = FXCollections.observableArrayList();
 		idCol.setCellValueFactory(new PropertyValueFactory<NhanVienModel, String>("maNV"));
 		nameCol.setCellValueFactory(new PropertyValueFactory<NhanVienModel, String>("tenNV"));
 		addressCol.setCellValueFactory(new PropertyValueFactory<NhanVienModel, String>("diaChi"));
@@ -354,20 +436,76 @@ public class HomeController implements Initializable {
 	// load data from database enter table in screen
 
 	public void loadDataStaff() {
-		try {
-			PreparedStatement pst = conn.prepareStatement("Select * from nhanvien");
-			ResultSet rs = pst.executeQuery();
-			while (rs.next()) {
-				staff.add(new NhanVienModel(rs.getString("MaNV"), rs.getString("TenNV"), rs.getString("DIACHI"),
-						rs.getString("SDT"), rs.getFloat("Luong"), rs.getDate("NGAYNHAN"), rs.getString("pass"),
-						rs.getBoolean("vaitro")));
-			}
-			tableStaff.setItems(staff);
-		} catch (SQLException e) {
-			e.printStackTrace();
+		ArrayList<NhanVienModel> list = INhanVien.getInstance().selectAll();
+		for (NhanVienModel nhanVienModel : list) {
+			staff.add(nhanVienModel);
 		}
-		JDBCUtil.closeConnection(conn);
+		tableStaff.setItems(staff);
 	}
+	
+	// set column table Staff ('Khách Hàng')
+	
+	public void setClientTable() {
+		client = FXCollections.observableArrayList();
+		idClientCol.setCellValueFactory(new PropertyValueFactory<KhachHangModel, String>("maKH"));
+		nameClientCol.setCellValueFactory(new PropertyValueFactory<KhachHangModel, String>("tenKH"));
+		addressClientCol.setCellValueFactory(new PropertyValueFactory<KhachHangModel, String>("diaChi"));
+		phoneClientCol.setCellValueFactory(new PropertyValueFactory<KhachHangModel, String>("SDT"));
+		genderClientCol.setCellValueFactory(new PropertyValueFactory<KhachHangModel, Boolean>("gioiTinh"));
+	}
+	
+	// load data from database enter table in screen
+
+	public void loadDataClient() {
+		ArrayList<KhachHangModel> list = IKhachHang.getInstance().selectAll();
+		for (KhachHangModel khachHangModel : list) {
+			client.add(khachHangModel);
+		}
+		tableClient.setItems(client);
+	}
+	
+	// set column table Staff ('Sản Phẩm')
+	
+	public void setProductTable() {
+		product = FXCollections.observableArrayList();
+		idProCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, String>("maSP"));
+		nameProCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, String>("tenSp"));
+		wageProCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, Float>("giaDichVu"));
+		markProCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, String>("thuongHieu"));
+		serviceProCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, String>("dichVu"));
+	}
+	
+	// load data from database enter table in screen
+	
+	public void loadDataProduct() {
+		ArrayList<SanPhamModel> list = ISanPham.getInstance().selectAll();
+		for (SanPhamModel sanPhamModel : list) {
+			product.add(sanPhamModel);
+		}
+		tableProduct.setItems(product);
+	}
+	
+	// set column table Staff ('Hóa Đơn')
+	
+	public void setBillTable() {
+		bill = FXCollections.observableArrayList();
+		idBillCol.setCellValueFactory(new PropertyValueFactory<DonHangModel, String>("mahd"));
+		nameBillCol.setCellValueFactory(new PropertyValueFactory<DonHangModel, String>("ID_KhachHang"));
+		nameServiceBillCol.setCellValueFactory(new PropertyValueFactory<DonHangModel, String>("ID_NV"));
+		dayBillCol.setCellValueFactory(new PropertyValueFactory<DonHangModel, Date>("ngay"));
+		paidBillCol.setCellValueFactory(new PropertyValueFactory<DonHangModel, Float>("thanhToan"));
+	}
+	
+	// load data from database enter table in screen
+	
+		public void loadDataBill() {
+			ArrayList<DonHangModel> list = IHoaDon.getInstance().selectAll();
+			for (DonHangModel donHangModel : list) {
+				bill.add(donHangModel);
+			}
+			tableBill.setItems(bill);
+		}
+	
 
 	// set PieChart
 	

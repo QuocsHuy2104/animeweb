@@ -85,7 +85,50 @@ public class INhanVien implements DAOInterface<NhanVienModel> {
 
 	@Override
 	public ArrayList<NhanVienModel> selectAll() {
-		return null;
+		ArrayList<NhanVienModel> result = new ArrayList<NhanVienModel>();
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("SELECT * FROM NHANVIEN");
+			ResultSet rs = pst.executeQuery();
+			while(rs.next()) {
+				String id = rs.getString("MaNV");
+				String name = rs.getString("TenNV");
+				String address = rs.getString("DiaChi");
+				String phone = rs.getString("SDT");
+				Date reDate = rs.getDate("NgayNhan");
+				String pass = rs.getString("pass");
+				int role = rs.getInt("vaitro");
+				
+				boolean roles = role == 1 ? true : false;
+				
+				NhanVienModel nv = new NhanVienModel(id, name, address, phone, role, reDate, pass, roles);
+				result.add(nv);
+			}
+			pst.close();
+			rs.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public int updatePass(String pass, String manv) {
+		int result = 0;
+		
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("Update pass = ? where manv = ?");
+			pst.setString(1, pass);
+			pst.setString(2, manv);
+			result = pst.executeUpdate();
+			pst.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 	
 
