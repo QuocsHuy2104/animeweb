@@ -1,5 +1,6 @@
 package application;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,12 +10,18 @@ import java.sql.Statement;
 import connectJDBC.JDBCUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 public class ForgotPassController {
 
@@ -35,26 +42,18 @@ public class ForgotPassController {
 
 	@FXML
 	private Pane paneAuth;
+	
+	@FXML
+	private AnchorPane root;
+	
+	@FXML
+	private Label lblSecond;
 
 	public int result;
 	
 	public PreparedStatement pst = null;
 
 	public void validate(ActionEvent e) {
-		
-		if (!txtUserForgot.getText().equals("")) {
-			txtUserForgot.setStyle("-fx-border-color: white ; -fx-border-width: 2px ; -fx-text-inner-color: white;");
-		}
-
-		if (!txtPassForgot.getText().equals("")) {
-			txtPassForgot.setStyle("-fx-border-color: white ; -fx-border-width: 2px ; -fx-text-inner-color: white;");
-
-		}
-
-		if (!txtAuth.getText().equals("")) {
-			txtAuth.setStyle("-fx-border-color: white ; -fx-border-width: 2px ; -fx-text-inner-color: white;");
-
-		}
 
 		if (txtUserForgot.getText().equals("")) {
 			txtUserForgot.setPromptText("Nhập tên đăng nhập");
@@ -79,11 +78,12 @@ public class ForgotPassController {
 		}
 
 		Connection conn = JDBCUtil.getConnection();
-		String sql = "select * from nhanvien";
+		String sql = "select * from nhanvien where manv = ?";
 		String user = txtUserForgot.getText();
 		try {
-			Statement st = conn.createStatement();
-			ResultSet rs = st.executeQuery(sql);
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, user);
+			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 				if (user.trim().equals(rs.getString("manv"))) {
 					new Thread(new Runnable() {
@@ -106,7 +106,6 @@ public class ForgotPassController {
 					txtUserForgot.setVisible(false);
 					txtPassForgot.setVisible(false);
 					txtAuth.setVisible(false);
-					btnAuth.setVisible(false);
 					
 					pst = conn.prepareStatement("update nhanvien set pass = ? where manv = ?");
 					pst.setString(1, txtAuth.getText().trim());
@@ -122,26 +121,45 @@ public class ForgotPassController {
 	}
 	
 	public void checkOTP(ActionEvent ex) {
-		if (txtsend.getText().equals(Float.valueOf(result).toString())) {
+		int input = Integer.parseInt(txtsend.getText());
+		if (input == result) {
 			try {
 				pst.executeUpdate();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Update successfull");
-		} else {
-			System.out.println("Update fail");
-		}
+			
+			Stage stage = (Stage) root.getScene().getWindow();
+			stage.close();
+
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
+				Scene scene = new Scene(root);
+				stage.setScene(scene);
+				stage.show();
+				stage.setResizable(false);
+				String css = this.getClass().getResource("styleLogin.css").toExternalForm();
+				stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/image/logo.png")));
+				stage.setTitle("Đăng nhập Studio Breakfast");
+				scene.getStylesheets().add(css);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		} else System.out.println("Update fail");
 	}
 
 	public void random() {
 		while (true) {
-			result = (int) Math.floor(Math.random() * 100000);
+			result = (int) Math.floor(Math.random() * 10000);
 			lblOTP.setText("Mã OTP :: " + result);
 			if (result > 2000) {
-				return;
+				break;
 			}
 		}
-
+	}
+	
+	public void refresh() {
+		random();
 	}
 }

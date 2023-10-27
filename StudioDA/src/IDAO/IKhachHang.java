@@ -20,17 +20,61 @@ public class IKhachHang implements DAOInterface<KhachHangModel> {
 
 	@Override
 	public int insert(KhachHangModel reneric) {
-		return 0;
+		int result = 0;
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("insert into khachhang values (?, ?, ?, ?, ?, ?)");
+			pst.setString(1, reneric.getMaKH());
+			pst.setString(2, reneric.getTenKH());
+			pst.setString(3, reneric.getDiaChi());
+			pst.setString(4, reneric.getSDT());
+			pst.setBoolean(5, reneric.isGioiTinh());
+			pst.setInt(6, reneric.getIdSP());
+			result = pst.executeUpdate();
+			
+			pst.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	@Override
 	public int del(KhachHangModel reneric) {
-		return 0;
+		int result = 0;
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("delete from khachhang where makh = ?");
+			pst.setString(1, reneric.getMaKH());
+			result = pst.executeUpdate();
+			
+			pst.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	@Override
 	public int update(KhachHangModel reneric) {
-		return 0;
+		int result = 0;
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("update khachhang set tenkh = ?, diachi = ?, sdt = ? where makh = ?");
+			pst.setString(1, reneric.getTenKH());
+			pst.setString(2, reneric.getDiaChi());
+			pst.setString(3, reneric.getSDT());
+			pst.setString(4, reneric.getMaKH());
+			result = pst.executeUpdate();
+			
+			pst.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	@Override
@@ -68,6 +112,24 @@ public class IKhachHang implements DAOInterface<KhachHangModel> {
 		return result;
 	}
 	
+	public int selectCount() {
+		int khachhang = 0;
+		Connection conn = JDBCUtil.getConnection();
+		PreparedStatement pst;
+		try {
+			pst = conn.prepareStatement("select Count(makh) from Khachhang");
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				khachhang = rs.getInt(1);
+			}
+			pst.close();
+			rs.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return khachhang;
+	}
 	
 
 }

@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -22,12 +23,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.NhanVienModel;
 import utilities.Auth;
+import utilities.Notification;
 import javafx.scene.Node;
 
 public class LoginController {
 
 	@FXML
-	private TextField txtUser;
+	public TextField txtUser;
 	@FXML
 	private PasswordField txtPass;
 	@FXML
@@ -39,6 +41,8 @@ public class LoginController {
 	Stage stage;
 	Scene scene;
 	Parent root1;
+	
+	public static int roles;
 
 	public void LoginEvent(ActionEvent e) {
 		// check username
@@ -51,21 +55,18 @@ public class LoginController {
 			return;
 		}
 		
-		NhanVienModel nv = new NhanVienModel();
-		INhanVien.getInstance().selectByID(nv);
-
 		Connection conn = JDBCUtil.getConnection();
 
 		try {
-			PreparedStatement pst = conn.prepareStatement("select * from nhanvien");
+			PreparedStatement pst = conn.prepareStatement("select * from nhanvien where manv = ?");
+			pst.setString(1, txtUser.getText());
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
+				
+				roles = rs.getInt("vaitro");
+				
 				String manv = rs.getString("manv");
 				String matkhau = rs.getString("pass");
-				if (rs.getInt("vaitro") == 1) {
-					Auth.roles = true;
-				} else Auth.roles = false;
-				
 				
 				if (txtUser.getText().equals(manv) && txtPass.getText().equals(matkhau)) {
 					stage = (Stage) root.getScene().getWindow();
@@ -85,20 +86,12 @@ public class LoginController {
 				
 				// "ten dang nhap khong ton tai"
 				if (!manv.equals(txtUser.getText())) {
-					Alert alert = new Alert(AlertType.WARNING);
-					alert.setTitle("WARNING");
-					alert.setHeaderText("Message warning");
-					alert.setContentText("Tên đăng nhập không tồn tại");
-					alert.show();
+					Notification.alert(AlertType.WARNING, "Ten đăng nhập không tồn tại");
 				}
 				
 				// sai mat khau
 				if (!txtPass.getText().equals(matkhau)){
-					Alert alert = new Alert(AlertType.WARNING);
-					alert.setTitle("WARNING");
-					alert.setHeaderText("Message warning");
-					alert.setContentText("Mật khẩu không chính xác");
-					alert.show();
+					Notification.alert(AlertType.WARNING, "Mật khẩu không chính xác");
 					return;
 				}
 								
@@ -120,6 +113,9 @@ public class LoginController {
 			stage = new Stage();
 			Scene scene = new Scene(forgot);
 			stage.setScene(scene);
+			stage.setResizable(false);
+			stage.setTitle("Quên mật khẩu");
+			stage.getIcons().add(new Image(getClass().getResourceAsStream("/image/logo.png")));
 			stage.show();
 
 		} catch (IOException e) {

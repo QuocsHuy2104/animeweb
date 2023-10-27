@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="418.0" prefWidth="504.0" style="-fx-background-color: #333;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ClientController">
+   <children>
+      <Text fill="#fa34aa" layoutX="26.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="StaffDeltais" wrappingWidth="204.53675079345703">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Text>
+      <Line endX="136.00001525878906" layoutX="126.0" layoutY="68.0" startX="-100.0" stroke="#fa34aa" />
+      <HBox alignment="CENTER" layoutX="24.0" layoutY="88.0" prefHeight="46.0" prefWidth="454.0">
+         <children>
+            <Text fill="#fa34aa" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã Khách Hàng :" wrappingWidth="142.20587158203125">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <TextField fx:id="txtID" prefHeight="26.0" prefWidth="183.0" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="24.0" layoutY="126.0" prefHeight="46.0" prefWidth="454.0">
+         <children>
+            <Text fill="#fa34aa" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên Khách Hàng :" wrappingWidth="142.20587158203125">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <TextField fx:id="txtName" prefHeight="26.0" prefWidth="183.0" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="24.0" layoutY="172.0" prefHeight="46.0" prefWidth="454.0">
+         <children>
+            <Text fill="#fa34aa" strokeType="OUTSIDE" strokeWidth="0.0" text="Địa Chỉ :" wrappingWidth="142.20587158203125">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <TextArea fx:id="txtAddress" prefHeight="46.0" prefWidth="184.0" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="24.0" layoutY="218.0" prefHeight="46.0" prefWidth="454.0">
+         <children>
+            <Text fill="#fa34aa" strokeType="OUTSIDE" strokeWidth="0.0" text="Số Điện Thoại :" wrappingWidth="142.20587158203125">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <TextField fx:id="txtPhone" prefHeight="26.0" prefWidth="183.0" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </HBox>
+      <HBox fx:id="hboxRoles" alignment="CENTER" layoutX="24.0" layoutY="264.0" prefHeight="46.0" prefWidth="454.0">
+         <children>
+            <Text fill="#fa34aa" strokeType="OUTSIDE" strokeWidth="0.0" text="Giới Tính :" wrappingWidth="97.40594482421875">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <RadioButton fx:id="rbtnMan" mnemonicParsing="false" prefHeight="18.0" prefWidth="126.0" text="Nam" textFill="WHITE" />
+            <RadioButton fx:id="rbtnWoman" mnemonicParsing="false" prefHeight="18.0" prefWidth="106.0" text="Nữ" textFill="WHITE" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </HBox>
+      <HBox fx:id="hboxPass" alignment="CENTER" layoutX="24.0" layoutY="310.0" prefHeight="46.0" prefWidth="454.0">
+         <children>
+            <Text fill="#fa34aa" strokeType="OUTSIDE" strokeWidth="0.0" text="ID Sản Phẩm :" wrappingWidth="142.20587158203125">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <TextField fx:id="IDProduct" prefHeight="26.0" prefWidth="183.0" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </HBox>
+      <Button layoutX="24.0" layoutY="356.0" mnemonicParsing="false" onAction="#addClient" prefHeight="38.0" prefWidth="142.0" style="-fx-background-color: #38fc62;" text="Save">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Button layoutX="180.0" layoutY="356.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="142.0" style="-fx-background-color: #ffe642;" text="Clean">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Button layoutX="335.0" layoutY="356.0" mnemonicParsing="false" onAction="#updataClient" prefHeight="38.0" prefWidth="142.0" style="-fx-background-color: #38fc62;" text="Update">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

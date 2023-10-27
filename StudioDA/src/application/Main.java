@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.fxml.FXMLLoader;
 
 
@@ -18,6 +19,8 @@ public class Main extends Application {
 			primaryStage.show();
 			primaryStage.setResizable(false);
 			String css = this.getClass().getResource("styleLogin.css").toExternalForm();
+			primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/image/logo.png")));
+			primaryStage.setTitle("Đăng nhập Studio Breakfast");
 			scene.getStylesheets().add(css);
 			
 		} catch(Exception e) {

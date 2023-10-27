@@ -25,13 +25,13 @@ public class INhanVien implements DAOInterface<NhanVienModel> {
 		
 		Connection conn = JDBCUtil.getConnection();
 		try {
-			PreparedStatement pst = conn.prepareStatement("insert into nhanvien(?,?,?,?,?,?,?,?)");
+			PreparedStatement pst = conn.prepareStatement("insert into nhanvien values(?,?,?,?,?,?,?,?)");
 			pst.setString(1, reneric.getMaNV());
 			pst.setString(2, reneric.getTenNV());
 			pst.setString(3, reneric.getDiaChi());
 			pst.setString(4, reneric.getSoDT());
-			pst.setDouble(5, reneric.getLuong());
-			pst.setDate(6, (Date) reneric.getNgayNhan());
+			pst.setString(5, reneric.getNgayNhan());
+			pst.setDouble(6, reneric.getLuong());
 			pst.setString(7, reneric.getPass());
 			pst.setBoolean(8, reneric.isRoles());
 			
@@ -47,12 +47,37 @@ public class INhanVien implements DAOInterface<NhanVienModel> {
 
 	@Override
 	public int del(NhanVienModel reneric) {
-		return 0;
+		int result = 0;
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("Delete from nhanvien where manv = ?");
+			pst.setString(1, reneric.getMaNV());
+			result = pst.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	@Override
 	public int update(NhanVienModel reneric) {
-		return 0;
+		int result = 0;
+		
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("Update nhanvien set tenNV = ?, diaChi = ?, sdt = ?,luong = ? where manv = ?");
+			pst.setString(1, reneric.getTenNV());
+			pst.setString(2, reneric.getDiaChi());
+			pst.setString(3, reneric.getSoDT());
+			pst.setString(4, Double.valueOf(reneric.getLuong()).toString());
+			pst.setString(5, reneric.getMaNV());
+			result = pst.executeUpdate();
+			pst.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	@Override
@@ -69,7 +94,7 @@ public class INhanVien implements DAOInterface<NhanVienModel> {
 				String address = rs.getString("DiaChi");
 				String contact = rs.getString("SDT");
 				Double luong = rs.getDouble("luong");
-				Date ngaynhan = rs.getDate("NgayNhan");
+				String ngaynhan = rs.getString("NgayNhan");
 				String pass = rs.getString("MatKhau");
 				boolean role = rs.getBoolean("VaiTro");
 				result = new NhanVienModel(id, name, address, contact, luong, ngaynhan, pass, role);
@@ -95,7 +120,7 @@ public class INhanVien implements DAOInterface<NhanVienModel> {
 				String name = rs.getString("TenNV");
 				String address = rs.getString("DiaChi");
 				String phone = rs.getString("SDT");
-				Date reDate = rs.getDate("NgayNhan");
+				String reDate = rs.getString("NgayNhan");
 				String pass = rs.getString("pass");
 				int role = rs.getInt("vaitro");
 				
@@ -129,6 +154,25 @@ public class INhanVien implements DAOInterface<NhanVienModel> {
 		}
 		
 		return result;
+	}
+	
+	public int selectCount() {
+		int nhanvien = 0;
+		Connection conn = JDBCUtil.getConnection();
+		PreparedStatement pst;
+		try {
+			pst = conn.prepareStatement("select Count(manV) from nhanvien");
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				nhanvien = rs.getInt(1);
+			}
+			pst.close();
+			rs.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return nhanvien;
 	}
 	
 

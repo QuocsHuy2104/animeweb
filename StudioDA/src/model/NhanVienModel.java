@@ -6,11 +6,11 @@ public class NhanVienModel {
 	
 	private String maNV, tenNV, diaChi, soDT;
 	private double luong;
-	private Date ngayNhan;
+	private String ngayNhan;
 	private String pass;
 	private boolean roles;
 	
-	public NhanVienModel(String maNV, String tenNV, String diaChi, String soDT, double luong, Date ngayNhan,
+	public NhanVienModel(String maNV, String tenNV, String diaChi, String soDT, double luong, String ngayNhan,
 			String pass, boolean roles) {
 		this.maNV = maNV;
 		this.tenNV = tenNV;
@@ -58,6 +58,9 @@ public class NhanVienModel {
 	}
 
 	public double getLuong() {
+		if (luong < 0) {
+			return 0;
+		}
 		return luong;
 	}
 
@@ -65,11 +68,11 @@ public class NhanVienModel {
 		this.luong = luong;
 	}
 
-	public Date getNgayNhan() {
+	public String getNgayNhan() {
 		return ngayNhan;
 	}
 
-	public void setNgayNhan(Date ngayNhan) {
+	public void setNgayNhan(String ngayNhan) {
 		this.ngayNhan = ngayNhan;
 	}
 

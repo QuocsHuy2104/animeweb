@@ -8,7 +8,10 @@
 }
 
 #btnLogin:hover {
-	-fx-background-color: yellow;
+	-fx-background-color: #ff00f2;
+	-fx-border-radius : 8px;
+	-fx-border-color: #19ff3c;
+	-fx-border-width: 3px;
 }
 
 #imageViewBackground {
@@ -23,7 +26,10 @@
 #txtPass,
 #txtUserForgot,
 #txtAuth,
-#txtPassForgot {
+#txtPassForgot,
+#txtCurrentPass,
+#txtNewPass,
+#txtUserChange{
 	-fx-background-color: none;
 	-fx-border-color: white;
 	-fx-border-width: 1.75px;
@@ -31,7 +37,8 @@
 }
 
 #txtUserForgot:focused,
-#txtUser:focused {
+#txtUser:focused,
+#txtUserChange:focused {
 	-fx-background-color: white;
 	-fx-border-radius: 10.0px;
 	-fx-background-color: linear-gradient(to bottom, derive(-fx-text-box-border, -10.0%), -fx-text-box-border),
@@ -42,7 +49,9 @@
 
 #txtPassForgot:focused,
 #txtAuth:focused,
-#txtPass:focused {
+#txtPass:focused,
+#txtCurrentPass:focused,
+#txtNewPass:focused {
 	-fx-background-color: white;
 	-fx-border-radius: 10.0px;
 	-fx-background-color: linear-gradient(to bottom, derive(-fx-text-box-border, -10.0%), -fx-text-box-border),
@@ -51,14 +60,19 @@
 	-fx-background-radius: 10.0px;
 }
 
+#txtUser:focused,
+#txtPass:focused,
 #txtAuth:focused,
 #txtPassForgot:focused, 
-#txtUserForgot:focused {
+#txtUserForgot:focused,
+#txtCurrentPass:focused,
+#txtNewPass:focused,
+#txtUserChange:focused {
 	-fx-text-fill: black;
 }
 
 #forgotPassword:hover {
-	-fx-text-fill: yellow;
+	-fx-text-fill: #ff00f2;
 }
 
 #recHome:hover,

@@ -23,8 +23,6 @@ public class HomeView extends Application {
 			String css = this.getClass().getResource("style.css").toExternalForm();
 			scene.getStylesheets().add(css);
 			
-			
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

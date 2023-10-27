@@ -12,9 +12,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="399.0" prefWidth="805.0" style="-fx-background-color: #333;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ForgotPassController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="399.0" prefWidth="805.0" style="-fx-background-color: #333;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ForgotPassController">
    <children>
-      <Button fx:id="btnAuth" alignment="CENTER" layoutX="609.0" layoutY="300.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#validate" prefHeight="34.0" prefWidth="117.0" text="Xác nhận">
+      <Button fx:id="btnLogin" alignment="CENTER" layoutX="609.0" layoutY="271.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#validate" prefHeight="34.0" prefWidth="117.0" style="-fx-background-radius: 8px;" stylesheets="@styleLogin.css" text="Xác nhận">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -24,12 +24,12 @@
             <Font size="14.0" />
          </font>
       </TextField>
-      <PasswordField fx:id="txtPassForgot" layoutX="550.0" layoutY="164.0" prefHeight="42.0" prefWidth="234.0" promptText="Mật khẩu mới" style="-fx-text-inner-color: white;" stylesheets="@styleLogin.css">
+      <PasswordField fx:id="txtPassForgot" layoutX="550.0" layoutY="149.0" prefHeight="42.0" prefWidth="234.0" promptText="Mật khẩu mới" style="-fx-text-inner-color: white;" stylesheets="@styleLogin.css">
          <font>
             <Font size="14.0" />
          </font>
       </PasswordField>
-      <PasswordField fx:id="txtAuth" layoutX="550.0" layoutY="234.0" prefHeight="42.0" prefWidth="234.0" promptText="Mật khẩu mới" style="-fx-text-inner-color: white;" stylesheets="@styleLogin.css">
+      <PasswordField fx:id="txtAuth" layoutX="550.0" layoutY="206.0" prefHeight="42.0" prefWidth="234.0" promptText="Mật khẩu mới" style="-fx-text-inner-color: white;" stylesheets="@styleLogin.css">
          <font>
             <Font size="14.0" />
          </font>
@@ -52,7 +52,7 @@
                </font>
             </Label>
             <TextField fx:id="txtsend" alignment="CENTER" layoutX="26.0" layoutY="86.0" prefHeight="25.0" prefWidth="246.0" />
-            <Button fx:id="btnSend" alignment="CENTER" layoutX="100.0" layoutY="130.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="34.0" prefWidth="117.0" text="Send" onAction="#checkOTP">
+            <Button fx:id="btnSend" alignment="CENTER" layoutX="100.0" layoutY="130.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#checkOTP" prefHeight="34.0" prefWidth="117.0" text="Send">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -62,12 +62,12 @@
                   <Font size="14.0" />
                </font>
             </Text>
-            <ImageView fitHeight="34.0" fitWidth="34.0" layoutX="26.0" layoutY="175.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="34.0" fitWidth="34.0" layoutX="26.0" layoutY="175.0" onMouseClicked="#refresh" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../image/refresh.png" />
                </image>
             </ImageView>
-            <Label layoutX="148.0" layoutY="182.0" text="60s" textFill="#5f87ff">
+            <Label fx:id="lblSecond" layoutX="148.0" layoutY="182.0" text="60s" textFill="#5f87ff">
                <font>
                   <Font size="14.0" />
                </font>

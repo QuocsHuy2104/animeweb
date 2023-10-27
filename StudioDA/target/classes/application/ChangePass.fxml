@@ -22,27 +22,27 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <TextField fx:id="txtUser" layoutX="537.0" layoutY="90.0" prefHeight="31.0" prefWidth="261.0" promptText="Tên đăng nhập">
+      <TextField fx:id="txtUserChange" layoutX="537.0" layoutY="90.0" prefHeight="40.0" prefWidth="262.0" promptText="Tên đăng nhập" style="-fx-text-inner-color: #fff;" stylesheets="@styleLogin.css">
          <font>
             <Font size="13.0" />
          </font>
       </TextField>
-      <PasswordField fx:id="txtCurrentPass" layoutX="536.0" layoutY="130.0" prefHeight="31.0" prefWidth="261.0" promptText="Mật khẩu">
+      <PasswordField fx:id="txtCurrentPass" layoutX="536.0" layoutY="140.0" prefHeight="40.0" prefWidth="262.0" promptText="Mật khẩu cũ" style="-fx-text-inner-color: #fff;" stylesheets="@styleLogin.css">
          <font>
             <Font size="13.0" />
          </font>
       </PasswordField>
-      <PasswordField fx:id="txtNewPass" layoutX="536.0" layoutY="170.0" prefHeight="31.0" prefWidth="262.0" promptText="Mật khẩu mới">
+      <PasswordField fx:id="txtNewPass" layoutX="535.0" layoutY="190.0" prefHeight="40.0" prefWidth="262.0" promptText="Mật khẩu mới" style="-fx-text-inner-color: #ffff;" stylesheets="@styleLogin.css">
          <font>
             <Font size="13.0" />
          </font>
       </PasswordField>
-      <PasswordField fx:id="txtAuth" layoutX="536.0" layoutY="210.0" prefHeight="31.0" prefWidth="262.0" promptText="Xác nhận mật khẩu">
+      <PasswordField fx:id="txtAuth" layoutX="535.0" layoutY="240.0" prefHeight="40.0" prefWidth="262.0" promptText="Xác nhận mật khẩu" style="-fx-text-inner-color: #fff;" stylesheets="@styleLogin.css">
          <font>
             <Font size="13.0" />
          </font>
       </PasswordField>
-      <Button fx:id="btnOK" alignment="CENTER" layoutX="611.0" layoutY="278.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="110.0" text="OK" onAction="#changePass">
+      <Button fx:id="btnOK" alignment="CENTER" layoutX="613.0" layoutY="307.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#changePass" prefHeight="40.0" prefWidth="110.0" text="Xac Nhan">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

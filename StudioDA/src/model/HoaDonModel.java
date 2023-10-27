@@ -2,20 +2,21 @@ package model;
 
 import java.util.Date;
 
-public class DonHangModel {
+public class HoaDonModel {
+	
 	private String mahd;
-	private Date ngay;
+	private String ngay;
 	private float thanhToan;
 	private int ID_KhachHang;
 	private int ID_NV ;
 	
-	public DonHangModel(String mahd, Date ngay, float thanhToan, int iD_KhachHang, int iD_NV) {
+	public HoaDonModel(String mahd, String ngay, float thanhToan, int iD_KhachHang, int iD_NV) {
 		super();
 		this.mahd = mahd;
 		this.ngay = ngay;
 		this.thanhToan = thanhToan;
-		ID_KhachHang = iD_KhachHang;
-		ID_NV = iD_NV;
+		this.ID_KhachHang = iD_KhachHang;
+		this.ID_NV = iD_NV;
 	}
 
 	public String getMahd() {
@@ -26,11 +27,11 @@ public class DonHangModel {
 		this.mahd = mahd;
 	}
 
-	public Date getNgay() {
+	public String getNgay() {
 		return ngay;
 	}
 
-	public void setNgay(Date ngay) {
+	public void setNgay(String ngay) {
 		this.ngay = ngay;
 	}
 

@@ -10,4 +10,13 @@
 	-fx-text-fill: #ff19cd;
 }
 
+#labelHome:hover,
+#labelStaff:hover,
+#labelProduct:hover, 
+#labelRenvenue:hover, 
+#labelService:hover, 
+#labelSignOut:hover,
+#labelBill:hover {
+	-fx-text-fill : #ff00f2;
+}
 
