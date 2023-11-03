@@ -11,6 +11,7 @@ import DAO.DAOInterface;
 import connectJDBC.JDBCUtil;
 import model.HoaDonModel;
 import model.KhachHangModel;
+import model.SanPhamModel;
 
 public class IHoaDon implements DAOInterface<HoaDonModel> {
 	
@@ -98,7 +99,27 @@ public class IHoaDon implements DAOInterface<HoaDonModel> {
 
 	@Override
 	public HoaDonModel selectByID(HoaDonModel generic) {
-		return null;
+		HoaDonModel result = null;
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("Select * from hoadon where mahd = ?");
+			pst.setString(1, generic.getMahd());
+			ResultSet rs = pst.executeQuery();
+			while(rs.next()) {
+				String id = rs.getString("Mahd");
+				String ngay = rs.getString("ngay");
+				float thanhtoan = rs.getFloat("thanhtoan");
+				int idkh = rs.getInt("id_khachhang");
+				int idnv = rs.getInt("id_nv");
+				result = new HoaDonModel(id, ngay, thanhtoan, idkh, idnv);
+			}
+			pst.close();
+			rs.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	@Override

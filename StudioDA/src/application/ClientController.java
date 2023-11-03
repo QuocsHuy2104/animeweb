@@ -7,10 +7,12 @@ import IDAO.IKhachHang;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Stage;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.AnchorPane;
 import model.KhachHangModel;
 import utilities.Notification;
 
@@ -24,6 +26,9 @@ public class ClientController implements Initializable {
 	
 	@FXML
 	private RadioButton rbtnMan, rbtnWoman;
+	
+	@FXML
+	private AnchorPane root;
 	
 	public void addClient() {
 		String id = txtID.getText();
@@ -57,6 +62,16 @@ public class ClientController implements Initializable {
 		
 		KhachHangModel kh = new KhachHangModel(id, name, address, phone, gender, idProduct);
 		IKhachHang.getInstance().update(kh);
+		
+		Stage stage = (Stage) root.getScene().getWindow();
+		stage.close();
+	}
+	
+	public void clean() {
+		txtID.setText("");
+		txtName.setText("");
+		txtAddress.setText("");
+		txtPhone.setText("");
 	}
 
 	@Override
@@ -64,6 +79,7 @@ public class ClientController implements Initializable {
 		ToggleGroup group = new ToggleGroup();
 		rbtnMan.setToggleGroup(group);
 		rbtnWoman.setToggleGroup(group);
+		rbtnMan.setSelected(true);
 	}
 
 }

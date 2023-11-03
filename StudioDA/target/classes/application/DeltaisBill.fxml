@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="393.0" prefWidth="518.0" style="-fx-background-color: #333;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.BillController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="393.0" prefWidth="518.0" style="-fx-background-color: #333;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.BillController">
    <children>
       <Text fill="#fa34aa" layoutX="36.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BillDeltais" wrappingWidth="204.53675079345703">
          <font>
@@ -81,7 +81,7 @@
             <Font size="16.0" />
          </font>
       </Button>
-      <Button layoutX="190.0" layoutY="317.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="142.0" style="-fx-background-color: #ffe642;" text="Clean">
+      <Button layoutX="190.0" layoutY="317.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="142.0" style="-fx-background-color: #ffe642;" text="Clean" onAction="#clean">
          <font>
             <Font size="16.0" />
          </font>

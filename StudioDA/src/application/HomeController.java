@@ -1,6 +1,5 @@
 package application;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -16,12 +15,14 @@ import IDAO.IKhachHang;
 import IDAO.INhanVien;
 import IDAO.ISanPham;
 import connectJDBC.JDBCUtil;
+import javafx.animation.TranslateTransition;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
@@ -37,14 +38,21 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.HoaDonModel;
 import model.KhachHangModel;
 import model.NhanVienModel;
@@ -54,17 +62,19 @@ import utilities.Notification;
 public class HomeController implements Initializable {
 
 	@FXML
-	private ImageView ImageMenu, imageSignout, ImageMenuBar, imageHeart;
+	private ImageView imageSignout, imageHeart, imgHome, imgStaff, imgClient, imgProduct, imgRevenue, imgBill, imgPaid,
+			setting;
 
 	@FXML
 	private Pane MenuPane, ContentPane, paneSetting, paneStaff, paneHome, paneClient, paneProduct, paneRevenue,
-			paneBill, paneDonate;
+			paneBill, paneDonate, pane1, pane2, pane3, pane4, pane5;
 
 	@FXML
-	private Rectangle menuBar, recHome, recStaff, recService, recProduct, recRevenue, recBill;
+	private Rectangle recHome, recStaff, recPaid, recProduct, recRevenue, recBill, recClient, recPoster, recWebsite,
+			recMusic, rec1, rec2, rec3, rec4, recPoster1, recPoster2, recPoster3, recPoster4;
 
 	@FXML
-	private Label labelHome, labelStaff, labelProduct, labelRenvenue, labelService, labmoielSignOut, labelBill, title,labelSignOut;
+	private Button btnHome, btnStaff, btnClient, btnProduct, btnRevenue, btnBill, btnPaid;
 
 	@FXML
 	private Line lineMenu;
@@ -74,6 +84,9 @@ public class HomeController implements Initializable {
 
 	@FXML
 	private AnchorPane root;
+
+	@FXML
+	private Circle circleLogo;
 
 	@FXML
 	private Button btnChangePass, btnAddStaff, btnEditStaff, btnDellStaff, addStaff, updateStaff, removeStaff, btnAbout,
@@ -174,6 +187,9 @@ public class HomeController implements Initializable {
 	@FXML
 	private Tab tabBill;
 
+	@FXML
+	private TextField txtFindStaff, txtFindClient, txtFindProduct, txtFindBill;
+
 	private ObservableList<NhanVienModel> staff;
 
 	private ObservableList<KhachHangModel> client;
@@ -188,104 +204,27 @@ public class HomeController implements Initializable {
 
 	// Code Handle event from
 
-	public void zoomOut() {
-		new Thread(new Runnable() {
-			public void run() {
-				for (int i = 176; i >= 110; i--) {
-					menuBar.setWidth(i);
-					hiddenMenu();
-					try {
-						Thread.sleep(6);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}).start();
-	}
-
-	public void zoomIn() {
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				for (int i = 110; i <= 176; i++) {
-					menuBar.setWidth(i);
-					try {
-						Thread.sleep(6);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-				showMenu();
-			}
-		}).start();
-	}
-
-	public void showMenu() {
-		recHome.setVisible(true);
-		recStaff.setVisible(true);
-		recService.setVisible(true);
-		recProduct.setVisible(true);
-		recRevenue.setVisible(true);
-		recBill.setVisible(true);
-
-		labelHome.setVisible(true);
-		labelStaff.setVisible(true);
-		labelProduct.setVisible(true);
-		labelRenvenue.setVisible(true);
-		labelService.setVisible(true);
-		labelSignOut.setVisible(true);
-		labelBill.setVisible(true);
-
-		ImageMenu.setVisible(true);
-		lineMenu.setVisible(true);
-		imageSignout.setLayoutX(128);
-		ImageMenuBar.setVisible(false);
-
-	}
-
-	public void hiddenMenu() {
-		recHome.setVisible(false);
-		recStaff.setVisible(false);
-		recService.setVisible(false);
-		recProduct.setVisible(false);
-		recRevenue.setVisible(false);
-		recBill.setVisible(false);
-
-		labelHome.setVisible(false);
-		labelStaff.setVisible(false);
-		labelProduct.setVisible(false);
-		labelRenvenue.setVisible(false);
-		labelService.setVisible(false);
-		labelSignOut.setVisible(false);
-		labelBill.setVisible(false);
-
-		ImageMenu.setVisible(false);
-		lineMenu.setVisible(false);
-		imageSignout.setLayoutX(50);
-		ImageMenuBar.setVisible(true);
-
-	}
-
 	public void convertScene() {
 
 	}
 
 	public void convertHeart() {
-		Image img = new Image("C:/Users/HP/workspage-udpm/StudioDA/src/image/changeheart.png");
+		Image img = new Image("C:/Users/HP/workspage-udpm/StudioDA/src/image/love-you.png");
 		imageHeart.setImage(img);
 		paneDonate.setVisible(true);
 	}
 
 	public void setting() {
 		paneSetting.setVisible(true);
-
+		Image img = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\cogwheel.png");
+		setting.setImage(img);
 	}
 
 	public void closeSetting() {
 		paneSetting.setVisible(false);
 		paneDonate.setVisible(false);
+		Image img = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\metal-gear.png");
+		setting.setImage(img);
 	}
 
 	public void changeBackground() {
@@ -300,7 +239,11 @@ public class HomeController implements Initializable {
 		paneProduct.setVisible(false);
 		paneRevenue.setVisible(false);
 		paneBill.setVisible(false);
-		title.setText("Pages / Trang chủ");
+
+		hiddenRecControl();
+		recHome.setVisible(true);
+		btnHome.setStyle("-fx-text-fill: orange; -fx-background-color: none");
+		imgHome.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\home-page.png"));
 
 	}
 
@@ -313,7 +256,11 @@ public class HomeController implements Initializable {
 			paneProduct.setVisible(false);
 			paneRevenue.setVisible(false);
 			paneBill.setVisible(false);
-			title.setText("Pages / Nhân viên");
+
+			hiddenRecControl();
+			recStaff.setVisible(true);
+			btnStaff.setStyle("-fx-text-fill: orange; -fx-background-color: none");
+			imgStaff.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\team-management.png"));
 
 		} else
 			Notification.alert(AlertType.CONFIRMATION, "Đăng nhập tài khoản trưởng phòng để xem");
@@ -328,7 +275,11 @@ public class HomeController implements Initializable {
 		paneProduct.setVisible(true);
 		paneRevenue.setVisible(false);
 		paneBill.setVisible(false);
-		title.setText("Pages / Sản phẩm");
+
+		hiddenRecControl();
+		recProduct.setVisible(true);
+		btnProduct.setStyle("-fx-text-fill: orange; -fx-background-color: none");
+		imgProduct.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\order1png.png"));
 
 	}
 
@@ -340,7 +291,11 @@ public class HomeController implements Initializable {
 		paneClient.setVisible(false);
 		paneProduct.setVisible(false);
 		paneRevenue.setVisible(false);
-		title.setText("Pages / Hóa Đơn");
+
+		hiddenRecControl();
+		recBill.setVisible(true);
+		btnBill.setStyle("-fx-text-fill: orange; -fx-background-color: none");
+		imgBill.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\mobile-receipt.png"));
 
 	}
 
@@ -352,7 +307,11 @@ public class HomeController implements Initializable {
 			paneClient.setVisible(false);
 			paneProduct.setVisible(false);
 			paneRevenue.setVisible(true);
-			title.setText("Pages / Thống kê");
+
+			hiddenRecControl();
+			recRevenue.setVisible(true);
+			btnRevenue.setStyle("-fx-text-fill: orange; -fx-background-color: none");
+			imgRevenue.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\data-analysis.png"));
 		}
 
 		else
@@ -366,7 +325,46 @@ public class HomeController implements Initializable {
 		paneClient.setVisible(true);
 		paneProduct.setVisible(false);
 		paneRevenue.setVisible(false);
-		title.setText("Pages / Khách hàng");
+
+		hiddenRecControl();
+		recClient.setVisible(true);
+		btnClient.setStyle("-fx-text-fill: orange; -fx-background-color: none");
+		imgClient.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\costumer1.png"));
+
+	}
+
+	public void hiddenRecControl() {
+		recHome.setVisible(false);
+		recStaff.setVisible(false);
+		recBill.setVisible(false);
+		recClient.setVisible(false);
+		recPaid.setVisible(false);
+		recPaid.setVisible(false);
+		recProduct.setVisible(false);
+
+		btnHome.setTextFill(Color.WHITE);
+		btnStaff.setTextFill(Color.WHITE);
+		btnProduct.setTextFill(Color.WHITE);
+		btnClient.setTextFill(Color.WHITE);
+		btnRevenue.setTextFill(Color.WHITE);
+		btnBill.setTextFill(Color.WHITE);
+		btnPaid.setTextFill(Color.WHITE);
+
+		imgHome.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\home.png"));
+		imgStaff.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\manager.png"));
+		imgClient.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\costumer.png"));
+		imgPaid.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\bill.png"));
+		imgProduct.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\order.png"));
+		imgRevenue.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\analytic.png"));
+		imgBill.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\receipt.png"));
+	}
+
+	public void openPaid() {
+
+		hiddenRecControl();
+		recPaid.setVisible(true);
+		btnPaid.setStyle("-fx-text-fill: orange; -fx-background-color: none");
+		imgPaid.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\bill1.png"));
 	}
 
 	// End Code Handle event from
@@ -496,9 +494,34 @@ public class HomeController implements Initializable {
 		}
 	}
 
+	// open screen music
+
+//	public void openMusic() {
+//		
+//		try {
+//			Parent music = FXMLLoader.load(getClass().getResource("Music.fxml"));
+//			stage = new Stage();
+//			scene = new Scene(music);
+//			stage.setScene(scene);
+//			stage.show();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		
+//
+//	}
+
 	// End code show Stage
 
 	// Begin handle code back end
+
+	public void translateAnimation(double duration, Node node, double width) {
+
+		TranslateTransition transition = new TranslateTransition(Duration.seconds(duration), node);
+		transition.setByX(width);
+		transition.play();
+
+	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -506,6 +529,8 @@ public class HomeController implements Initializable {
 		setPieChart();
 
 		cbbBackground.getItems().setAll("Default", "White smoke");
+
+		fillImage();
 
 		setCellTable();
 		loadDataStaff();
@@ -520,6 +545,11 @@ public class HomeController implements Initializable {
 		loadDataBill();
 
 		loadLineChart();
+
+		translateAnimation(0.5, pane2, 571);
+		translateAnimation(0.5, pane3, 571);
+		translateAnimation(0.5, pane4, 571);
+		translateAnimation(0.5, pane5, 571);
 	}
 
 	// set column table Staff ('NHÂN VIÊN')
@@ -598,7 +628,7 @@ public class HomeController implements Initializable {
 		tableProduct.setItems(product);
 	}
 
-	// set column table Staff ('Hóa Đơn')
+	// set column table Bill ('Hóa Đơn')
 
 	public void setBillTable() {
 		bill = FXCollections.observableArrayList();
@@ -760,4 +790,135 @@ public class HomeController implements Initializable {
 		myLineChart.getData().add(series1);
 		myLineChart.getData().add(series);
 	}
+
+	public void findStaff() {
+
+		String manv = txtFindStaff.getText();
+		NhanVienModel model = new NhanVienModel(manv, null, null, null, 0, null, null, false);
+
+		if (tableStaff.getItems().size() >= 1) {
+			tableStaff.getItems().clear();
+		}
+
+		NhanVienModel model1 = INhanVien.getInstance().selectByID(model);
+		staff.add(model1);
+		tableStaff.setItems(staff);
+
+	}
+
+	public void findClient() {
+		String makh = txtFindClient.getText();
+
+		KhachHangModel model = new KhachHangModel(makh, null, null, null, false, 0);
+
+		if (tableClient.getItems().size() >= 1) {
+			tableClient.getItems().clear();
+		}
+
+		KhachHangModel kh = IKhachHang.getInstance().selectByID(model);
+		client.add(kh);
+		tableClient.setItems(client);
+	}
+
+	public void findProduct() {
+
+		String masp = txtFindProduct.getText();
+
+		SanPhamModel model = new SanPhamModel(masp, null, null, 0, null, null, 0);
+		SanPhamModel sp = ISanPham.getInstance().selectByID(model);
+
+		if (tableProduct.getItems().size() >= 1) {
+			tableProduct.getItems().clear();
+		}
+		product.add(sp);
+
+		tableProduct.setItems(product);
+	}
+
+	public void findBill() {
+		String mahd = txtFindBill.getText();
+
+		HoaDonModel model = new HoaDonModel(mahd, null, 0, 0, 0);
+		HoaDonModel hoadon = IHoaDon.getInstance().selectByID(model);
+
+		if (tableBill.getItems().size() >= 1) {
+			tableBill.getItems().clear();
+		}
+
+		bill.add(hoadon);
+		tableBill.setItems(bill);
+	}
+
+	public void fillImage() {
+		Image img = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\logo.png");
+		circleLogo.setFill(new ImagePattern(img));
+
+		Image poster = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\poster3.jpg");
+		recPoster.setFill(new ImagePattern(poster));
+
+		Image poster6 = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\poster6.jpg");
+		recPoster1.setFill(new ImagePattern(poster6));
+
+		Image poster7 = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\poster7.jpg");
+		recPoster2.setFill(new ImagePattern(poster7));
+
+		Image poster8 = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\poster8.jpg");
+		recPoster3.setFill(new ImagePattern(poster8));
+
+		Image poster9 = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\poster9.jpg");
+		recPoster4.setFill(new ImagePattern(poster9));
+
+		Image music = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\musicl.jpg");
+		recMusic.setFill(new ImagePattern(music));
+
+		Image poster1 = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\poster1.jpg");
+		rec1.setFill(new ImagePattern(poster1));
+
+		Image poster2 = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\poster2.jpg");
+		rec2.setFill(new ImagePattern(poster2));
+
+		Image poster3 = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\poster4.jpg");
+		rec3.setFill(new ImagePattern(poster3));
+
+		Image poster4 = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\poster5.jpg");
+		rec4.setFill(new ImagePattern(poster4));
+
+	}
+
+	int show = 0;
+
+	public void back() {
+		if (show == 0) {
+			translateAnimation(0.5, pane2, -571);
+			show++;
+		} else if (show == 1) {
+			translateAnimation(0.5, pane3, -571);
+			show++;
+		} else if (show == 2) {
+			translateAnimation(0.5, pane4, -571);
+			show++;
+		} else if (show == 3) {
+			translateAnimation(0.5, pane5, -571);
+			show++;
+		}
+
+	}
+
+	public void next() {
+		if (show == 1) {
+			translateAnimation(0.5, pane2, 571);
+			show--;
+
+		} else if (show == 2) {
+			translateAnimation(0.5, pane3, 571);
+			show--;
+		} else if (show == 3) {
+			translateAnimation(0.5, pane4, 571);
+			show--;
+		} else if (show == 4) {
+			translateAnimation(0.5, pane5, 571);
+			show--;
+		}
+	}
+
 }

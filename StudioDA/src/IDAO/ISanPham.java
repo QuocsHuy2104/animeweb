@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import DAO.DAOInterface;
 import connectJDBC.JDBCUtil;
 import model.KhachHangModel;
+import model.NhanVienModel;
 import model.SanPhamModel;
 
 public class ISanPham implements DAOInterface<SanPhamModel> {
@@ -84,7 +85,29 @@ public class ISanPham implements DAOInterface<SanPhamModel> {
 
 	@Override
 	public SanPhamModel selectByID(SanPhamModel generic) {
-		return null;
+		SanPhamModel result = null;
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("Select * from sanpham where masp = ?");
+			pst.setString(1, generic.getMaSP());
+			ResultSet rs = pst.executeQuery();
+			while(rs.next()) {
+				String id = rs.getString("Masp");
+				String name = rs.getString("Tensp");
+				String thuonghieu = rs.getString("thuonghieu");
+				Float gia = rs.getFloat("giadichvu");
+				String mota = rs.getString("mota");
+				String dichvu = rs.getString("dichvu");
+				int idsp = rs.getInt("id_nv");
+				result = new SanPhamModel(id, name, thuonghieu, gia, mota, dichvu, idsp);
+			}
+			pst.close();
+			rs.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	@Override

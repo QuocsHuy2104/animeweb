@@ -18,6 +18,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import model.HoaDonModel;
 
 public class BillController implements Initializable {
@@ -32,6 +34,9 @@ public class BillController implements Initializable {
 
 	@FXML
 	private ChoiceBox<Float> choicePaid;
+	
+	@FXML
+	private AnchorPane root;
 
 	public void loadChoiceBox() {
 		Connection conn = JDBCUtil.getConnection();
@@ -91,6 +96,16 @@ public class BillController implements Initializable {
 		
 		HoaDonModel model = new HoaDonModel(mahd, ngay, thanhtoan, idClient, idStaff);
 		IHoaDon.getInstance().update(model);
+		
+
+		Stage stage = (Stage) root.getScene().getWindow();
+		stage.close();
+		
+	}
+	
+	public void clean() {
+		txtID.setText("");
+		IDStaff.setText("");
 	}
 
 	@Override

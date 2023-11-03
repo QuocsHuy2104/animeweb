@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="418.0" prefWidth="504.0" style="-fx-background-color: #333;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ClientController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="418.0" prefWidth="504.0" style="-fx-background-color: #333;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ClientController">
    <children>
       <Text fill="#fa34aa" layoutX="26.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="StaffDeltais" wrappingWidth="204.53675079345703">
          <font>
@@ -104,7 +104,7 @@
             <Font size="16.0" />
          </font>
       </Button>
-      <Button layoutX="180.0" layoutY="356.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="142.0" style="-fx-background-color: #ffe642;" text="Clean">
+      <Button layoutX="180.0" layoutY="356.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="142.0" style="-fx-background-color: #ffe642;" text="Clean" onAction="#clean">
          <font>
             <Font size="16.0" />
          </font>

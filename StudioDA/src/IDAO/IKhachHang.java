@@ -79,7 +79,28 @@ public class IKhachHang implements DAOInterface<KhachHangModel> {
 
 	@Override
 	public KhachHangModel selectByID(KhachHangModel generic) {
-		return null;
+		KhachHangModel result = null;
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("Select * from khachhang where makh = ?");
+			pst.setString(1, generic.getMaKH());
+			ResultSet rs = pst.executeQuery();
+			while(rs.next()) {
+				String id = rs.getString("maKH");
+				String name = rs.getString("TenKH");
+				String address = rs.getString("DiaChi");
+				String contact = rs.getString("SDT");
+				boolean role = rs.getBoolean("gioitinh");
+				int idsp = rs.getInt("ID_sanpham");
+				result = new KhachHangModel(id, name, address, contact, role, idsp);
+			}
+			pst.close();
+			rs.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	@Override

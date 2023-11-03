@@ -10,13 +10,15 @@
 	-fx-text-fill: #ff19cd;
 }
 
-#labelHome:hover,
-#labelStaff:hover,
-#labelProduct:hover, 
-#labelRenvenue:hover, 
-#labelService:hover, 
-#labelSignOut:hover,
-#labelBill:hover {
-	-fx-text-fill : #ff00f2;
+#btnHome:hover,
+#btnStaff:hover,
+#btnClient:hover,
+#btnProduct:hover,
+#btnBill:hover,
+#btnRevenue:hover,
+#btnPaid:hover,
+#btnSignOut:hover {
+	-fx-cursor: hand;
+	-fx-text-fill: linear-gradient(from 23.4848% 20.8333% to 100.0% 100.0%, #fa7f2d 0.0%, #fa7d2f 10.1845%, #36d7f7 27.0528%, #36d7f7 57.8997%, #f21d96 68.2648%, #f41c93 100.0%);
 }
 

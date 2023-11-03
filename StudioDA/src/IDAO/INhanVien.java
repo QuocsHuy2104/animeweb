@@ -95,7 +95,7 @@ public class INhanVien implements DAOInterface<NhanVienModel> {
 				String contact = rs.getString("SDT");
 				Double luong = rs.getDouble("luong");
 				String ngaynhan = rs.getString("NgayNhan");
-				String pass = rs.getString("MatKhau");
+				String pass = rs.getString("pass");
 				boolean role = rs.getBoolean("VaiTro");
 				result = new NhanVienModel(id, name, address, contact, luong, ngaynhan, pass, role);
 			}
@@ -120,13 +120,14 @@ public class INhanVien implements DAOInterface<NhanVienModel> {
 				String name = rs.getString("TenNV");
 				String address = rs.getString("DiaChi");
 				String phone = rs.getString("SDT");
+				Double luong = rs.getDouble("luong");
 				String reDate = rs.getString("NgayNhan");
 				String pass = rs.getString("pass");
 				int role = rs.getInt("vaitro");
 				
 				boolean roles = role == 1 ? true : false;
 				
-				NhanVienModel nv = new NhanVienModel(id, name, address, phone, role, reDate, pass, roles);
+				NhanVienModel nv = new NhanVienModel(id, name, address, phone, luong, reDate, pass, roles);
 				result.add(nv);
 			}
 			pst.close();
