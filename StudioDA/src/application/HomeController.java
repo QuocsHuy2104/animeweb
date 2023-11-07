@@ -16,9 +16,11 @@ import IDAO.INhanVien;
 import IDAO.ISanPham;
 import connectJDBC.JDBCUtil;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -52,6 +54,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import model.HoaDonModel;
 import model.KhachHangModel;
@@ -262,8 +266,11 @@ public class HomeController implements Initializable {
 			btnStaff.setStyle("-fx-text-fill: orange; -fx-background-color: none");
 			imgStaff.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\team-management.png"));
 
-		} else
-			Notification.alert(AlertType.CONFIRMATION, "Đăng nhập tài khoản trưởng phòng để xem");
+		} else {
+			Alert alert = new Alert();
+			alert.start(stage);
+		}
+			
 
 	}
 
@@ -496,20 +503,20 @@ public class HomeController implements Initializable {
 
 	// open screen music
 
-//	public void openMusic() {
-//		
-//		try {
-//			Parent music = FXMLLoader.load(getClass().getResource("Music.fxml"));
-//			stage = new Stage();
-//			scene = new Scene(music);
-//			stage.setScene(scene);
-//			stage.show();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		
-//
-//	}
+	public void openMusic() {
+		
+		try {
+			Parent music = FXMLLoader.load(getClass().getResource("Music.fxml"));
+			stage = new Stage();
+			scene = new Scene(music);
+			stage.setScene(scene);
+			stage.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+
+	}
 
 	// End code show Stage
 
@@ -920,5 +927,7 @@ public class HomeController implements Initializable {
 			show--;
 		}
 	}
+	
+	
 
 }

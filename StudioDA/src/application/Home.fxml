@@ -740,7 +740,10 @@
                      <children>
             						<Rectangle fx:id="recVideo" arcHeight="30.0" arcWidth="30.0" fill="DODGERBLUE" height="115.0" layoutX="9.0" layoutY="204.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="122.0" />
       						<Rectangle fx:id="playVideo" arcHeight="30.0" arcWidth="30.0" fill="DODGERBLUE" height="185.0" layoutX="9.0" layoutY="8.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="253.0" />
-      						<Rectangle fx:id="recMusic" arcHeight="30.0" arcWidth="30.0" fill="DODGERBLUE" height="115.0" layoutX="139.0" layoutY="204.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="122.0" />
+      						<Rectangle fx:id="recMusic" arcHeight="30.0" arcWidth="30.0" fill="DODGERBLUE" height="115.0" layoutX="139.0" layoutY="204.0" onMouseClicked="#openMusic" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="122.0">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></Rectangle>
                      </children>
                   </Pane>
       					</children>
@@ -752,6 +755,18 @@
                         <Image url="@../image/donate.jpg" />
                      </image>
                   </ImageView>
+               </children>
+            </Pane>
+            <Pane fx:id="paneService" layoutX="1.0" prefHeight="618.0" prefWidth="879.0" visible="false">
+               <children>
+                  <TableView layoutX="14.0" layoutY="14.0" prefHeight="526.0" prefWidth="860.0">
+                    <columns>
+                      <TableColumn prefWidth="202.40000915527344" text="MÃ DỊCH VỤ" />
+                      <TableColumn prefWidth="144.0" text="TÊN DỊCH VỤ" />
+                        <TableColumn prefWidth="165.60003662109375" text="GIÁ DỊCH VỤ" />
+                        <TableColumn prefWidth="163.199951171875" text="KHUYẾN MÃI" />
+                    </columns>
+                  </TableView>
                </children>
             </Pane>
 			</children>

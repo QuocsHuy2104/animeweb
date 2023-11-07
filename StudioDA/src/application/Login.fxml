@@ -41,7 +41,7 @@
          <font>
             <Font size="17.0" />
          </font></TextField>
-      <Button fx:id="btnLogin" layoutX="1055.0" layoutY="462.0" mnemonicParsing="false" onAction="#LoginEvent" prefHeight="52.0" prefWidth="125.0" style="-fx-background-radius: 10px;" stylesheets="@styleLogin.css" text="Login Now">
+      <Button fx:id="btnLogin" layoutX="1055.0" layoutY="462.0" mnemonicParsing="false" onAction="#LoginEvent" prefHeight="52.0" prefWidth="125.0" style="-fx-background-radius: 10px;" stylesheets="@styleLogin.css" text="Đăng Nhập">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
