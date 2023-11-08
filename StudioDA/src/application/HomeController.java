@@ -362,7 +362,6 @@ public class HomeController implements Initializable {
 		imgClient.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\costumer.png"));
 		imgPaid.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\bill.png"));
 		imgProduct.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\order.png"));
-		imgRevenue.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\analytic.png"));
 		imgBill.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\receipt.png"));
 	}
 
@@ -536,8 +535,6 @@ public class HomeController implements Initializable {
 		setPieChart();
 
 		cbbBackground.getItems().setAll("Default", "White smoke");
-
-		fillImage();
 
 		setCellTable();
 		loadDataStaff();
@@ -855,79 +852,5 @@ public class HomeController implements Initializable {
 		bill.add(hoadon);
 		tableBill.setItems(bill);
 	}
-
-	public void fillImage() {
-		Image img = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\logo.png");
-		circleLogo.setFill(new ImagePattern(img));
-
-		Image poster = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\poster3.jpg");
-		recPoster.setFill(new ImagePattern(poster));
-
-		Image poster6 = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\poster6.jpg");
-		recPoster1.setFill(new ImagePattern(poster6));
-
-		Image poster7 = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\poster7.jpg");
-		recPoster2.setFill(new ImagePattern(poster7));
-
-		Image poster8 = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\poster8.jpg");
-		recPoster3.setFill(new ImagePattern(poster8));
-
-		Image poster9 = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\poster9.jpg");
-		recPoster4.setFill(new ImagePattern(poster9));
-
-		Image music = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\musicl.jpg");
-		recMusic.setFill(new ImagePattern(music));
-
-		Image poster1 = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\poster1.jpg");
-		rec1.setFill(new ImagePattern(poster1));
-
-		Image poster2 = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\poster2.jpg");
-		rec2.setFill(new ImagePattern(poster2));
-
-		Image poster3 = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\poster4.jpg");
-		rec3.setFill(new ImagePattern(poster3));
-
-		Image poster4 = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\poster5.jpg");
-		rec4.setFill(new ImagePattern(poster4));
-
-	}
-
-	int show = 0;
-
-	public void back() {
-		if (show == 0) {
-			translateAnimation(0.5, pane2, -571);
-			show++;
-		} else if (show == 1) {
-			translateAnimation(0.5, pane3, -571);
-			show++;
-		} else if (show == 2) {
-			translateAnimation(0.5, pane4, -571);
-			show++;
-		} else if (show == 3) {
-			translateAnimation(0.5, pane5, -571);
-			show++;
-		}
-
-	}
-
-	public void next() {
-		if (show == 1) {
-			translateAnimation(0.5, pane2, 571);
-			show--;
-
-		} else if (show == 2) {
-			translateAnimation(0.5, pane3, 571);
-			show--;
-		} else if (show == 3) {
-			translateAnimation(0.5, pane4, 571);
-			show--;
-		} else if (show == 4) {
-			translateAnimation(0.5, pane5, 571);
-			show--;
-		}
-	}
-	
-	
 
 }

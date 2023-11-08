@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.CategoryAxis?>
@@ -9,17 +10,22 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.paint.Color?>
@@ -31,9 +37,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1070.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.HomeController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1340.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.HomeController">
 	<children>
-		<Pane fx:id="MenuPane" layoutY="82.0" prefHeight="618.0" prefWidth="191.0">
+		<Pane fx:id="MenuPane" layoutY="82.0" prefHeight="680.0" prefWidth="210.0" stylesheets="@style.css">
 			<children>
 				<ImageView fx:id="imgHome" fitHeight="30.0" fitWidth="30.0" layoutX="31.0" layoutY="25.0" onMouseClicked="#openHome" pickOnBounds="true" preserveRatio="true">
 					<image>
@@ -53,22 +59,12 @@
 						<Image url="@../image/costumer.png" />
 					</image>
 				</ImageView>
-				<ImageView fx:id="imgProduct" fitHeight="35.0" fitWidth="35.0" layoutX="29.0" layoutY="245.0" onMouseClicked="#openProduct" pickOnBounds="true" preserveRatio="true">
+				<ImageView fx:id="imgProduct" fitHeight="35.0" fitWidth="35.0" layoutX="29.0" layoutY="190.0" onMouseClicked="#openProduct" pickOnBounds="true" preserveRatio="true">
 					<image>
 						<Image url="@../image/order.png" />
 					</image>
 				</ImageView>
-				<ImageView fx:id="imgRevenue" fitHeight="35.0" fitWidth="35.0" layoutX="29.0" layoutY="190.0" onMouseClicked="#openRevenue" pickOnBounds="true" preserveRatio="true">
-					<image>
-						<Image url="@../image/analytic.png" />
-					</image>
-				</ImageView>
-				<ImageView fx:id="imageSignout" fitHeight="35.0" fitWidth="35.0" layoutX="29.0" layoutY="568.0" onMouseClicked="#openLogin" pickOnBounds="true" preserveRatio="true">
-					<image>
-						<Image url="@../image/logout%20(1).png" />
-					</image>
-				</ImageView>
-				<ImageView fx:id="imgBill" fitHeight="35.0" fitWidth="35.0" layoutX="29.0" layoutY="300.0" onMouseClicked="#openBill" pickOnBounds="true" preserveRatio="true">
+				<ImageView fx:id="imgBill" fitHeight="35.0" fitWidth="35.0" layoutX="29.0" layoutY="303.0" onMouseClicked="#openBill" pickOnBounds="true" preserveRatio="true">
 					<image>
 						<Image url="@../image/receipt.png" />
 					</image>
@@ -111,32 +107,22 @@
 						<Font size="16.0" />
 					</font>
 				</Button>
-				<Button fx:id="btnRevenue" alignment="BASELINE_LEFT" layoutX="71.0" layoutY="189.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#openRevenue" prefHeight="36.0" prefWidth="115.0" style="-fx-background-color: none;" stylesheets="@style.css" text="Thống Kê" textAlignment="CENTER" textFill="#fcfcfc">
+				<Button fx:id="btnProduct" alignment="BASELINE_LEFT" layoutX="71.0" layoutY="190.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#openProduct" prefHeight="36.0" prefWidth="115.0" style="-fx-background-color: none;" stylesheets="@style.css" text="Sản Phẩm" textAlignment="CENTER" textFill="#fcfcfc">
 					<font>
 						<Font size="16.0" />
 					</font>
 				</Button>
-				<Button fx:id="btnProduct" alignment="BASELINE_LEFT" layoutX="71.0" layoutY="244.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#openProduct" prefHeight="36.0" prefWidth="115.0" style="-fx-background-color: none;" stylesheets="@style.css" text="Sản Phẩm" textAlignment="CENTER" textFill="#fcfcfc">
+				<Button fx:id="btnBill" alignment="BASELINE_LEFT" layoutX="71.0" layoutY="302.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#openBill" prefHeight="36.0" prefWidth="115.0" style="-fx-background-color: none;" stylesheets="@style.css" text="Hóa Đơn" textAlignment="CENTER" textFill="#fcfcfc">
 					<font>
 						<Font size="16.0" />
 					</font>
 				</Button>
-				<Button fx:id="btnBill" alignment="BASELINE_LEFT" layoutX="71.0" layoutY="299.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#openBill" prefHeight="36.0" prefWidth="115.0" style="-fx-background-color: none;" stylesheets="@style.css" text="Hóa Đơn" textAlignment="CENTER" textFill="#fcfcfc">
-					<font>
-						<Font size="16.0" />
-					</font>
-				</Button>
-				<Button fx:id="btnSignOut" alignment="BASELINE_LEFT" layoutX="71.0" layoutY="567.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#openLogin" prefHeight="36.0" prefWidth="97.0" style="-fx-background-color: none;" text="Đăng Xuất" textAlignment="CENTER" textFill="WHITE">
-					<font>
-						<Font size="16.0" />
-					</font>
-				</Button>
-				<ImageView fx:id="imgPaid" fitHeight="35.0" fitWidth="35.0" layoutX="29.0" layoutY="355.0" onMouseClicked="#openBill" pickOnBounds="true" preserveRatio="true">
+				<ImageView fx:id="imgPaid" fitHeight="35.0" fitWidth="35.0" layoutX="29.0" layoutY="358.0" onMouseClicked="#openBill" pickOnBounds="true" preserveRatio="true">
 					<image>
 						<Image url="@../image/bill.png" />
 					</image>
 				</ImageView>
-				<Button fx:id="btnPaid" alignment="BASELINE_LEFT" layoutX="71.0" layoutY="354.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="36.0" prefWidth="115.0" style="-fx-background-color: none;" stylesheets="@style.css" text="Thanh Toán" textAlignment="CENTER" textFill="#fcfcfc">
+				<Button fx:id="btnBillDeltais" alignment="BASELINE_LEFT" layoutX="71.0" layoutY="357.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="36.0" prefWidth="115.0" style="-fx-background-color: none;" stylesheets="@style.css" text="Thanh Toán" textAlignment="CENTER" textFill="#fcfcfc">
 					<font>
 						<Font size="16.0" />
 					</font>
@@ -304,45 +290,90 @@
 						<Font size="16.0" />
 					</font>
 				</Button>
+            <ImageView fx:id="imgPaid1" fitHeight="35.0" fitWidth="35.0" layoutX="29.0" layoutY="245.0" onMouseClicked="#openBill" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../image/customer-service.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="btnService" alignment="BASELINE_LEFT" layoutX="71.0" layoutY="245.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#openBill" prefHeight="36.0" prefWidth="115.0" style="-fx-background-color: none;" stylesheets="@style.css" text="Dịch Vụ" textAlignment="CENTER" textFill="#fcfcfc">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
 			</children>
 		</Pane>
-		<Pane prefHeight="82.0" prefWidth="1063.0" stylesheets="@style.css">
+		<Pane fx:id="headerPane" prefHeight="82.0" prefWidth="1340.0" stylesheets="@style.css">
 			<children>
-				<ImageView fx:id="imageHeart" fitHeight="40.0" fitWidth="44.0" layoutX="1009.0" layoutY="22.0" onMouseClicked="#convertHeart" pickOnBounds="true" preserveRatio="true">
+				<ImageView fx:id="imageHeart" fitHeight="40.0" fitWidth="44.0" layoutX="1286.0" layoutY="23.0" onMouseClicked="#convertHeart" pickOnBounds="true" preserveRatio="true">
 					<image>
 						<Image url="@../image/love-you1.png" />
 					</image>
 				</ImageView>
-				<ImageView fx:id="setting" fitHeight="35.0" fitWidth="36.0" layoutX="960.0" layoutY="24.0" onMouseClicked="#setting" pickOnBounds="true" preserveRatio="true">
+				<ImageView fx:id="setting" fitHeight="35.0" fitWidth="36.0" layoutX="1242.0" layoutY="26.0" onMouseClicked="#setting" pickOnBounds="true" preserveRatio="true">
 					<image>
 						<Image url="@../image/metal-gear.png" />
 					</image>
 				</ImageView>
-				<Circle fill="#fafafa" layoutX="919.0" layoutY="41.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+				<Circle fill="#fafafa" layoutX="1197.0" layoutY="44.0" radius="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
 				<Circle fx:id="circleLogo" fill="#ffffffcc" layoutX="44.0" layoutY="41.0" radius="22.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
 				<Label layoutX="81.0" layoutY="18.0" prefHeight="45.0" prefWidth="176.0" text="Studio Breakfast" textFill="WHITE">
 					<font>
 						<Font size="22.0" />
 					</font>
 				</Label>
-				<Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ffffff26" height="45.0" layoutX="303.0" layoutY="19.0" stroke="#ff24f0" strokeType="INSIDE" strokeWidth="0.0" width="485.0" />
-				<ImageView fx:id="imgFind" fitHeight="30.0" fitWidth="30.0" layoutX="316.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
+				<Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ffffff26" height="44.0" layoutX="301.0" layoutY="22.0" stroke="#ff24f0" strokeType="INSIDE" strokeWidth="0.0" width="485.0" />
+				<ImageView fx:id="imgFind" fitHeight="30.0" fitWidth="30.0" layoutX="315.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
 					<image>
 						<Image url="@../image/search-interface-symbol.png" />
 					</image>
 				</ImageView>
-				<TextField fx:id="txtFindAll" layoutX="358.0" layoutY="25.0" prefHeight="35.0" prefWidth="262.0" promptText="Tìm Kiếm" style="-fx-text-inner-color: white; -fx-background-color: none;" stylesheets="@style.css">
+				<TextField fx:id="txtFindAll" layoutX="357.0" layoutY="26.0" prefHeight="35.0" prefWidth="262.0" promptText="Tìm Kiếm" style="-fx-text-inner-color: white; -fx-background-color: none;" stylesheets="@style.css">
 					<font>
 						<Font size="15.0" />
 					</font>
 				</TextField>
 			</children>
 		</Pane>
-		<Pane fx:id="ContentPane" layoutX="191.0" layoutY="81.0" onMouseClicked="#closeSetting" prefHeight="618.0" prefWidth="882.0">
+				<Pane fx:id="paneSetting" prefHeight="760.0" prefWidth="1340.0">
+         <children>
+            <ImageView fitHeight="44.0" fitWidth="44.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../image/cogwheel.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="lblTitleSetting" layoutX="67.0" layoutY="19.0" prefHeight="35.0" prefWidth="130.0" stylesheets="@style.css" text="Cài Đặt">
+               <font>
+                  <Font size="24.0" />
+               </font>
+               <textFill>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="1.0" green="0.4797530770301819" blue="0.27407407760620117" />
+                           </color>
+                        </Stop>
+                        <Stop offset="0.48367199553556767">
+                           <color>
+                              <Color red="1.0" green="0.5238271355628967" blue="0.014814814552664757" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="1.0" green="0.7833333611488342" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </textFill>
+            </Label>
+         </children>
+				</Pane>
+		<Pane fx:id="ContentPane" layoutX="210.0" layoutY="81.0" onMouseClicked="#closeSetting" prefHeight="680.0" prefWidth="1131.0">
 			<children>
-				<Pane fx:id="paneRevenue" layoutX="1.0" prefHeight="618.0" prefWidth="879.0" visible="false">
-					<children>
-						<LineChart fx:id="myLineChart" layoutX="14.0" layoutY="14.0" prefHeight="297.0" prefWidth="485.0">
+      				<Pane fx:id="paneHome" layoutX="14.0" layoutY="14.0" prefHeight="665.0" prefWidth="1117.0" visible="false">
+               <children>
+						<LineChart fx:id="myLineChart" layoutX="14.0" layoutY="339.0" prefHeight="300.0" prefWidth="500.0">
 							<xAxis>
 								<CategoryAxis side="BOTTOM" />
 							</xAxis>
@@ -350,45 +381,166 @@
 								<NumberAxis side="LEFT" />
 							</yAxis>
 						</LineChart>
-						<PieChart fx:id="pieChart" layoutX="517.0" layoutY="31.0" prefHeight="554.0" prefWidth="348.0" title="Thống kê" />
-						<AreaChart layoutX="14.0" layoutY="311.0" prefHeight="297.0" prefWidth="485.0">
-							<xAxis>
-								<CategoryAxis side="BOTTOM" />
-							</xAxis>
-							<yAxis>
-								<NumberAxis side="LEFT" />
-							</yAxis>
-						</AreaChart>
-					</children>
-				</Pane>
-				<Pane fx:id="paneStaff" layoutX="1.0" prefHeight="618.0" prefWidth="879.0" visible="false">
+						<PieChart fx:id="pieChart" layoutX="762.0" layoutY="27.0" prefHeight="312.0" prefWidth="341.0" title="Thống kê" />
+                  <AreaChart layoutX="14.0" layoutY="9.0" prefHeight="330.0" prefWidth="726.0">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </AreaChart>
+                  <TableView fx:id="tblRevenue" layoutX="523.0" layoutY="351.0" prefHeight="266.0" prefWidth="580.0">
+                    <columns>
+                      <TableColumn prefWidth="150.4000244140625" text="Sản Phẩm" />
+                      <TableColumn minWidth="0.0" prefWidth="0.0" text="C2" />
+                        <TableColumn prefWidth="136.800048828125" text="Giá Bán" />
+                        <TableColumn prefWidth="131.2000732421875" text="Giảm Giá" />
+                        <TableColumn prefWidth="75.0" text="Lượt Bán" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </children>
+      				</Pane>
+				<Pane fx:id="paneStaff" layoutX="14.0" layoutY="14.0" prefHeight="665.0" prefWidth="1117.0" visible="false">
 					<children>
-						<TableView fx:id="tableStaff" layoutX="14.0" layoutY="18.0" prefHeight="428.0" prefWidth="632.0">
+						<TableView fx:id="tableStaff" layoutX="14.0" layoutY="64.0" prefHeight="489.0" prefWidth="682.0">
 							<columns>
 								<TableColumn fx:id="idCol" prefWidth="104.80001831054688" style="-fx-alignment: center;" text="Mã Nhân Viên" />
 								<TableColumn fx:id="nameCol" prefWidth="96.79998779296875" style="-fx-alignment: center;" text="Họ Tên" />
 								<TableColumn fx:id="addressCol" prefWidth="112.800048828125" style="-fx-alignment: center;" text="Địa Chỉ" />
 								<TableColumn fx:id="phoneCol" prefWidth="115.99993896484375" style="-fx-alignment: center;" text="Số Điện Thoại" />
-								<TableColumn fx:id="wageCol" prefWidth="120.0" style="-fx-alignment: center;" text="Lương" />
+								<TableColumn fx:id="wageCol" prefWidth="120.0" style="-fx-alignment: center;" text="Email" />
 							</columns>
-							<columnResizePolicy>
-								<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-							</columnResizePolicy>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
 						</TableView>
-						<FlowPane fx:id="ControllStaff" alignment="CENTER" columnHalignment="CENTER" hgap="10.0" layoutX="784.0" layoutY="53.0" orientation="VERTICAL" prefHeight="209.0" prefWidth="81.0" vgap="20.0">
-							<children>
-								<Button fx:id="btnAddStaff" mnemonicParsing="false" onMouseClicked="#openAddStaff" prefHeight="26.0" prefWidth="60.0" style="-fx-background-color: #66FF66;" text="Thêm" />
-								<Button fx:id="btnEditStaff" mnemonicParsing="false" onAction="#openAddStaff" prefHeight="26.0" prefWidth="60.0" style="-fx-background-color: #FFFF66;" text="Sửa" />
-								<Button fx:id="btnDellStaff" mnemonicParsing="false" onAction="#deleteStaff" prefHeight="26.0" prefWidth="61.0" style="-fx-background-color: #FF6699;" text="Xóa" />
-								<Button fx:id="refreshTableStaff" mnemonicParsing="false" onAction="#loadDataStaff" prefHeight="26.0" prefWidth="61.0" style="-fx-background-color: #FF00FF;" text="Đặt lại" />
-							</children>
-						</FlowPane>
-						<TextField fx:id="txtFindStaff" layoutX="674.0" layoutY="18.0" onAction="#findStaff" prefHeight="26.0" prefWidth="191.0" promptText="Tìm Kiếm" />
+                  <HBox alignment="CENTER" layoutX="706.0" layoutY="474.0" prefHeight="55.0" prefWidth="397.0">
+                     <children>
+								<Button fx:id="addStaffButton" mnemonicParsing="false" onMouseClicked="#openAddStaff" prefHeight="26.0" prefWidth="60.0" stylesheets="@style.css" text="Thêm" />
+								<Button fx:id="editStaffButton" mnemonicParsing="false" onAction="#openAddStaff" prefHeight="26.0" prefWidth="60.0" stylesheets="@style.css" text="Sửa">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin></Button>
+								<Button fx:id="delStaffButton" mnemonicParsing="false" onAction="#deleteStaff" prefHeight="30.0" prefWidth="79.0" stylesheets="@style.css" text="Xóa">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin></Button>
+								<Button fx:id="refreshStaffButton" mnemonicParsing="false" onAction="#loadDataStaff" prefHeight="37.0" prefWidth="105.0" text="Đặt lại">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin></Button>
+                     </children>
+                  </HBox>
+						<TextField fx:id="txtFindStaff" layoutX="14.0" layoutY="14.0" onAction="#findStaff" prefHeight="38.0" prefWidth="682.0" promptText="Tìm Kiếm" stylesheets="@style.css" />
+                  <Pane layoutX="706.0" layoutY="64.0" prefHeight="408.0" prefWidth="397.0">
+                     <children>
+                        <HBox alignment="CENTER" layoutX="-3.0" layoutY="14.0" prefHeight="46.0" prefWidth="404.0">
+                           <children>
+                              <Text fill="#fa9b34" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã Nhân Viên :" wrappingWidth="142.20587158203125">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="IDStaff" disable="true" prefHeight="26.0" prefWidth="203.0" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="-3.0" layoutY="60.0" prefHeight="46.0" prefWidth="404.0">
+                           <children>
+                              <Text fill="#fa9b34" strokeType="OUTSIDE" strokeWidth="0.0" text="Họ tên :" wrappingWidth="142.20587158203125">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="nameStaff" prefHeight="26.0" prefWidth="200.0" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="-3.0" layoutY="106.0" prefHeight="46.0" prefWidth="404.0">
+                           <children>
+                              <Text fill="#fa9b34" strokeType="OUTSIDE" strokeWidth="0.0" text="Số Điện Thoại :" wrappingWidth="142.20587158203125">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="phoneStaff" prefHeight="26.0" prefWidth="200.0" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="-3.0" layoutY="152.0" prefHeight="46.0" prefWidth="404.0">
+                           <children>
+                              <Text fill="#fa9b34" strokeType="OUTSIDE" strokeWidth="0.0" text="Email :" wrappingWidth="142.20587158203125">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="emailStaff" prefHeight="26.0" prefWidth="200.0" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="-3.0" layoutY="204.0" prefHeight="64.0" prefWidth="404.0">
+                           <children>
+                              <Text fill="#fa9b34" strokeType="OUTSIDE" strokeWidth="0.0" text="Địa Chỉ :" wrappingWidth="142.20587158203125">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <TextArea fx:id="addressStaff" prefHeight="90.0" prefWidth="201.0" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="-3.0" layoutY="276.0" prefHeight="46.0" prefWidth="404.0">
+                           <children>
+                              <Text fill="#fa9b34" strokeType="OUTSIDE" strokeWidth="0.0" text="Mật Khẩu :" wrappingWidth="142.20587158203125">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <PasswordField fx:id="password" prefHeight="26.0" prefWidth="203.0" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="-3.0" layoutY="322.0" prefHeight="46.0" prefWidth="404.0">
+                           <children>
+                              <Text fill="#fa9b34" strokeType="OUTSIDE" strokeWidth="0.0" text="Vai Trò :" wrappingWidth="142.20587158203125">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <RadioButton fx:id="rbtnManage" mnemonicParsing="false" prefHeight="18.0" prefWidth="114.0" text="Trưởng Phòng" textFill="#ffb90f">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="Roles" />
+                                 </toggleGroup>
+                              </RadioButton>
+                              <RadioButton fx:id="rbtnStaff" mnemonicParsing="false" prefHeight="18.0" prefWidth="92.0" stylesheets="@style.css" text="Nhân Viên" textFill="#ffb90f" toggleGroup="$Roles" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                     </children>
+                  </Pane>
 					</children>
 				</Pane>
-				<Pane fx:id="paneClient" layoutX="11.0" layoutY="61.0" onMouseClicked="#openClient" prefHeight="507.0" prefWidth="580.0" visible="false">
+				<Pane fx:id="paneClient" layoutX="14.0" layoutY="14.0" onMouseClicked="#openClient" prefHeight="665.0" prefWidth="1117.0" visible="false">
 					<children>
-						<TableView fx:id="tableClient" layoutX="14.0" layoutY="14.0" prefHeight="428.0" prefWidth="552.0">
+						<TableView fx:id="tableClient" layoutX="14.0" layoutY="64.0" prefHeight="476.0" prefWidth="629.0">
 							<columns>
 								<TableColumn fx:id="idClientCol" prefWidth="99.20004272460938" style="-fx-alignment: center;" text="Mã Khách Hàng" />
 								<TableColumn fx:id="nameClientCol" minWidth="6.399993896484375" prefWidth="113.60000610351562" style="-fx-alignment: center;" text="Tên Khách Hàng" />
@@ -400,63 +552,204 @@
 								<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
 							</columnResizePolicy>
 						</TableView>
-						<FlowPane fx:id="ControllStaff1" alignment="CENTER" hgap="10.0" layoutX="14.0" layoutY="448.0" prefHeight="45.0" prefWidth="272.0" vgap="20.0">
+						<FlowPane fx:id="ControllStaff1" alignment="CENTER" hgap="10.0" layoutX="668.0" layoutY="472.0" prefHeight="75.0" prefWidth="438.0" vgap="20.0">
 							<children>
-								<Button fx:id="btnAddCli" mnemonicParsing="false" onAction="#openAddClient" prefHeight="26.0" prefWidth="60.0" text="Thêm" />
-								<Button fx:id="btnEditCli" mnemonicParsing="false" onAction="#openAddClient" prefHeight="26.0" prefWidth="60.0" text="Sửa" />
-								<Button fx:id="btnDelCli" mnemonicParsing="false" onAction="#delClient" prefHeight="26.0" prefWidth="61.0" text="Xóa" />
-								<Button mnemonicParsing="false" onAction="#loadDataClient" text="Refresh" />
+								<Button fx:id="addClientButton" mnemonicParsing="false" onAction="#openAddClient" prefHeight="26.0" prefWidth="60.0" text="Thêm" />
+								<Button fx:id="editClientButton" mnemonicParsing="false" onAction="#openAddClient" prefHeight="26.0" prefWidth="60.0" text="Sửa" />
+								<Button fx:id="delClientButton" mnemonicParsing="false" onAction="#delClient" prefHeight="26.0" prefWidth="61.0" text="Xóa" />
+								<Button fx:id="refreshClientButton" mnemonicParsing="false" onAction="#loadDataClient" text="Refresh" />
 							</children>
 						</FlowPane>
-						<TextField fx:id="txtFindClient" layoutX="386.0" layoutY="456.0" onAction="#findClient" prefHeight="26.0" prefWidth="176.0" promptText="Tìm Kiếm" />
+						<TextField fx:id="txtFindClient" layoutX="14.0" layoutY="14.0" onAction="#findClient" prefHeight="38.0" prefWidth="629.0" promptText="Tìm Kiếm" />
+                  <Pane layoutX="689.0" layoutY="64.0" prefHeight="408.0" prefWidth="397.0">
+                     <children>
+                        <HBox alignment="CENTER" layoutX="-3.0" prefHeight="46.0" prefWidth="404.0">
+                           <children>
+                              <Text fill="#fa9b34" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã Khách Hàng :" wrappingWidth="142.20587158203125">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="IDClient" disable="true" prefHeight="26.0" prefWidth="203.0" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="-3.0" layoutY="46.0" prefHeight="46.0" prefWidth="404.0">
+                           <children>
+                              <Text fill="#fa9b34" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên Khách Hàng :" wrappingWidth="142.20587158203125">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="nameClient" prefHeight="26.0" prefWidth="203.0" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="-3.0" layoutY="92.0" prefHeight="46.0" prefWidth="404.0">
+                           <children>
+                              <Text fill="#fa9b34" strokeType="OUTSIDE" strokeWidth="0.0" text="Số Điện Thoại :" wrappingWidth="142.20587158203125">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="phoneClient" prefHeight="26.0" prefWidth="203.0" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="-3.0" layoutY="138.0" prefHeight="46.0" prefWidth="404.0">
+                           <children>
+                              <Text fill="#fa9b34" strokeType="OUTSIDE" strokeWidth="0.0" text="Email :" wrappingWidth="142.20587158203125">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="emailClient" prefHeight="26.0" prefWidth="203.0" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="-3.0" layoutY="190.0" prefHeight="82.0" prefWidth="404.0">
+                           <children>
+                              <Text fill="#fa9b34" strokeType="OUTSIDE" strokeWidth="0.0" text="Địa Chỉ :" wrappingWidth="142.20587158203125">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets bottom="40.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <TextArea fx:id="addressClient" prefHeight="200.0" prefWidth="200.0" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="-3.0" layoutY="279.0" prefHeight="46.0" prefWidth="404.0">
+                           <children>
+                              <Text fill="#fa9b34" strokeType="OUTSIDE" strokeWidth="0.0" text="Giới Tính :" wrappingWidth="142.20587158203125">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <RadioButton fx:id="rbtnMan" mnemonicParsing="false" prefHeight="18.0" prefWidth="114.0" text="Nam" textFill="#ffb90f">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="Roles1" />
+                                 </toggleGroup>
+                              </RadioButton>
+                              <RadioButton fx:id="rbtnWoman" mnemonicParsing="false" prefHeight="18.0" prefWidth="92.0" stylesheets="@style.css" text="Nữ" textFill="#ffb90f" toggleGroup="$Roles1" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                     </children>
+                  </Pane>
 					</children>
 				</Pane>
-				<Pane fx:id="paneProduct" layoutX="11.0" layoutY="61.0" prefHeight="507.0" prefWidth="580.0" visible="false">
+				<Pane fx:id="paneProduct" layoutX="14.0" layoutY="14.0" prefHeight="665.0" prefWidth="1117.0" visible="false">
 					<children>
-						<TableView fx:id="tableProduct" layoutX="14.0" layoutY="18.0" prefHeight="421.0" prefWidth="552.0">
+						<TableView fx:id="tableProduct" layoutX="14.0" layoutY="67.0" prefHeight="476.0" prefWidth="629.0">
 							<columns>
 								<TableColumn fx:id="idProCol" prefWidth="108.00001525878906" style="-fx-alignment: center;" text="MÃ SẢN PHẨM" />
 								<TableColumn fx:id="nameProCol" prefWidth="127.20001220703125" style="-fx-alignment: center;" text="TÊN SẢN PHẨM" />
 								<TableColumn fx:id="wageProCol" prefWidth="79.199951171875" style="-fx-alignment: center;" text="GIÁ" />
 								<TableColumn fx:id="markProCol" prefWidth="116.800048828125" style="-fx-alignment: center;" text="THƯƠNG HIỆU" />
-								<TableColumn fx:id="serviceProCol" prefWidth="123.20001220703125" style="-fx-alignment: center;" text="DỊCH VỤ" />
+								<TableColumn fx:id="serviceProCol" prefWidth="123.20001220703125" style="-fx-alignment: center;" text="Nhân Viên" />
 							</columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
 						</TableView>
-						<FlowPane fx:id="ControllStaff2" alignment="CENTER" hgap="10.0" layoutX="14.0" layoutY="448.0" prefHeight="45.0" prefWidth="272.0" vgap="20.0">
+						<FlowPane fx:id="ControllStaff2" alignment="CENTER" hgap="10.0" layoutX="664.0" layoutY="468.0" prefHeight="75.0" prefWidth="438.0" vgap="20.0">
 							<children>
-								<Button fx:id="btnInsertPro" mnemonicParsing="false" onAction="#openAddProduct" prefHeight="26.0" prefWidth="60.0" text="Thêm" />
-								<Button fx:id="btnEditPro" mnemonicParsing="false" onMouseClicked="#openAddProduct" prefHeight="26.0" prefWidth="60.0" text="Sửa" />
-								<Button fx:id="btnDelPro" mnemonicParsing="false" onMouseClicked="#deleteProduct" prefHeight="26.0" prefWidth="61.0" text="Xóa" />
-								<Button mnemonicParsing="false" onMouseClicked="#loadDataProduct" text="Refresh" />
+								<Button fx:id="addProductButton" mnemonicParsing="false" onAction="#openAddProduct" prefHeight="26.0" prefWidth="60.0" text="Thêm" />
+								<Button fx:id="editProductButton" mnemonicParsing="false" onMouseClicked="#openAddProduct" prefHeight="26.0" prefWidth="60.0" text="Sửa" />
+								<Button fx:id="delProductButton" mnemonicParsing="false" onMouseClicked="#deleteProduct" prefHeight="26.0" prefWidth="61.0" text="Xóa" />
+								<Button fx:id="refreshProductButton" mnemonicParsing="false" onMouseClicked="#loadDataProduct" text="Refresh" />
 							</children>
 						</FlowPane>
-						<TextField fx:id="txtFindProduct" layoutX="373.0" layoutY="465.0" onAction="#findProduct" prefHeight="26.0" prefWidth="176.0" promptText="Tìm Kiếm" />
+						<TextField fx:id="txtFindProduct" layoutX="14.0" layoutY="14.0" onAction="#findProduct" prefHeight="38.0" prefWidth="629.0" promptText="Tìm Kiếm" />
+                  <Pane layoutX="684.0" layoutY="67.0" prefHeight="330.0" prefWidth="397.0">
+                     <children>
+                        <HBox alignment="CENTER" layoutX="-3.0" prefHeight="46.0" prefWidth="404.0">
+                           <children>
+                              <Text fill="#fa9b34" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã Sản Phẩm :" wrappingWidth="142.20587158203125">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="IDProduct" disable="true" prefHeight="26.0" prefWidth="203.0" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="-3.0" layoutY="46.0" prefHeight="46.0" prefWidth="404.0">
+                           <children>
+                              <Text fill="#fa9b34" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên Sản Phẩm :" wrappingWidth="142.20587158203125">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="nameProduct" prefHeight="26.0" prefWidth="203.0" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="-3.0" layoutY="92.0" prefHeight="46.0" prefWidth="404.0">
+                           <children>
+                              <Text fill="#fa9b34" strokeType="OUTSIDE" strokeWidth="0.0" text="Giá Sản Phẩm :" wrappingWidth="142.20587158203125">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="priceProduct" prefHeight="26.0" prefWidth="203.0" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="-3.0" layoutY="138.0" prefHeight="46.0" prefWidth="404.0">
+                           <children>
+                              <Text fill="#fa9b34" strokeType="OUTSIDE" strokeWidth="0.0" text="Thương Hiệu :" wrappingWidth="142.20587158203125">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <ComboBox fx:id="trademark" prefHeight="26.0" prefWidth="204.0" promptText="Thương Hiệu" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="-3.0" layoutY="190.0" prefHeight="46.0" prefWidth="404.0">
+                           <children>
+                              <Text fill="#fa9b34" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã Nhân Viên :" wrappingWidth="142.20587158203125">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </Text>
+                              <TextField fx:id="txtIDStaff" prefHeight="26.0" prefWidth="202.0" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                     </children>
+                  </Pane>
 					</children>
 				</Pane>
-      				<Pane fx:id="paneSetting" layoutX="527.0" prefHeight="179.0" prefWidth="341.0" style="-fx-background-color: #ffff; -fx-border-color: orange; -fx-border-radius: 15; -fx-background-radius: 15;" visible="false">
-      					<children>
-      						<Button fx:id="btnChangPass" layoutX="165.0" layoutY="76.0" mnemonicParsing="false" onAction="#changepass" prefHeight="25.0" prefWidth="141.0" text="Click Here" />
-      						<Label layoutX="29.0" layoutY="30.0" text="Background :">
-      							<font>
-      								<Font size="14.0" />
-      							</font>
-      						</Label>
-      						<ComboBox fx:id="cbbBackground" layoutX="165.0" layoutY="28.0" prefHeight="25.0" prefWidth="141.0" />
-      						<Label layoutX="29.0" layoutY="77.0" text="Đổi mật khẩu:">
-      							<font>
-      								<Font size="14.0" />
-      							</font>
-      						</Label>
-      						<Label layoutX="29.0" layoutY="122.0" text="About Studio App:">
-      							<font>
-      								<Font size="14.0" />
-      							</font>
-      						</Label>
-      						<Button fx:id="btnAbout" layoutX="165.0" layoutY="120.0" mnemonicParsing="false" onAction="#openAbout" prefHeight="25.0" prefWidth="141.0" text="Click Here" />
-      
-            
-            					</children>
-      				</Pane>
 				<Pane fx:id="paneBill" layoutX="20.0" layoutY="21.0" prefHeight="576.0" prefWidth="860.0" style="-fx-background-color: #ffff;" visible="false">
 					<children>
 						<TabPane fx:id="tabPane" prefHeight="507.0" prefWidth="580.0" tabClosingPolicy="UNAVAILABLE">
@@ -553,210 +846,6 @@
 						</TabPane>
 					</children>
 				</Pane>
-      				<Pane fx:id="paneHome" prefHeight="618.0" prefWidth="879.0">
-      					<children>
-      						<Rectangle fx:id="rec1" arcHeight="30.0" arcWidth="30.0" fill="DODGERBLUE" height="239.0" layoutX="35.0" layoutY="369.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="230.0" />
-      						<Rectangle fx:id="rec2" arcHeight="30.0" arcWidth="30.0" fill="DODGERBLUE" height="239.0" layoutX="275.0" layoutY="369.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="191.0" />
-      						<Rectangle fx:id="rec3" arcHeight="30.0" arcWidth="30.0" fill="DODGERBLUE" height="239.0" layoutX="475.0" layoutY="369.0" strokeType="INSIDE" strokeWidth="0.0" width="191.0">
-      							<stroke>
-      								<LinearGradient endX="1.0" endY="1.0" startX="0.2500000031608524" startY="0.39015148625229346">
-      									<stops>
-      										<Stop>
-      											<color>
-      												<Color red="0.9800000190734863" green="0.49763602018356323" blue="0.17640000581741333" />
-      											</color>
-      										</Stop>
-      										<Stop offset="1.0">
-      											<color>
-      												<Color />
-      											</color>
-      										</Stop>
-      									</stops>
-      								</LinearGradient>
-      							</stroke>
-      						</Rectangle>
-      						<Rectangle fx:id="rec4" arcHeight="30.0" arcWidth="30.0" fill="DODGERBLUE" height="239.0" layoutX="675.0" layoutY="369.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="191.0" />
-      						<Rectangle fx:id="ctrl2" arcHeight="5.0" arcWidth="5.0" height="6.0" layoutX="345.0" layoutY="336.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0">
-      							<fill>
-      								<LinearGradient endX="1.0" endY="1.0" startX="0.2500000031608524" startY="0.39015148625229346">
-      									<stops>
-      										<Stop>
-      											<color>
-      												<Color red="0.9800000190734863" green="0.49763602018356323" blue="0.17640000581741333" />
-      											</color>
-      										</Stop>
-      										<Stop offset="1.0">
-      											<color>
-      												<Color red="1.0" green="0.8928394913673401" blue="0.08148147910833359" />
-      											</color>
-      										</Stop>
-      									</stops>
-      								</LinearGradient>
-      							</fill>
-      							<cursor>
-      								<Cursor fx:constant="HAND" />
-      							</cursor>
-      						</Rectangle>
-      						<Rectangle fx:id="ctrl3" arcHeight="5.0" arcWidth="5.0" height="6.0" layoutX="357.0" layoutY="336.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0">
-      							<fill>
-      								<LinearGradient endX="1.0" endY="1.0" startX="0.2500000031608524" startY="0.39015148625229346">
-      									<stops>
-      										<Stop>
-      											<color>
-      												<Color red="0.9800000190734863" green="0.49763602018356323" blue="0.17640000581741333" />
-      											</color>
-      										</Stop>
-      										<Stop offset="1.0">
-      											<color>
-      												<Color red="1.0" green="0.8928394913673401" blue="0.08148147910833359" />
-      											</color>
-      										</Stop>
-      									</stops>
-      								</LinearGradient>
-      							</fill>
-      							<cursor>
-      								<Cursor fx:constant="HAND" />
-      							</cursor>
-      						</Rectangle>
-      						<Rectangle fx:id="ctrl4" arcHeight="5.0" arcWidth="5.0" height="6.0" layoutX="368.0" layoutY="336.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0">
-      							<fill>
-      								<LinearGradient endX="1.0" endY="1.0" startX="0.2500000031608524" startY="0.39015148625229346">
-      									<stops>
-      										<Stop>
-      											<color>
-      												<Color red="0.9800000190734863" green="0.49763602018356323" blue="0.17640000581741333" />
-      											</color>
-      										</Stop>
-      										<Stop offset="1.0">
-      											<color>
-      												<Color red="1.0" green="0.8928394913673401" blue="0.08148147910833359" />
-      											</color>
-      										</Stop>
-      									</stops>
-      								</LinearGradient>
-      							</fill>
-      							<cursor>
-      								<Cursor fx:constant="HAND" />
-      							</cursor>
-      						</Rectangle>
-      						<Rectangle fx:id="ctrl4" arcHeight="5.0" arcWidth="5.0" height="6.0" layoutX="380.0" layoutY="336.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0">
-      							<fill>
-      								<LinearGradient endX="1.0" endY="1.0" startX="0.2500000031608524" startY="0.39015148625229346">
-      									<stops>
-      										<Stop>
-      											<color>
-      												<Color red="0.9800000190734863" green="0.49763602018356323" blue="0.17640000581741333" />
-      											</color>
-      										</Stop>
-      										<Stop offset="1.0">
-      											<color>
-      												<Color red="1.0" green="0.8928394913673401" blue="0.08148147910833359" />
-      											</color>
-      										</Stop>
-      									</stops>
-      								</LinearGradient>
-      							</fill>
-      							<cursor>
-      								<Cursor fx:constant="HAND" />
-      							</cursor>
-      						</Rectangle>
-      						<Rectangle fx:id="ctrl1" arcHeight="5.0" arcWidth="5.0" height="6.0" layoutX="293.0" layoutY="336.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="44.0">
-      							<fill>
-      								<LinearGradient endX="1.0" endY="1.0" startX="0.2500000031608524" startY="0.39015148625229346">
-      									<stops>
-      										<Stop>
-      											<color>
-      												<Color red="0.9800000190734863" green="0.49763602018356323" blue="0.17640000581741333" />
-      											</color>
-      										</Stop>
-      										<Stop offset="1.0">
-      											<color>
-      												<Color red="1.0" green="0.8928394913673401" blue="0.08148147910833359" />
-      											</color>
-      										</Stop>
-      									</stops>
-      								</LinearGradient>
-      							</fill>
-      							<cursor>
-      								<Cursor fx:constant="HAND" />
-      							</cursor>
-      						</Rectangle>
-                  <Pane fx:id="pane1" layoutX="35.0" layoutY="14.0" prefHeight="309.0" prefWidth="571.0">
-                     <children>
-                        <Rectangle fx:id="recPoster1" arcHeight="30.0" arcWidth="30.0" fill="#ff61ca" height="309.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" width="571.0">
-                           <cursor>
-                              <Cursor fx:constant="OPEN_HAND" />
-                           </cursor>
-                        </Rectangle>
-                     </children>
-                  </Pane>
-                  <Pane fx:id="pane2" layoutX="35.0" layoutY="14.0" prefHeight="309.0" prefWidth="571.0">
-                     <children>
-      						<Rectangle fx:id="recPoster" arcHeight="30.0" arcWidth="30.0" fill="#ff61ca" height="309.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" width="571.0">
-      							<cursor>
-      								<Cursor fx:constant="OPEN_HAND" />
-      							</cursor>
-      						</Rectangle>
-                     </children>
-                  </Pane>
-                  <Pane fx:id="pane3" layoutX="35.0" layoutY="14.0" prefHeight="309.0" prefWidth="571.0">
-                     <children>
-                        <Rectangle fx:id="recPoster2" arcHeight="30.0" arcWidth="30.0" fill="#ff61ca" height="309.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" width="571.0">
-                           <cursor>
-                              <Cursor fx:constant="OPEN_HAND" />
-                           </cursor>
-                        </Rectangle>
-                     </children>
-                  </Pane>
-                  <Pane fx:id="pane4" layoutX="35.0" layoutY="14.0" prefHeight="309.0" prefWidth="571.0">
-                     <children>
-                        <Rectangle fx:id="recPoster3" arcHeight="30.0" arcWidth="30.0" fill="#ff61ca" height="309.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" width="571.0">
-                           <cursor>
-                              <Cursor fx:constant="OPEN_HAND" />
-                           </cursor>
-                        </Rectangle>
-                     </children>
-                  </Pane>
-                  <Pane fx:id="pane5" layoutX="35.0" layoutY="14.0" prefHeight="309.0" prefWidth="571.0">
-                     <children>
-                        <Rectangle fx:id="recPoster4" arcHeight="30.0" arcWidth="30.0" fill="#ff61ca" height="309.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" width="571.0">
-                           <cursor>
-                              <Cursor fx:constant="OPEN_HAND" />
-                           </cursor>
-                        </Rectangle>
-                     </children>
-                  </Pane>
-                  <ImageView fitHeight="40.0" fitWidth="24.0" layoutX="37.0" layoutY="157.0" onMouseClicked="#back" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../image/left-arrow.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="40.0" fitWidth="24.0" layoutX="582.0" layoutY="157.0" onMouseClicked="#next" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../image/right-arrow.png" />
-                     </image>
-                  </ImageView>
-                  <Pane layoutX="606.0" layoutY="6.0" prefHeight="327.0" prefWidth="278.0" style="-fx-background-color: #333;">
-                     <children>
-            						<Rectangle fx:id="recVideo" arcHeight="30.0" arcWidth="30.0" fill="DODGERBLUE" height="115.0" layoutX="9.0" layoutY="204.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="122.0" />
-      						<Rectangle fx:id="playVideo" arcHeight="30.0" arcWidth="30.0" fill="DODGERBLUE" height="185.0" layoutX="9.0" layoutY="8.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="253.0" />
-      						<Rectangle fx:id="recMusic" arcHeight="30.0" arcWidth="30.0" fill="DODGERBLUE" height="115.0" layoutX="139.0" layoutY="204.0" onMouseClicked="#openMusic" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="122.0">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor></Rectangle>
-                     </children>
-                  </Pane>
-      					</children>
-      				</Pane>
-            <Pane fx:id="paneDonate" layoutX="677.0" prefHeight="246.0" prefWidth="191.0" visible="false">
-               <children>
-                  <ImageView fitHeight="246.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../image/donate.jpg" />
-                     </image>
-                  </ImageView>
-               </children>
-            </Pane>
             <Pane fx:id="paneService" layoutX="1.0" prefHeight="618.0" prefWidth="879.0" visible="false">
                <children>
                   <TableView layoutX="14.0" layoutY="14.0" prefHeight="526.0" prefWidth="860.0">

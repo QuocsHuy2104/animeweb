@@ -19,7 +19,6 @@ public class HomeView extends Application {
 			primaryStage.setTitle("Studio Application");
 			primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/image/logo.png")));
 			primaryStage.show();
-			primaryStage.setResizable(false);
 			String css = this.getClass().getResource("style.css").toExternalForm();
 			scene.getStylesheets().add(css);
 			

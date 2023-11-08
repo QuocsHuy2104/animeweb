@@ -1,13 +1,32 @@
-#root {
-	-fx-background-color: #333;
+#root,
+#paneSetting {
+	-fx-background-color: #363636;
 }
 
-#title {
-	-fx-text-fill: #ff00f2;
+#tblRevenue,
+#tableStaff,
+#tableClient,
+#tableProduct {
+	-fx-background-color: #555555;
 }
 
-#colorText {
-	-fx-text-fill: #ff19cd;
+#txtFindClient,
+#txtFindStaff,
+#txtFindProduct {
+	-fx-background-color: none;
+	-fx-border-width: 1px;
+	-fx-border-color: white;
+	-fx-border-radius: 12px;
+	-fx-font-size: 16px;
+}
+
+#txtFindStaff:focused,
+#txtClient:focused,
+#txtFindProduct:focused {
+	-fx-background-color: none;
+	-fx-text-inner-color: #fff;
+	-fx-border-color: #FF00FF;
+	-fx-border-width: 1px;
 }
 
 #btnHome:hover,
@@ -21,4 +40,69 @@
 	-fx-cursor: hand;
 	-fx-text-fill: linear-gradient(from 23.4848% 20.8333% to 100.0% 100.0%, #fa7f2d 0.0%, #fa7d2f 10.1845%, #36d7f7 27.0528%, #36d7f7 57.8997%, #f21d96 68.2648%, #f41c93 100.0%);
 }
+
+#addProductButton:hover,
+#editProductButton:hover,
+#delProductButton:hover,
+#refreshProductButton:hover,
+#addStaffButton:hover,
+#editStaffButton:hover,
+#delStaffButton:hover,
+#refreshStaffButton:hover,
+#addClientButton:hover,
+#editClientButton:hover,
+#delClientButton:hover,
+#refreshClientButton:hover {
+	-fx-effect: dropshadow(three-pass-box, #FF00FF, 10, 0, 1, 4);
+}
+
+
+#addProductButton:pressed,
+#editProductButton:pressed,
+#delProductButton:pressed,
+#refreshProductButton:pressed,
+#addStaffButton:pressed,
+#editStaffButton:pressed,
+#delStaffButton:pressed,
+#refreshStaffButton:pressed,
+#addClientButton:pressed,
+#editClientButton:pressed,
+#delClientButton:pressed,
+#refreshClientButton:pressed {
+	-fx-background-color: #ADFF2F;
+}
+
+
+#addClientButton,
+#editClientButton,
+#delClientButton,
+#refreshClientButton,
+#addProductButton,
+#editProductButton,
+#delProductButton,
+#refreshProductButton,
+#addStaffButton,
+#editStaffButton,
+#delStaffButton,
+#refreshStaffButton {
+	-fx-pref-height: 35;
+	-fx-pref-width: 95;
+	-fx-background-color: none;
+	-fx-font-size: 16px;
+	-fx-cursor: hand;
+	-fx-border-width: 1px;
+	-fx-border-color: #F5FFFA;
+	-fx-text-fill: #F5FFFA;
+	-fx-border-radius: 6px;
+}
+
+#rbtnStaff,
+#rbtnManage {
+	-fx-cursor: hand;
+}
+
+#lblTitleSetting {
+	-fx-text-fill: linear-gradient(from 0.0% 0.0% to 100.0% 100.0%, #ff7a46 0.0%, #ff8604 48.3672%, #ffc800 100.0%);
+}
+
 
