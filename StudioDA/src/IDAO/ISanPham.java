@@ -23,14 +23,11 @@ public class ISanPham implements DAOInterface<SanPhamModel> {
 		int result = 0;
 		Connection conn = JDBCUtil.getConnection();
 		try {
-			PreparedStatement pst = conn.prepareStatement("insert into sanpham values (?,?,?,?,?,?,?)");
+			PreparedStatement pst = conn.prepareStatement("insert into sanpham values (?,?,?,?)");
 			pst.setString(1, reneric.getMaSP());
 			pst.setString(2, reneric.getTenSp());
-			pst.setString(3, reneric.getThuongHieu());
-			pst.setFloat(4, reneric.getGiaDichVu());
-			pst.setString(5, reneric.getMoTa());
-			pst.setString(6, reneric.getDichVu());
-			pst.setInt(7, reneric.getMaNV());
+			pst.setFloat(3, reneric.getDonGia());
+			pst.setString(4, reneric.getMaTH());
 			
 			result = pst.executeUpdate();
 			pst.close();
@@ -65,12 +62,9 @@ public class ISanPham implements DAOInterface<SanPhamModel> {
 		int result = 0;
 		Connection conn = JDBCUtil.getConnection();
 		try {
-			PreparedStatement pst = conn.prepareStatement("update sanpham set tensp = ?, thuonghieu = ?, giadv = ?, mota = ?, dichvu = ? where masp = ?");
+			PreparedStatement pst = conn.prepareStatement("update sanpham set tensp = ?, dongia = ? where masp = ?");
 			pst.setString(1, reneric.getTenSp());
-			pst.setString(2, reneric.getThuongHieu());
-			pst.setFloat(3, reneric.getGiaDichVu());
-			pst.setString(4, reneric.getMoTa());
-			pst.setString(5, reneric.getDichVu());
+			pst.setFloat(2, reneric.getDonGia());
 			pst.setString(6, reneric.getMaSP());
 			
 			result = pst.executeUpdate();
@@ -94,12 +88,9 @@ public class ISanPham implements DAOInterface<SanPhamModel> {
 			while(rs.next()) {
 				String id = rs.getString("Masp");
 				String name = rs.getString("Tensp");
-				String thuonghieu = rs.getString("thuonghieu");
-				Float gia = rs.getFloat("giadichvu");
-				String mota = rs.getString("mota");
-				String dichvu = rs.getString("dichvu");
-				int idsp = rs.getInt("id_nv");
-				result = new SanPhamModel(id, name, thuonghieu, gia, mota, dichvu, idsp);
+				String maTH = rs.getString("MaTH");
+				Float donGia = rs.getFloat("dongia");
+				result = new SanPhamModel(id, name, maTH, donGia);
 			}
 			pst.close();
 			rs.close();
@@ -118,15 +109,12 @@ public class ISanPham implements DAOInterface<SanPhamModel> {
 			PreparedStatement pst = conn.prepareStatement("SELECT * FROM SanPham");
 			ResultSet rs = pst.executeQuery();
 			while(rs.next()) {
-				String idPro = rs.getString("MaSp");
-				String nameSP = rs.getString("TenSP");
-				String trademark = rs.getString("thuonghieu");
-				float wage = rs.getFloat("GiaDichVu");
-				String describe = rs.getString("mota");
-				String service = rs.getString("DichVu");
-				int idStaff = rs.getInt("ID_NV");
+				String id = rs.getString("Masp");
+				String name = rs.getString("Tensp");
+				String maTH = rs.getString("MaTH");
+				Float donGia = rs.getFloat("dongia");
 				
-				SanPhamModel sp = new SanPhamModel(idPro, nameSP, trademark, wage, describe, service, idStaff);
+				SanPhamModel sp = new SanPhamModel(id, name, maTH, donGia);
 				result.add(sp);
 			}
 			pst.close();

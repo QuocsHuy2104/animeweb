@@ -1,47 +1,49 @@
 package application;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import IDAO.INhanVien;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import model.NhanVienModel;
+import utilities.PasswordRegex;
+import application.ErrorForm;
 
-public class ChangePassController {
-
-	@FXML
-	private TextField txtUser;
+public class ChangePassController implements Initializable{
 
 	@FXML
-	private PasswordField txtCurrentPass, txtNewPass, txtAuth;
+	private PasswordField txtCurrentPass, txtNewPass, txtAuthPass;
 	
 	@FXML
 	private Button btnOK;
 	
 	@FXML
+	private Rectangle recBackground;
+	
+	@FXML
 	private AnchorPane parent;
 	
 	public void changePass(ActionEvent event) {
-		String user = txtUser.getText().trim();
+		String user = LoginController.user;
 		String currentPass = txtCurrentPass.getText().trim();
 		String newPass = txtNewPass.getText().trim();
-		String authPass = txtAuth.getText().trim();
+		String authPass = txtAuthPass.getText().trim();
 		
 		// check input textfield
-		
-		if (user.equals("")) {
-			txtUser.setPromptText("Nhập tên tài khoản");
-		}
 		
 		if (currentPass.equals("")) {
 			txtCurrentPass.setPromptText("Nhập mật khẩu cũ");
@@ -49,6 +51,15 @@ public class ChangePassController {
 		
 		if (newPass.equals("")) {
 			txtCurrentPass.setPromptText("Nhập mật khẩu mới");
+		}
+		
+		PasswordRegex passwordRegex = new PasswordRegex();
+		if (passwordRegex.validate(newPass) == false) {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Thông Báo");
+			alert.setHeaderText("Thông Báo");
+			alert.setContentText("Mật khẩu không trùng khớp");
+			return;
 		}
 		
 		if (authPass.equals("")) {
@@ -65,7 +76,6 @@ public class ChangePassController {
 		}
 		
 		INhanVien.getInstance().updatePass(user, authPass);
-		System.out.println("Update successfull");
 		
 		Stage stage = (Stage) parent.getScene().getWindow();
 		stage.close();
@@ -80,6 +90,11 @@ public class ChangePassController {
 			e.printStackTrace();
 		}
 		
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		recBackground.setFill(new ImagePattern(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\application\\backgroundFrom.png")));
 	}
 	
 }

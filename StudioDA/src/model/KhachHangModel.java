@@ -1,19 +1,22 @@
 package model;
 
 public class KhachHangModel {
-	
-	private String maKH, tenKH, diaChi, SDT;
+
+	private String maKH, tenKH, diachi, sdt;
 	private boolean gioiTinh;
-	private int idSP;
-	
-	public KhachHangModel(String maKH, String tenKH, String diaChi, String sDT, boolean gioiTinh, int idSP) {
+	private String email;
+	private boolean trangThai;
+
+	public KhachHangModel(String maKH, String tenKH, String diachi, String sdt, boolean gioiTinh, String email,
+			boolean trangThai) {
 		super();
 		this.maKH = maKH;
 		this.tenKH = tenKH;
-		this.diaChi = diaChi;
-		this.SDT = sDT;
+		this.diachi = diachi;
+		this.sdt = sdt;
 		this.gioiTinh = gioiTinh;
-		this.idSP = idSP;
+		this.email = email;
+		this.trangThai = trangThai;
 	}
 
 	public String getMaKH() {
@@ -32,20 +35,20 @@ public class KhachHangModel {
 		this.tenKH = tenKH;
 	}
 
-	public String getDiaChi() {
-		return diaChi;
+	public String getDiachi() {
+		return diachi;
 	}
 
-	public void setDiaChi(String diaChi) {
-		this.diaChi = diaChi;
+	public void setDiachi(String diachi) {
+		this.diachi = diachi;
 	}
 
-	public String getSDT() {
-		return SDT;
+	public String getSdt() {
+		return sdt;
 	}
 
-	public void setSDT(String sDT) {
-		SDT = sDT;
+	public void setSdt(String sdt) {
+		this.sdt = sdt;
 	}
 
 	public boolean isGioiTinh() {
@@ -56,14 +59,20 @@ public class KhachHangModel {
 		this.gioiTinh = gioiTinh;
 	}
 
-	public int getIdSP() {
-		return idSP;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setIdSP(int idSP) {
-		this.idSP = idSP;
+	public void setEmail(String email) {
+		this.email = email;
 	}
-	
-	
+
+	public boolean isTrangThai() {
+		return trangThai;
+	}
+
+	public void setTrangThai(boolean trangThai) {
+		this.trangThai = trangThai;
+	}
 	
 }

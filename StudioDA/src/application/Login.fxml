@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
@@ -21,37 +23,44 @@
             <Image url="@backgroundLogin.jpg" />
          </image>
       </ImageView>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="579.0" layoutX="876.0" layoutY="92.0" stroke="BLACK" strokeType="INSIDE" width="484.0" />
-      <ImageView fx:id="FromImage" fitHeight="579.0" fitWidth="474.0" layoutX="876.0" layoutY="92.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" smooth="false">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="641.0" layoutX="876.0" layoutY="92.0" stroke="BLACK" strokeType="INSIDE" width="484.0" />
+      <ImageView fx:id="FromImage" fitHeight="641.0" fitWidth="474.0" layoutX="876.0" layoutY="92.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" smooth="false">
          <image>
             <Image url="@backgroundFrom.png" />
          </image>
       </ImageView>
-      <Label layoutX="1002.0" layoutY="152.0" text="Đăng nhập" textFill="WHITE">
+      <Label layoutX="1002.0" layoutY="121.0" text="Đăng nhập" textFill="WHITE">
          <font>
             <Font name="Roboto Medium" size="50.0" />
          </font>
       </Label>
-      <Label layoutX="972.0" layoutY="234.0" text="How to i get started lorem ipsum dolor at?" textFill="WHITE">
+      <Label layoutX="972.0" layoutY="203.0" text="Đăng nhập để tiếp tục ca làm việc của bạn" textFill="WHITE">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="txtUser" layoutX="936.0" layoutY="295.0" prefHeight="52.0" prefWidth="364.0" promptText="Tên đăng nhập" style="-fx-text-inner-color: #fff;" stylesheets="@styleLogin.css">
+      <TextField fx:id="txtUser" layoutX="936.0" layoutY="244.0" prefHeight="46.0" prefWidth="364.0" promptText="Tên đăng nhập" style="-fx-text-inner-color: #fff;" stylesheets="@styleLogin.css">
          <font>
             <Font size="17.0" />
          </font></TextField>
-      <Button fx:id="btnLogin" layoutX="1055.0" layoutY="462.0" mnemonicParsing="false" onAction="#LoginEvent" prefHeight="52.0" prefWidth="125.0" style="-fx-background-radius: 10px;" stylesheets="@styleLogin.css" text="Đăng Nhập">
+      <Button fx:id="btnLogin" layoutX="939.0" layoutY="428.0" mnemonicParsing="false" onAction="#LoginEvent" prefHeight="38.0" prefWidth="155.0" stylesheets="@styleLogin.css" text="Đăng Nhập">
          <font>
-            <Font name="System Bold" size="14.0" />
+            <Font size="14.0" />
          </font>
+         <effect>
+            <DropShadow offsetX="5.0" offsetY="5.0">
+               <color>
+                  <Color red="0.3176470696926117" green="1.0" blue="0.8627451062202454" />
+               </color>
+            </DropShadow>
+         </effect>
       </Button>
-      <PasswordField fx:id="txtPass" layoutX="940.0" layoutY="372.0" prefHeight="52.0" prefWidth="364.0" promptText="Mật khẩu" style="-fx-text-inner-color: #fff;" stylesheets="@styleLogin.css">
+      <PasswordField fx:id="txtPass" layoutX="936.0" layoutY="307.0" prefHeight="46.0" prefWidth="364.0" promptText="Mật khẩu" style="-fx-text-inner-color: #fff;" stylesheets="@styleLogin.css">
          <font>
             <Font size="17.0" />
          </font>
       </PasswordField>
-      <Rectangle fx:id="rectangelTitle" arcHeight="40.0" arcWidth="40.0" height="94.0" layoutX="42.0" layoutY="586.0" stroke="#ffffff33" strokeType="INSIDE" strokeWidth="0.0" styleClass="styleLogin" width="298.0">
+      <Rectangle fx:id="recShow" arcHeight="40.0" arcWidth="40.0" height="94.0" layoutX="42.0" layoutY="555.0" onMouseExited="#openPaneConnect" stroke="#ffffff33" strokeType="INSIDE" strokeWidth="0.0" styleClass="styleLogin" width="298.0">
          <fill>
             <LinearGradient endX="1.0" endY="1.0">
                <stops>
@@ -68,11 +77,58 @@
                </stops>
             </LinearGradient>
          </fill></Rectangle>
-      <Label fx:id="forgotPassword" alignment="CENTER" contentDisplay="CENTER" layoutX="1048.0" layoutY="558.0" onMouseClicked="#openForgotPassword" prefHeight="27.0" prefWidth="155.0" stylesheets="@styleLogin.css" text="Quên mật khẩu" textAlignment="CENTER" textFill="#fcf8f8" textOverrun="LEADING_ELLIPSIS">
+      <Label fx:id="forgotPassword" alignment="CENTER" contentDisplay="CENTER" layoutX="1144.0" layoutY="371.0" onMouseClicked="#openForgotPassword" prefHeight="27.0" prefWidth="155.0" stylesheets="@styleLogin.css" text="Quên mật khẩu" textAlignment="CENTER" textFill="#5e6bff" textOverrun="LEADING_ELLIPSIS" underline="true">
          <font>
-            <Font size="18.0" />
+            <Font name="System Italic" size="14.0" />
          </font>
       </Label>
-      <Line endX="-145.4000244140625" endY="13.399993896484375" layoutX="1140.0" layoutY="572.0" startX="108.199951171875" startY="13.399993896484375" stroke="#c9c9c9" />
+      <CheckBox fx:id="myCheckBox" layoutX="936.0" layoutY="376.0" mnemonicParsing="false" text="Nhớ Mật Khẩu" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </CheckBox>
+      <Button fx:id="btnLogout" layoutX="1144.0" layoutY="428.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="155.0" stylesheets="@styleLogin.css" text="Thoát">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <effect>
+            <DropShadow offsetX="5.0" offsetY="5.0">
+               <color>
+                  <Color red="0.3176470696926117" green="1.0" blue="0.8627451062202454" />
+               </color>
+            </DropShadow>
+         </effect>
+      </Button>
+      <Pane fx:id="paneConnect" layoutX="872.0" layoutY="477.0" prefHeight="247.0" prefWidth="492.0" visible="false">
+         <children>
+            <TextField fx:id="txtServer" layoutX="64.0" layoutY="14.0" prefHeight="52.0" prefWidth="364.0" promptText="Máy Chủ" style="-fx-text-inner-color: #fff;" stylesheets="@styleLogin.css">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="txtDatabase" layoutX="64.0" layoutY="77.0" prefHeight="52.0" prefWidth="364.0" promptText="Database" style="-fx-text-inner-color: #fff;" stylesheets="@styleLogin.css">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="txtPassDB" layoutX="64.0" layoutY="140.0" prefHeight="52.0" prefWidth="364.0" promptText="Mật Khẩu" style="-fx-text-inner-color: #fff;" stylesheets="@styleLogin.css">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </TextField>
+            <Button fx:id="btnConnect" layoutX="273.0" layoutY="205.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="155.0" stylesheets="@styleLogin.css" text="Kêt Nối">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <effect>
+                  <DropShadow offsetX="5.0" offsetY="5.0">
+                     <color>
+                        <Color red="0.3176470696926117" green="1.0" blue="0.8627451062202454" />
+                     </color>
+                  </DropShadow>
+               </effect>
+            </Button>
+         </children>
+      </Pane>
    </children>
 </AnchorPane>

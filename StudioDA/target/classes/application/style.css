@@ -3,13 +3,16 @@
 	-fx-background-color: #363636;
 }
 
+#tableBillDeltais,
 #tblRevenue,
 #tableStaff,
 #tableClient,
-#tableProduct {
+#tableProduct,
+#tableBill {
 	-fx-background-color: #555555;
 }
 
+#txtFindBill,
 #txtFindClient,
 #txtFindStaff,
 #txtFindProduct {
@@ -20,6 +23,7 @@
 	-fx-font-size: 16px;
 }
 
+#txtFindBill:focused,
 #txtFindStaff:focused,
 #txtClient:focused,
 #txtFindProduct:focused {
@@ -34,13 +38,17 @@
 #btnClient:hover,
 #btnProduct:hover,
 #btnBill:hover,
-#btnRevenue:hover,
-#btnPaid:hover,
-#btnSignOut:hover {
+#btnService:hover,
+#btnBillDeltais:hover {
 	-fx-cursor: hand;
 	-fx-text-fill: linear-gradient(from 23.4848% 20.8333% to 100.0% 100.0%, #fa7f2d 0.0%, #fa7d2f 10.1845%, #36d7f7 27.0528%, #36d7f7 57.8997%, #f21d96 68.2648%, #f41c93 100.0%);
+	
 }
 
+#addBillButton:hover,
+#editBillButton:hover,
+#delBillButton:hover,
+#refreshBillButton:hover,
 #addProductButton:hover,
 #editProductButton:hover,
 #delProductButton:hover,
@@ -56,7 +64,10 @@
 	-fx-effect: dropshadow(three-pass-box, #FF00FF, 10, 0, 1, 4);
 }
 
-
+#addBillButton:pressed,
+#editBillButton:pressed,
+#delBillButton:pressed,
+#refreshBillButton:pressed,
 #addProductButton:pressed,
 #editProductButton:pressed,
 #delProductButton:pressed,
@@ -72,7 +83,10 @@
 	-fx-background-color: #ADFF2F;
 }
 
-
+#addBillButton,
+#editBillButton,
+#delBillButton,
+#refreshBillButton,
 #addClientButton,
 #editClientButton,
 #delClientButton,
@@ -101,8 +115,83 @@
 	-fx-cursor: hand;
 }
 
-#lblTitleSetting {
-	-fx-text-fill: linear-gradient(from 0.0% 0.0% to 100.0% 100.0%, #ff7a46 0.0%, #ff8604 48.3672%, #ffc800 100.0%);
+
+
+#lblAppName,
+#lblNameStaff {
+	-fx-text-fill: #ffffff;
+	-fx-font-size: 20px;
 }
 
+#lblVersion,
+#lblMail {
+	-fx-text-fill: #ffffff;
+	-fx-font-size: 16px;
+}
+
+#IDStaff,
+#nameStaff,
+#phoneStaff,
+#emailStaff,
+#password {
+	-fx-font-size: 14px;
+	-fx-background-color: none;
+	-fx-border-width: 1px;
+	-fx-border-radius: 6px;
+	-fx-border-color: #ffff;
+	-fx-text-fill: #fff;
+}
+
+#IDStaff:focused,
+#nameStaff:focused,
+#phoneStaff:focused,
+#emailStaff:focused,
+#password:focused {
+	-fx-background-color: none;
+	-fx-text-inner-color: #FF00FF;
+	-fx-border-color: #363636;
+}
+
+#IDClient,
+#nameClient,
+#phoneClient,
+#emailClient {
+	-fx-font-size: 14px;
+	-fx-background-color: none;
+	-fx-border-width: 1px;
+	-fx-border-radius: 6px;
+	-fx-border-color: #ffff;
+	-fx-text-fill: #fff;
+}
+
+#IDClient:focused,
+#nameClient:focused,
+#phoneClient:focused,
+#emailClient:focused {
+	-fx-background-color: none;
+	-fx-text-inner-color: #FF00FF;
+	-fx-border-color: #363636;
+}
+
+
+#IDProduct,
+#nameProduct,
+#priceProduct,
+#txtIDStaff {
+	-fx-font-size: 14px;
+	-fx-background-color: none;
+	-fx-border-width: 1px;
+	-fx-border-radius: 6px;
+	-fx-border-color: #ffff;
+	-fx-text-fill: #fff;
+}
+
+#IDProduct:focused,
+#nameProduct:focused,
+#priceProduct:focused,
+#txtIDStaff:focused {
+	-fx-background-color: none;
+	-fx-text-inner-color: #FF00FF;
+	-fx-border-color: #363636;
+}
 

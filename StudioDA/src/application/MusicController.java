@@ -82,7 +82,7 @@ public class MusicController implements Initializable {
 			}
 		});
 		
-		songPregressBar.setStyle("-fx-accent: #b103fc");
+		songPregressBar.setStyle("-fx-accent: #b103fc"); 
 	}
 	
 	public void playMedia() {	

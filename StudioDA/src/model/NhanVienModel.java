@@ -3,26 +3,21 @@ package model;
 import java.util.Date;
 
 public class NhanVienModel {
+	private String maNV, tenNV, diaChi, sdt, email, matKhau;
+	private boolean vaiTro;
+	private boolean trangThai;
 	
-	private String maNV, tenNV, diaChi, soDT;
-	private double luong;
-	private String ngayNhan;
-	private String pass;
-	private boolean roles;
-	
-	public NhanVienModel(String maNV, String tenNV, String diaChi, String soDT, double luong, String ngayNhan,
-			String pass, boolean roles) {
+	public NhanVienModel(String maNV, String tenNV, String diaChi, String sdt, String email, String matKhau,
+			boolean vaiTro, boolean trangThai) {
+		super();
 		this.maNV = maNV;
 		this.tenNV = tenNV;
 		this.diaChi = diaChi;
-		this.soDT = soDT;
-		this.luong = luong;
-		this.ngayNhan = ngayNhan;
-		this.pass = pass;
-		this.roles = roles;
-	}
-
-	public NhanVienModel() {
+		this.sdt = sdt;
+		this.email = email;
+		this.matKhau = matKhau;
+		this.vaiTro = vaiTro;
+		this.trangThai = trangThai;
 	}
 
 	public String getMaNV() {
@@ -49,49 +44,44 @@ public class NhanVienModel {
 		this.diaChi = diaChi;
 	}
 
-	public String getSoDT() {
-		return soDT;
+	public String getSdt() {
+		return sdt;
 	}
 
-	public void setSoDT(String soDT) {
-		this.soDT = soDT;
+	public void setSdt(String sdt) {
+		this.sdt = sdt;
 	}
 
-	public double getLuong() {
-		if (luong < 0) {
-			return 0;
-		}
-		return luong;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setLuong(double luong) {
-		this.luong = luong;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-	public String getNgayNhan() {
-		return ngayNhan;
+	public String getMatKhau() {
+		return matKhau;
 	}
 
-	public void setNgayNhan(String ngayNhan) {
-		this.ngayNhan = ngayNhan;
+	public void setMatKhau(String matKhau) {
+		this.matKhau = matKhau;
 	}
 
-	public String getPass() {
-		return pass;
+	public boolean isVaiTro() {
+		return vaiTro;
 	}
 
-	public void setPass(String pass) {
-		this.pass = pass;
+	public void setVaiTro(boolean vaiTro) {
+		this.vaiTro = vaiTro;
 	}
 
-	public boolean isRoles() {
-		return roles;
+	public boolean isTrangThai() {
+		return trangThai;
 	}
 
-	public void setRoles(boolean roles) {
-		this.roles = roles;
+	public void setTrangThai(boolean trangThai) {
+		this.trangThai = trangThai;
 	}
-
 	
-
 }

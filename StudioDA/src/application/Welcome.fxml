@@ -1,30 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.shape.Circle?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Welcome">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Welcome">
    <children>
       <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@backgroundLogin.jpg" />
          </image>
       </ImageView>
-      <Circle fill="#a9cbeb00" layoutX="300.0" layoutY="200.0" radius="101.0" stroke="#e42dcf" strokeType="INSIDE" strokeWidth="2.0" />
-      <Circle fill="#1f93ff00" layoutX="300.0" layoutY="200.0" radius="93.0" stroke="#00ef50" strokeType="INSIDE" strokeWidth="2.0" />
-      <Label fx:id="lblValue" layoutX="284.0" layoutY="182.0" text="0%" textFill="WHITE">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
-      <Label fx:id="lblLoading" alignment="CENTER" layoutX="-2.0" layoutY="326.0" prefHeight="35.0" prefWidth="600.0" text="Loading ..." textFill="WHITE">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
+      <ProgressBar fx:id="myProgressBar" layoutY="373.0" prefHeight="26.0" prefWidth="600.0" progress="0.0" />
+      <Label fx:id="lblLoading" layoutX="14.0" layoutY="339.0" prefHeight="33.0" prefWidth="122.0" stylesheets="@styleLogin.css" text="Loading ..." />
+      <Circle fx:id="circle1" fill="#1f93ff00" layoutX="300.0" layoutY="200.0" radius="108.0" stroke="#f700ff" strokeType="INSIDE" strokeWidth="2.0" style="-fx-stroke-dash-array: 41;">
+         <effect>
+            <DropShadow spread="0.73">
+               <color>
+                  <Color red="0.7735802531242371" green="0.029629629105329514" blue="1.0" />
+               </color>
+            </DropShadow>
+         </effect>
+      </Circle>
+      <Circle fx:id="circle2" fill="#1f93ff00" layoutX="300.0" layoutY="200.0" radius="80.0" stroke="#04ff00" strokeType="INSIDE" strokeWidth="2.0" style="-fx-stroke-dash-array: 41;">
+         <effect>
+            <DropShadow spread="0.64">
+               <color>
+                  <Color red="0.22592592239379883" green="1.0" blue="0.4968518614768982" />
+               </color>
+            </DropShadow>
+         </effect>
+      </Circle>
+      <Label fx:id="lblValue" alignment="CENTER" layoutX="257.0" layoutY="180.0" prefHeight="40.0" prefWidth="86.0" stylesheets="@styleLogin.css" text="0%" textAlignment="CENTER" />
    </children>
 </AnchorPane>

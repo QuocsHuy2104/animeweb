@@ -13,7 +13,7 @@ import model.KhachHangModel;
 import model.NhanVienModel;
 
 public class IKhachHang implements DAOInterface<KhachHangModel> {
-	
+
 	public static IKhachHang getInstance() {
 		return new IKhachHang();
 	}
@@ -26,12 +26,12 @@ public class IKhachHang implements DAOInterface<KhachHangModel> {
 			PreparedStatement pst = conn.prepareStatement("insert into khachhang values (?, ?, ?, ?, ?, ?)");
 			pst.setString(1, reneric.getMaKH());
 			pst.setString(2, reneric.getTenKH());
-			pst.setString(3, reneric.getDiaChi());
-			pst.setString(4, reneric.getSDT());
+			pst.setString(3, reneric.getDiachi());
+			pst.setString(4, reneric.getSdt());
 			pst.setBoolean(5, reneric.isGioiTinh());
-			pst.setInt(6, reneric.getIdSP());
+			pst.setString(6, reneric.getEmail());
 			result = pst.executeUpdate();
-			
+
 			pst.close();
 			JDBCUtil.closeConnection(conn);
 		} catch (SQLException e) {
@@ -48,7 +48,7 @@ public class IKhachHang implements DAOInterface<KhachHangModel> {
 			PreparedStatement pst = conn.prepareStatement("delete from khachhang where makh = ?");
 			pst.setString(1, reneric.getMaKH());
 			result = pst.executeUpdate();
-			
+
 			pst.close();
 			JDBCUtil.closeConnection(conn);
 		} catch (SQLException e) {
@@ -62,13 +62,14 @@ public class IKhachHang implements DAOInterface<KhachHangModel> {
 		int result = 0;
 		Connection conn = JDBCUtil.getConnection();
 		try {
-			PreparedStatement pst = conn.prepareStatement("update khachhang set tenkh = ?, diachi = ?, sdt = ? where makh = ?");
+			PreparedStatement pst = conn
+					.prepareStatement("update khachhang set tenkh = ?, diachi = ?, sdt = ? where makh = ?");
 			pst.setString(1, reneric.getTenKH());
-			pst.setString(2, reneric.getDiaChi());
-			pst.setString(3, reneric.getSDT());
+			pst.setString(2, reneric.getDiachi());
+			pst.setString(3, reneric.getSdt());
 			pst.setString(4, reneric.getMaKH());
 			result = pst.executeUpdate();
-			
+
 			pst.close();
 			JDBCUtil.closeConnection(conn);
 		} catch (SQLException e) {
@@ -85,14 +86,19 @@ public class IKhachHang implements DAOInterface<KhachHangModel> {
 			PreparedStatement pst = conn.prepareStatement("Select * from khachhang where makh = ?");
 			pst.setString(1, generic.getMaKH());
 			ResultSet rs = pst.executeQuery();
-			while(rs.next()) {
-				String id = rs.getString("maKH");
+			while (rs.next()) {
+				String id = rs.getString("TenKH");
 				String name = rs.getString("TenKH");
-				String address = rs.getString("DiaChi");
+				String address = rs.getString("DIACHI");
 				String contact = rs.getString("SDT");
-				boolean role = rs.getBoolean("gioitinh");
-				int idsp = rs.getInt("ID_sanpham");
-				result = new KhachHangModel(id, name, address, contact, role, idsp);
+				int role = rs.getInt("GioiTinh");
+				String email = rs.getString("setString");
+				int tt = rs.getInt("trangThai");
+
+				boolean genders = role == 1 ? true : false;
+				boolean trangThai = tt == 1 ? true : false;
+
+				result = new KhachHangModel(id, name, address, contact, genders, email, trangThai);
 			}
 			pst.close();
 			rs.close();
@@ -110,18 +116,19 @@ public class IKhachHang implements DAOInterface<KhachHangModel> {
 		try {
 			PreparedStatement pst = conn.prepareStatement("SELECT * FROM KHACHHANG");
 			ResultSet rs = pst.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				String id = rs.getString("MaKH");
 				String name = rs.getString("TenKH");
 				String address = rs.getString("DiaChi");
 				String phone = rs.getString("SDT");
 				int gender = rs.getInt("GioiTinh");
-				int idSP = rs.getInt("id_sanpham");
-				
-				
+				String email = rs.getString("Email");
+				int tt = rs.getInt("trangThai");
+
 				boolean genders = gender == 1 ? true : false;
-				
-				KhachHangModel kh = new KhachHangModel(id, name, address, phone, genders, idSP);
+				boolean trangThai = tt == 1 ? true : false;
+
+				KhachHangModel kh = new KhachHangModel(id, name, address, phone, genders, email, trangThai);
 				result.add(kh);
 			}
 			pst.close();
@@ -132,7 +139,7 @@ public class IKhachHang implements DAOInterface<KhachHangModel> {
 		}
 		return result;
 	}
-	
+
 	public int selectCount() {
 		int khachhang = 0;
 		Connection conn = JDBCUtil.getConnection();
@@ -151,6 +158,5 @@ public class IKhachHang implements DAOInterface<KhachHangModel> {
 		}
 		return khachhang;
 	}
-	
 
 }

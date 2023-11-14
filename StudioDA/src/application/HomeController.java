@@ -2,10 +2,13 @@ package application;
 
 import java.io.IOException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -14,19 +17,15 @@ import IDAO.IHoaDon;
 import IDAO.IKhachHang;
 import IDAO.INhanVien;
 import IDAO.ISanPham;
-import connectJDBC.JDBCUtil;
-import javafx.animation.TranslateTransition;
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
@@ -35,56 +34,73 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.SingleSelectionModel;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
-import javafx.util.Duration;
-import model.HoaDonModel;
-import model.KhachHangModel;
-import model.NhanVienModel;
-import model.SanPhamModel;
+import model.*;
+import utilities.MessageDigest;
 import utilities.Notification;
+import utilities.PasswordRegex;
+import utilities.PhoneRegex;
 
 public class HomeController implements Initializable {
 
 	@FXML
-	private ImageView imageSignout, imageHeart, imgHome, imgStaff, imgClient, imgProduct, imgRevenue, imgBill, imgPaid,
-			setting;
+	private ImageView imageHeart, imgHome, imgStaff, imgClient, imgProduct, imgService, imgBill, imgPaid, setting;
 
 	@FXML
-	private Pane MenuPane, ContentPane, paneSetting, paneStaff, paneHome, paneClient, paneProduct, paneRevenue,
-			paneBill, paneDonate, pane1, pane2, pane3, pane4, pane5;
+	private Pane MenuPane, ContentPane, paneSetting, paneStaff, paneHome, paneClient, paneProduct, paneService,
+			paneBill;
 
 	@FXML
-	private Rectangle recHome, recStaff, recPaid, recProduct, recRevenue, recBill, recClient, recPoster, recWebsite,
-			recMusic, rec1, rec2, rec3, rec4, recPoster1, recPoster2, recPoster3, recPoster4;
+	private Rectangle recHome, recStaff, recPaid, recProduct, recBill, recClient, recService;
 
 	@FXML
-	private Button btnHome, btnStaff, btnClient, btnProduct, btnRevenue, btnBill, btnPaid;
+	private Button btnHome, btnStaff, btnClient, btnProduct, btnService, btnBill, btnBillDeltais;
 
 	@FXML
 	private Line lineMenu;
 
+	// Home
+
 	@FXML
 	private PieChart pieChart;
+
+	@FXML
+	private LineChart myLineChart;
+
+	@FXML
+	private AreaChart myAreaChart;
+
+	@FXML
+	private TableView tblRevenue;
+
+	@FXML
+	private TableColumn productCol;
+
+	@FXML
+	private TableColumn priceCol;
+
+	@FXML
+	private TableColumn discountCol;
+
+	@FXML
+	private TableColumn salesCol;
 
 	@FXML
 	private AnchorPane root;
@@ -92,14 +108,36 @@ public class HomeController implements Initializable {
 	@FXML
 	private Circle circleLogo;
 
-	@FXML
-	private Button btnChangePass, btnAddStaff, btnEditStaff, btnDellStaff, addStaff, updateStaff, removeStaff, btnAbout,
-			refreshTableStaff, btnInsertPro;
+	// Setting
 
 	@FXML
-	private ComboBox<String> cbbBackground;
+	private Rectangle recDatabase, recLogo;
+
+	@FXML
+	private ImageView imgDownArrow, imgDownArrow1, imgDownArrow2, imgDownArrow3;
+
+	@FXML
+	private Label lblMail, lblNameStaff;
+
+	@FXML
+	private Pane paneAccount, paneSystem;
 
 	// Table Staff
+
+	@FXML
+	private TextField IDStaff, nameStaff, phoneStaff, emailStaff;
+
+	@FXML
+	private TextArea addressStaff;
+
+	@FXML
+	private PasswordField password;
+
+	@FXML
+	private RadioButton rbtnStaff, rbtnManage;
+
+	@FXML
+	private Button addStaffButton, editStaffButton, delStaffButton, refreshStaffButton;
 
 	@FXML
 	private TableView<NhanVienModel> tableStaff;
@@ -117,9 +155,18 @@ public class HomeController implements Initializable {
 	private TableColumn<NhanVienModel, String> phoneCol;
 
 	@FXML
-	private TableColumn<NhanVienModel, Float> wageCol;
+	private TableColumn<NhanVienModel, String> emailStaffCol;
+
+	@FXML
+	private RadioButton rbtnMan, rbtnWoman;
 
 	// Table Client
+
+	@FXML
+	private TextField IDClient, nameClient, phoneClient, emailClient;
+
+	@FXML
+	private TextArea addressClient;
 
 	@FXML
 	private TableView<KhachHangModel> tableClient;
@@ -142,6 +189,12 @@ public class HomeController implements Initializable {
 	// Table Product
 
 	@FXML
+	private TextField IDProduct, nameProduct, priceProduct;
+
+	@FXML
+	private ComboBox<String> trademark;
+
+	@FXML
 	private TableView<SanPhamModel> tableProduct;
 
 	@FXML
@@ -156,8 +209,6 @@ public class HomeController implements Initializable {
 	@FXML
 	private TableColumn<SanPhamModel, String> markProCol;
 
-	@FXML
-	private TableColumn<SanPhamModel, String> serviceProCol;
 
 	// Table Bill
 
@@ -180,18 +231,6 @@ public class HomeController implements Initializable {
 	private TableColumn<HoaDonModel, Integer> idStaffCols;
 
 	@FXML
-	private LineChart myLineChart;
-
-	@FXML
-	private Label lblBill, lblDate, lblName, lblService, lblPrice, lblMoney, lblPaid;
-
-	@FXML
-	private TabPane tabPane;
-
-	@FXML
-	private Tab tabBill;
-
-	@FXML
 	private TextField txtFindStaff, txtFindClient, txtFindProduct, txtFindBill;
 
 	private ObservableList<NhanVienModel> staff;
@@ -202,37 +241,27 @@ public class HomeController implements Initializable {
 
 	private ObservableList<HoaDonModel> bill;
 
+	private ObservableList revenue;
+
 	Stage stage;
 	Scene scene;
 	Parent root1;
 
 	// Code Handle event from
 
-	public void convertScene() {
-
-	}
-
 	public void convertHeart() {
 		Image img = new Image("C:/Users/HP/workspage-udpm/StudioDA/src/image/love-you.png");
 		imageHeart.setImage(img);
-		paneDonate.setVisible(true);
 	}
 
 	public void setting() {
 		paneSetting.setVisible(true);
-		Image img = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\cogwheel.png");
-		setting.setImage(img);
 	}
 
 	public void closeSetting() {
 		paneSetting.setVisible(false);
-		paneDonate.setVisible(false);
 		Image img = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\metal-gear.png");
 		setting.setImage(img);
-	}
-
-	public void changeBackground() {
-
 	}
 
 	public void openHome() {
@@ -241,7 +270,7 @@ public class HomeController implements Initializable {
 		paneHome.setVisible(true);
 		paneClient.setVisible(false);
 		paneProduct.setVisible(false);
-		paneRevenue.setVisible(false);
+		paneService.setVisible(false);
 		paneBill.setVisible(false);
 
 		hiddenRecControl();
@@ -258,7 +287,7 @@ public class HomeController implements Initializable {
 			paneHome.setVisible(false);
 			paneClient.setVisible(false);
 			paneProduct.setVisible(false);
-			paneRevenue.setVisible(false);
+			paneService.setVisible(false);
 			paneBill.setVisible(false);
 
 			hiddenRecControl();
@@ -267,10 +296,9 @@ public class HomeController implements Initializable {
 			imgStaff.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\team-management.png"));
 
 		} else {
-			Alert alert = new Alert();
-			alert.start(stage);
+			ErrorForm errorForm = new ErrorForm();
+			errorForm.start(stage);
 		}
-			
 
 	}
 
@@ -280,7 +308,7 @@ public class HomeController implements Initializable {
 		paneHome.setVisible(false);
 		paneClient.setVisible(false);
 		paneProduct.setVisible(true);
-		paneRevenue.setVisible(false);
+		paneService.setVisible(false);
 		paneBill.setVisible(false);
 
 		hiddenRecControl();
@@ -290,6 +318,20 @@ public class HomeController implements Initializable {
 
 	}
 
+	public void openService() {
+		paneStaff.setVisible(false);
+		paneHome.setVisible(false);
+		paneClient.setVisible(false);
+		paneProduct.setVisible(false);
+		paneService.setVisible(true);
+		paneBill.setVisible(false);
+
+		hiddenRecControl();
+		recService.setVisible(true);
+		btnService.setStyle("-fx-text-fill: orange; -fx-background-color: none");
+		imgService.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\service.png"));
+	}
+
 	public void openBill() {
 
 		paneBill.setVisible(true);
@@ -297,7 +339,7 @@ public class HomeController implements Initializable {
 		paneHome.setVisible(false);
 		paneClient.setVisible(false);
 		paneProduct.setVisible(false);
-		paneRevenue.setVisible(false);
+		paneService.setVisible(false);
 
 		hiddenRecControl();
 		recBill.setVisible(true);
@@ -306,32 +348,14 @@ public class HomeController implements Initializable {
 
 	}
 
-	public void openRevenue() {
-		if (LoginController.roles == 1) {
-
-			paneStaff.setVisible(false);
-			paneHome.setVisible(false);
-			paneClient.setVisible(false);
-			paneProduct.setVisible(false);
-			paneRevenue.setVisible(true);
-
-			hiddenRecControl();
-			recRevenue.setVisible(true);
-			btnRevenue.setStyle("-fx-text-fill: orange; -fx-background-color: none");
-			imgRevenue.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\data-analysis.png"));
-		}
-
-		else
-			Notification.alert(AlertType.CONFIRMATION, "Đăng nhập tài khoản trưởng phòng để xem");
-	}
-
 	public void openClient() {
 
 		paneStaff.setVisible(false);
 		paneHome.setVisible(false);
 		paneClient.setVisible(true);
 		paneProduct.setVisible(false);
-		paneRevenue.setVisible(false);
+		paneService.setVisible(false);
+		paneBill.setVisible(false);
 
 		hiddenRecControl();
 		recClient.setVisible(true);
@@ -346,16 +370,16 @@ public class HomeController implements Initializable {
 		recBill.setVisible(false);
 		recClient.setVisible(false);
 		recPaid.setVisible(false);
-		recPaid.setVisible(false);
+		recService.setVisible(false);
 		recProduct.setVisible(false);
 
 		btnHome.setTextFill(Color.WHITE);
 		btnStaff.setTextFill(Color.WHITE);
 		btnProduct.setTextFill(Color.WHITE);
 		btnClient.setTextFill(Color.WHITE);
-		btnRevenue.setTextFill(Color.WHITE);
+		btnService.setTextFill(Color.WHITE);
 		btnBill.setTextFill(Color.WHITE);
-		btnPaid.setTextFill(Color.WHITE);
+		btnBillDeltais.setTextFill(Color.WHITE);
 
 		imgHome.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\home.png"));
 		imgStaff.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\manager.png"));
@@ -363,14 +387,81 @@ public class HomeController implements Initializable {
 		imgPaid.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\bill.png"));
 		imgProduct.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\order.png"));
 		imgBill.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\receipt.png"));
+		imgService.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\customer-service.png"));
 	}
 
 	public void openPaid() {
+		paneStaff.setVisible(false);
+		paneHome.setVisible(false);
+		paneClient.setVisible(false);
+		paneProduct.setVisible(false);
+		paneService.setVisible(false);
+		paneBill.setVisible(false);
 
 		hiddenRecControl();
+
 		recPaid.setVisible(true);
-		btnPaid.setStyle("-fx-text-fill: orange; -fx-background-color: none");
+		btnBillDeltais.setStyle("-fx-text-fill: orange; -fx-background-color: none");
 		imgPaid.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\bill1.png"));
+	}
+
+	// Controll Setting
+
+	public void showDatabase() {
+		// 190
+		// 64
+
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				for (int i = 64; i <= 190; i++) {
+					recDatabase.setHeight(i);
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				imgDownArrow.setVisible(false);
+				imgDownArrow1.setVisible(true);
+			}
+		}).start();
+
+	}
+
+	public void hiddenDatabase() {
+		// 190
+		// 64
+
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				for (int i = 190; i >= 64; i--) {
+					recDatabase.setHeight(i);
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				imgDownArrow.setVisible(true);
+				imgDownArrow1.setVisible(false);
+			}
+		}).start();
+
+	}
+
+	public void showPaneAccount() {
+		paneSystem.setVisible(false);
+		paneAccount.setVisible(true);
+	}
+
+	public void showPaneSystem() {
+		paneSystem.setVisible(true);
+		paneAccount.setVisible(false);
+
 	}
 
 	// End Code Handle event from
@@ -390,73 +481,6 @@ public class HomeController implements Initializable {
 			stage.show();
 		} catch (IOException ex) {
 			ex.printStackTrace();
-		}
-	}
-
-	// screen insert staff ('THÊM NHÂN VIÊN')
-	public void openAddStaff() {
-		try {
-			Parent deltais = FXMLLoader.load(getClass().getResource("DeltaisStaff.fxml"));
-			stage = new Stage();
-			Scene scene = new Scene(deltais);
-			stage.setScene(scene);
-			stage.setResizable(false);
-			stage.setTitle("Nhân viên");
-			stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/image/logo.png")));
-			stage.show();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	// screen insert staff ('THÊM Product')
-
-	public void openAddProduct() {
-		try {
-			Parent deltais = FXMLLoader.load(getClass().getResource("DeltaisProduct.fxml"));
-			Stage stage = new Stage();
-			Scene scene = new Scene(deltais);
-			stage.setScene(scene);
-			stage.setResizable(false);
-			stage.setTitle("Sản Phẩm");
-			stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/image/logo.png")));
-			stage.show();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	// screen insert staff ('THÊM Client')
-
-	public void openAddClient() {
-		try {
-			Parent deltais = FXMLLoader.load(getClass().getResource("DeltaisClient.fxml"));
-			Stage stage = new Stage();
-			Scene scene = new Scene(deltais);
-			stage.setScene(scene);
-			stage.setResizable(false);
-			stage.setTitle("Khách Hàng");
-			stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/image/logo.png")));
-			stage.show();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	// screen insert staff ('THÊM Bill')
-
-	public void openAddBill() {
-		try {
-			Parent deltais = FXMLLoader.load(getClass().getResource("DeltaisBill.fxml"));
-			Stage stage = new Stage();
-			Scene scene = new Scene(deltais);
-			stage.setScene(scene);
-			stage.setResizable(false);
-			stage.setTitle("Hóa Đơn");
-			stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/image/logo.png")));
-			stage.show();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -503,7 +527,7 @@ public class HomeController implements Initializable {
 	// open screen music
 
 	public void openMusic() {
-		
+
 		try {
 			Parent music = FXMLLoader.load(getClass().getResource("Music.fxml"));
 			stage = new Stage();
@@ -513,7 +537,6 @@ public class HomeController implements Initializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 
 	}
 
@@ -521,20 +544,10 @@ public class HomeController implements Initializable {
 
 	// Begin handle code back end
 
-	public void translateAnimation(double duration, Node node, double width) {
-
-		TranslateTransition transition = new TranslateTransition(Duration.seconds(duration), node);
-		transition.setByX(width);
-		transition.play();
-
-	}
-
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
 		setPieChart();
-
-		cbbBackground.getItems().setAll("Default", "White smoke");
 
 		setCellTable();
 		loadDataStaff();
@@ -548,13 +561,24 @@ public class HomeController implements Initializable {
 		setBillTable();
 		loadDataBill();
 
-		loadLineChart();
+		recLogo.setFill(new ImagePattern(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\logo.png")));
+		lblMail.setText(LoginController.email);
+		lblNameStaff.setText(LoginController.nameStaff);
 
-		translateAnimation(0.5, pane2, 571);
-		translateAnimation(0.5, pane3, 571);
-		translateAnimation(0.5, pane4, 571);
-		translateAnimation(0.5, pane5, 571);
+		// loadLineChart();
+
+		ToggleGroup group = new ToggleGroup();
+		rbtnManage.setToggleGroup(group);
+		rbtnStaff.setToggleGroup(group);
+
+		ToggleGroup group1 = new ToggleGroup();
+		rbtnMan.setToggleGroup(group1);
+		rbtnWoman.setToggleGroup(group1);
 	}
+
+	// Home Controll
+
+	// Staff Controll
 
 	// set column table Staff ('NHÂN VIÊN')
 	public void setCellTable() {
@@ -562,8 +586,8 @@ public class HomeController implements Initializable {
 		idCol.setCellValueFactory(new PropertyValueFactory<NhanVienModel, String>("maNV"));
 		nameCol.setCellValueFactory(new PropertyValueFactory<NhanVienModel, String>("tenNV"));
 		addressCol.setCellValueFactory(new PropertyValueFactory<NhanVienModel, String>("diaChi"));
-		phoneCol.setCellValueFactory(new PropertyValueFactory<NhanVienModel, String>("soDT"));
-		wageCol.setCellValueFactory(new PropertyValueFactory<NhanVienModel, Float>("luong"));
+		phoneCol.setCellValueFactory(new PropertyValueFactory<NhanVienModel, String>("sdt"));
+		emailStaffCol.setCellValueFactory(new PropertyValueFactory<NhanVienModel, String>("email"));
 	}
 
 	// load data from database enter table in screen
@@ -581,14 +605,85 @@ public class HomeController implements Initializable {
 		tableStaff.setItems(staff);
 	}
 
+	public void insertStaff() {
+		String id = IDStaff.getText().trim();
+		String ten = nameStaff.getText().trim();
+		String diachi = addressStaff.getText();
+		String sdt = phoneStaff.getText().trim();
+		String email = emailStaff.getText();
+		try {
+			PhoneRegex.checkPhone(sdt);
+		} catch (PhoneRegex e) {
+			e.printStackTrace();
+		}
+		String pass = password.getText();
+		if (id.equals("") || ten.equals("") || diachi.equals("") || sdt.equals("") || pass.equals("")) {
+			Notification.alert(AlertType.WARNING, "Vui lòng nhập đầy đủ thông tin");
+			return;
+		}
+		PasswordRegex passwordRegex = new PasswordRegex();
+
+		if (passwordRegex.validate(pass)) {
+			try {
+				String passMD = MessageDigest.getMD5(pass);
+				boolean roles = rbtnManage.isSelected() ? true : false;
+				
+				NhanVienModel model = new NhanVienModel(id, ten, diachi, sdt, email, passMD, roles, true);
+				INhanVien.getInstance().insert(model);
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			}
+		} else {
+			Notification.alert(AlertType.ERROR, "Tối thiểu tám ký tự, ít nhất một chữ cái, một số và một ký tự đặc biệt:");
+		}
+
+		loadDataStaff();
+
+	}
+
+	public void updateStaff() {
+		String id = IDStaff.getText().trim();
+		String ten = nameStaff.getText().trim();
+		String diachi = addressStaff.getText();
+		String sdt = phoneStaff.getText().trim();
+		String email = emailStaff.getText();
+		try {
+			PhoneRegex.checkPhone(sdt);
+		} catch (PhoneRegex e) {
+			e.printStackTrace();
+		}
+		String pass = password.getText();
+		boolean roles = rbtnManage.isSelected() ? true : false;
+
+		if (id.equals("") || ten.equals("") || diachi.equals("") || sdt.equals("") || pass.equals("")) {
+			Notification.alert(AlertType.WARNING, "Vui lòng nhập đầy đủ thông tin");
+			return;
+		}
+
+		NhanVienModel model = new NhanVienModel(id, ten, diachi, sdt, email, pass, roles, true);
+		INhanVien.getInstance().update(model);
+	}
+
+	public void cleanStaff() {
+		nameStaff.setText("");
+		addressStaff.setText("");
+		phoneStaff.setText("");
+		emailStaff.setText("");
+		password.setText("");
+		rbtnManage.setSelected(false);
+		rbtnStaff.setSelected(false);
+	}
+
+	// Client Controll
+
 	// set column table Staff ('Khách Hàng')
 
 	public void setClientTable() {
 		client = FXCollections.observableArrayList();
 		idClientCol.setCellValueFactory(new PropertyValueFactory<KhachHangModel, String>("maKH"));
 		nameClientCol.setCellValueFactory(new PropertyValueFactory<KhachHangModel, String>("tenKH"));
-		addressClientCol.setCellValueFactory(new PropertyValueFactory<KhachHangModel, String>("diaChi"));
-		phoneClientCol.setCellValueFactory(new PropertyValueFactory<KhachHangModel, String>("SDT"));
+		addressClientCol.setCellValueFactory(new PropertyValueFactory<KhachHangModel, String>("diachi"));
+		phoneClientCol.setCellValueFactory(new PropertyValueFactory<KhachHangModel, String>("sdt"));
 		genderClientCol.setCellValueFactory(new PropertyValueFactory<KhachHangModel, Boolean>("gioiTinh"));
 	}
 
@@ -606,16 +701,94 @@ public class HomeController implements Initializable {
 		tableClient.setItems(client);
 	}
 
-	// set column table Staff ('Sản Phẩm')
+	public void insertClient() {
+		String id = IDClient.getText();
+		String name = nameClient.getText();
+		String address = addressClient.getText();
+		String phone = phoneClient.getText();
+		boolean gender = rbtnMan.isSelected() ? true : false;
+		String email = emailClient.getText();
+
+		if (id.equals("") || name.equals("") || address.equals("") || phone.equals("")) {
+			Notification.alert(AlertType.WARNING, "Nhập đầy đủ thông tin");
+			return;
+		}
+
+		KhachHangModel kh = new KhachHangModel(id, name, address, phone, gender, email, true);
+		IKhachHang.getInstance().insert(kh);
+	}
+
+	public void updataClient() {
+		String id = IDClient.getText();
+		String name = nameClient.getText();
+		String address = addressClient.getText();
+		String phone = phoneClient.getText();
+		boolean gender = rbtnMan.isSelected() ? true : false;
+		String email = emailClient.getText();
+
+		if (id.equals("") || name.equals("") || address.equals("") || phone.equals("")) {
+			Notification.alert(AlertType.WARNING, "Nhập đầy đủ thông tin");
+			return;
+		}
+
+		KhachHangModel kh = new KhachHangModel(id, name, address, phone, gender, email, true);
+		IKhachHang.getInstance().update(kh);
+	}
+
+	public void cleanClient() {
+		IDClient.setText("");
+		nameClient.setText("");
+		addressClient.setText("");
+		phoneClient.setText("");
+		emailClient.setText("");
+	}
+
+	// Product Controll
+	
+	public void insertPro() {
+		String id = IDProduct.getText();
+		String name = nameProduct.getText();
+		Float price = Float.parseFloat(priceProduct.getText());
+		
+		if (id.equals("") || name.equals("") || trademark.equals("")) {
+			Notification.alert(AlertType.WARNING, "Vui lòng nhập đầy đủ thông tin");
+			return;
+		}
+		
+		SanPhamModel model = new SanPhamModel(name, id, name, price);
+		ISanPham.getInstance().insert(model);
+	}
+	
+	public void updatePro() {
+		String id = IDProduct.getText();
+		String name = nameProduct.getText();
+		Float price = Float.parseFloat(priceProduct.getText());
+		
+		if (id.equals("") || name.equals("") || trademark.equals("")) {
+			Notification.alert(AlertType.WARNING, "Vui lòng nhập đầy đủ thông tin");
+			return;
+		}
+		
+		SanPhamModel model = new SanPhamModel(name, id, name, price);
+		ISanPham.getInstance().update(model);
+		
+	}
+	
+	public void cleanPro() {
+		nameProduct.setText("");
+		IDProduct.setText("");
+		priceProduct.setText("");
+	}
+
+	// set column table Product ('Sản Phẩm')
 
 	public void setProductTable() {
 
 		product = FXCollections.observableArrayList();
 		idProCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, String>("maSP"));
 		nameProCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, String>("tenSp"));
-		wageProCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, Float>("giaDichVu"));
-		markProCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, String>("thuongHieu"));
-		serviceProCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, String>("dichVu"));
+		wageProCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, Float>("donGia"));
+		markProCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, String>("maTH"));
 	}
 
 	// load data from database enter table in screen
@@ -632,6 +805,8 @@ public class HomeController implements Initializable {
 		tableProduct.setItems(product);
 	}
 
+	// Bill Controll
+	
 	// set column table Bill ('Hóa Đơn')
 
 	public void setBillTable() {
@@ -683,8 +858,8 @@ public class HomeController implements Initializable {
 	public void deleteStaff() {
 		NhanVienModel col = tableStaff.getSelectionModel().getSelectedItem();
 
-		NhanVienModel model = new NhanVienModel(col.getMaNV(), col.getTenNV(), col.getDiaChi(), col.getSoDT(),
-				col.getLuong(), col.getNgayNhan(), col.getPass(), col.isRoles());
+		NhanVienModel model = new NhanVienModel(col.getMaNV(), col.getTenNV(), col.getDiaChi(), col.getSdt(),
+				col.getEmail(), col.getMatKhau(), col.isVaiTro(), col.isTrangThai());
 		INhanVien.getInstance().del(model);
 
 		loadDataStaff();
@@ -695,8 +870,7 @@ public class HomeController implements Initializable {
 	public void deleteProduct() {
 		SanPhamModel col = tableProduct.getSelectionModel().getSelectedItem();
 
-		SanPhamModel model = new SanPhamModel(col.getMaSP(), col.getTenSp(), col.getThuongHieu(), col.getGiaDichVu(),
-				col.getMoTa(), col.getDichVu(), col.getMaNV());
+		SanPhamModel model = new SanPhamModel(col.getMaSP(), col.getTenSp(), col.getMaTH(), col.getDonGia());
 		ISanPham.getInstance().del(model);
 
 		loadDataProduct();
@@ -707,8 +881,8 @@ public class HomeController implements Initializable {
 	public void delClient() {
 		KhachHangModel col = tableClient.getSelectionModel().getSelectedItem();
 
-		KhachHangModel model = new KhachHangModel(col.getMaKH(), col.getTenKH(), col.getDiaChi(), col.getSDT(),
-				col.isGioiTinh(), col.getIdSP());
+		KhachHangModel model = new KhachHangModel(col.getMaKH(), col.getTenKH(), col.getDiachi(), col.getSdt(),
+				col.isGioiTinh(), col.getEmail(), col.isTrangThai());
 		IKhachHang.getInstance().del(model);
 
 		loadDataClient();
@@ -726,79 +900,39 @@ public class HomeController implements Initializable {
 		loadDataBill();
 	}
 
-	// fill tabpane bill
-
-	public void fillTabPane() {
-		HoaDonModel col = tableBill.getSelectionModel().getSelectedItem();
-		Connection conn = JDBCUtil.getConnection();
-		String sql = "select MaHD, Ngay, TenKH, DichVu, GiaDichVu, thanhtoan from HOADON\r\n"
-				+ "inner join KHACHHANG on HOADON.ID_KhachHang = KHACHHANG.ID_KhachHang\r\n"
-				+ "inner join SANPHAM on KHACHHANG.id_sanpham = SANPHAM.ID_SANPHAM\r\n" + "where MaHD = ?";
-		try {
-			PreparedStatement pst = conn.prepareStatement(sql);
-			pst.setString(1, col.getMahd());
-			ResultSet rs = pst.executeQuery();
-			while (rs.next()) {
-				String MaHD = rs.getString(1);
-				String Ngay = rs.getString(2);
-				String TenKH = rs.getString(3);
-				String DichVu = rs.getString(4);
-				Float GiaDichVu = rs.getFloat(5);
-				Float ThanhToan = rs.getFloat(6);
-
-				lblBill.setText(MaHD);
-				lblDate.setText(Ngay);
-				lblName.setText(TenKH);
-				lblService.setText(DichVu);
-				lblPrice.setText(Float.valueOf(GiaDichVu).toString());
-				lblMoney.setText(Float.valueOf(GiaDichVu).toString());
-				lblPaid.setText(Float.valueOf(GiaDichVu).toString());
-			}
-
-			SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-			selectionModel.select(tabBill);
-
-			rs.close();
-			pst.close();
-			JDBCUtil.closeConnection(conn);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
 	// load line chart
 
-	public void loadLineChart() {
-		XYChart.Series series = new XYChart.Series();
-		series.setName("Hoa Don");
-
-		XYChart.Series series1 = new XYChart.Series();
-		series1.setName("Thu Nhap");
-
-		Connection conn = JDBCUtil.getConnection();
-		try {
-			PreparedStatement pst = conn.prepareStatement(
-					"select Ngay, SUM(thanhtoan) as thanhtoan, count(mahd) as soluong from HOADON group by Ngay");
-			ResultSet rs = pst.executeQuery();
-			while (rs.next()) {
-				series.getData().add(new XYChart.Data(rs.getString(1), rs.getInt("soluong")));
-				series1.getData().add(new XYChart.Data(rs.getString(1), rs.getFloat("thanhtoan")));
-			}
-			pst.close();
-			rs.close();
-			JDBCUtil.closeConnection(conn);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		myLineChart.getData().add(series1);
-		myLineChart.getData().add(series);
-	}
+//	public void loadLineChart() {
+//		XYChart.Series series = new XYChart.Series();
+//		series.setName("Hoa Don");
+//
+//		XYChart.Series series1 = new XYChart.Series();
+//		series1.setName("Thu Nhap");
+//
+//		Connection conn = JDBCUtil.getConnection();
+//		try {
+//			PreparedStatement pst = conn.prepareStatement(
+//					"select Ngay, SUM(thanhtoan) as thanhtoan, count(mahd) as soluong from HOADON group by Ngay");
+//			ResultSet rs = pst.executeQuery();
+//			while (rs.next()) {
+//				series.getData().add(new XYChart.Data(rs.getString(1), rs.getInt("soluong")));
+//				series1.getData().add(new XYChart.Data(rs.getString(1), rs.getFloat("thanhtoan")));
+//			}
+//			pst.close();
+//			rs.close();
+//			JDBCUtil.closeConnection(conn);
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//
+//		myLineChart.getData().add(series1);
+//		myLineChart.getData().add(series);
+//	}
 
 	public void findStaff() {
 
 		String manv = txtFindStaff.getText();
-		NhanVienModel model = new NhanVienModel(manv, null, null, null, 0, null, null, false);
+		NhanVienModel model = new NhanVienModel(manv, null, null, null, null, null, false, false);
 
 		if (tableStaff.getItems().size() >= 1) {
 			tableStaff.getItems().clear();
@@ -813,7 +947,7 @@ public class HomeController implements Initializable {
 	public void findClient() {
 		String makh = txtFindClient.getText();
 
-		KhachHangModel model = new KhachHangModel(makh, null, null, null, false, 0);
+		KhachHangModel model = new KhachHangModel(makh, null, null, null, false, null, false);
 
 		if (tableClient.getItems().size() >= 1) {
 			tableClient.getItems().clear();
@@ -828,7 +962,7 @@ public class HomeController implements Initializable {
 
 		String masp = txtFindProduct.getText();
 
-		SanPhamModel model = new SanPhamModel(masp, null, null, 0, null, null, 0);
+		SanPhamModel model = new SanPhamModel(masp, null, null, null);
 		SanPhamModel sp = ISanPham.getInstance().selectByID(model);
 
 		if (tableProduct.getItems().size() >= 1) {

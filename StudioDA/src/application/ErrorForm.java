@@ -14,7 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class Alert extends Application {
+public class ErrorForm extends Application {
 	
 	@FXML
 	private Button btnOK, btnCancel;

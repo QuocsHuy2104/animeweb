@@ -2,16 +2,26 @@
 	-fx-background-color: black;
 }
 
-#btnLogin {
+#btnChangePass,
+#btnAuth,
+#btnBack,
+#btnConnect,
+#btnLogout,
+#btnLogin,
+#btnConfirm {
 	-fx-background-color: #19ff3c;
 	-fx-cursor: hand;
+	-fx-border-radius: 8px;
 }
 
-#btnLogin:hover {
-	-fx-background-color: #ff00f2;
-	-fx-border-radius : 8px;
-	-fx-border-color: #19ff3c;
-	-fx-border-width: 3px;
+#btnChangePass:hover,
+#btnConfirm:hover,
+#btnAuth:hover,
+#btnBack:hover,
+#btnLogout:hover,
+#btnLogin:hover,
+#btnConnect:hover {
+	-fx-effect: dropshadow(three-pass-box, #FF00FF, 10, 0, 1, 2);
 }
 
 #imageViewBackground {
@@ -22,21 +32,37 @@
 	-fx-background-color: #1E1922;
 }
 
+
+#txtServer,
+#txtPassDB,
+#txtDatabase,
 #txtUser,
 #txtPass,
-#txtUserForgot,
+#txtEmail,
 #txtAuth,
-#txtPassForgot,
-#txtCurrentPass,
+#txtCodeAuth,
+#txtConfirm,
+#txtUserChange,
 #txtNewPass,
-#txtUserChange{
+#txtCurrentPass,
+#txtAuthPass{
 	-fx-background-color: none;
 	-fx-border-color: white;
 	-fx-border-width: 1.75px;
 	-fx-border-radius: 10.0px;
 }
 
-#txtUserForgot:focused,
+#txtNewPass,
+#txtCurrentPass,
+#txtAuthPass {
+	-fx-text-inner-color: #fff;
+}
+
+
+#txtServer:focused,
+#txtPassDB:focused,
+#txtDatabase:focused,
+#txtEmail:focused,
 #txtUser:focused,
 #txtUserChange:focused {
 	-fx-background-color: white;
@@ -47,27 +73,36 @@
 	-fx-background-radius: 10.0px;
 }
 
-#txtPassForgot:focused,
+#txtConfirm:focused,
+#txtNewPass:focused,
+#txtCodeAuth:focused,
 #txtAuth:focused,
 #txtPass:focused,
-#txtCurrentPass:focused,
-#txtNewPass:focused {
-	-fx-background-color: white;
-	-fx-border-radius: 10.0px;
-	-fx-background-color: linear-gradient(to bottom, derive(-fx-text-box-border, -10.0%), -fx-text-box-border),
-    linear-gradient(from 0.0px 0.0px to 0.0px 5.0px, derive(-fx-control-inner-background, -9.0%), -fx-control-inner-background);
-	-fx-background-insets: 0.0, 1.0;
-	-fx-background-radius: 10.0px;
-}
-
-#txtUser:focused,
-#txtPass:focused,
-#txtAuth:focused,
-#txtPassForgot:focused, 
-#txtUserForgot:focused,
 #txtCurrentPass:focused,
 #txtNewPass:focused,
-#txtUserChange:focused {
+#txtAuthPass:focused {
+	-fx-background-color: white;
+	-fx-border-radius: 10.0px;
+	-fx-background-color: linear-gradient(to bottom, derive(-fx-text-box-border, -10.0%), -fx-text-box-border),
+    linear-gradient(from 0.0px 0.0px to 0.0px 5.0px, derive(-fx-control-inner-background, -9.0%), -fx-control-inner-background);
+	-fx-background-insets: 0.0, 1.0;
+	-fx-background-radius: 10.0px;
+}
+
+#txtConfirm:focused,
+#txtNewPass:focused,
+#txtServer:focused,
+#txtPassDB:focused,
+#txtDatabase:focused,
+#txtUser:focused,
+#txtPass:focused,
+#txtAuth:focused,
+#txtCodeAuth:focused, 
+#txtEmail:focused,
+#txtCurrentPass:focused,
+#txtNewPass:focused,
+#txtUserChange:focused,
+#txtAuthPass:focused {
 	-fx-text-fill: black;
 }
 
@@ -75,12 +110,11 @@
 	-fx-text-fill: #ff00f2;
 }
 
-#recHome:hover,
-#recStaff:hover,
-#recService:hover,
-#recProduct:hover,
-#recRevenue:hover,
-#recBill:hover {
-	-fx-background-color: white;
+#lblValue,
+#lblLoading {
+	-fx-text-alignment: justify;
+	-fx-text-fill: #fff;
+	-fx-font-size: 18px;
 }
+
 

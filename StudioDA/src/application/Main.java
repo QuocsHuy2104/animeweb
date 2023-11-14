@@ -1,10 +1,14 @@
 package application;
 	
 import javafx.application.Application;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.fxml.FXMLLoader;
 
 
@@ -13,7 +17,10 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			
-			Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
+			
+			Parent root = loader.load();
+			
 			Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
 			primaryStage.show();

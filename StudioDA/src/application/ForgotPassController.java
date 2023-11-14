@@ -1,16 +1,19 @@
 package application;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ResourceBundle;
 
 import connectJDBC.JDBCUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,15 +24,17 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-public class ForgotPassController {
+public class ForgotPassController implements Initializable {
 
 	@FXML
-	private TextField txtUserForgot, txtsend;
+	private TextField txtEmail, txtCodeAuth;
 
 	@FXML
-	private PasswordField txtPassForgot, txtAuth;
+	private PasswordField txtConfirm, txtNewPass;
 
 	@FXML
 	private Button btnAuth;
@@ -42,124 +47,73 @@ public class ForgotPassController {
 
 	@FXML
 	private Pane paneAuth;
-	
+
 	@FXML
 	private AnchorPane root;
-	
+
 	@FXML
 	private Label lblSecond;
 
+	@FXML
+	private Rectangle recBackground;
+
 	public int result;
-	
+
 	public PreparedStatement pst = null;
 
-	public void validate(ActionEvent e) {
+	public void validate() {
 
-		if (txtUserForgot.getText().equals("")) {
-			txtUserForgot.setPromptText("Nhập tên đăng nhập");
-			txtUserForgot.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;-fx-text-inner-color: white;");
+		if (txtEmail.getText().equals("")) {
+			txtEmail.setPromptText("Nhập Email");
+			txtEmail.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;-fx-text-inner-color: white;");
 		}
-		
-		if (txtPassForgot.getText().equals("")) {
-			txtPassForgot.setPromptText("Nhập mật khẩu mới");
-			txtPassForgot.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;-fx-text-inner-color: white;");
+
+		if (txtCodeAuth.getText().equals("")) {
+			txtCodeAuth.setPromptText("Nhập Mã Xác Nhận");
+			txtCodeAuth.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;-fx-text-inner-color: white;");
 		}
-		
-		if (txtAuth.getText().equals("")) {
-			txtAuth.setPromptText("Nhập lại mật khẩu");
-			txtAuth.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;-fx-text-inner-color: white;");
+
+		if (txtNewPass.getText().equals("")) {
+			txtNewPass.setPromptText("Nhập Mật Khẩu Mới");
+			txtNewPass.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;-fx-text-inner-color: white;");
 			return;
 		}
 
-		if (!txtAuth.getText().equalsIgnoreCase(txtPassForgot.getText())) {
-			txtAuth.setPromptText("Mật khẩu không trùng");
-			txtAuth.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;-fx-text-inner-color: white;");
+		if (!txtConfirm.getText().equalsIgnoreCase(txtNewPass.getText())) {
+			txtConfirm.setPromptText("Mật khẩu không trùng");
+			txtConfirm.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;-fx-text-inner-color: white;");
 			return;
 		}
 
-		Connection conn = JDBCUtil.getConnection();
-		String sql = "select * from nhanvien where manv = ?";
-		String user = txtUserForgot.getText();
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		Image img = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\application\\backgroundFrom.png");
+		recBackground.setFill(new ImagePattern(img));
+		
+		btnAuth.setOnAction(e -> {
+			validate();
+		});
+	}
+
+	public void Back() {
+		Stage stage = (Stage) root.getScene().getWindow();
+		stage.close();
+
 		try {
-			pst = conn.prepareStatement(sql);
-			pst.setString(1, user);
-			ResultSet rs = pst.executeQuery();
-			while (rs.next()) {
-				if (user.trim().equals(rs.getString("manv"))) {
-					new Thread(new Runnable() {
+			Parent login = FXMLLoader.load(getClass().getResource("Login.fxml"));
+			Scene scene = new Scene(login);
+			stage.setScene(scene);
+			stage.show();
+			stage.setResizable(false);
+			String css = this.getClass().getResource("styleLogin.css").toExternalForm();
+			stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/image/logo.png")));
+			stage.setTitle("Đăng nhập Studio Breakfast");
+			scene.getStylesheets().add(css);
 
-						@Override
-						public void run() {
-							for (int i = 40; i <= 300; i++) {
-								imgView.setLayoutX(i);
-								try {
-									Thread.sleep(3);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-							}
-							paneAuth.setVisible(true);
-						}
-					}).start();
-
-					lblTitle.setVisible(false);
-					txtUserForgot.setVisible(false);
-					txtPassForgot.setVisible(false);
-					txtAuth.setVisible(false);
-					
-					pst = conn.prepareStatement("update nhanvien set pass = ? where manv = ?");
-					pst.setString(1, txtAuth.getText().trim());
-					pst.setString(2, user.trim());
-					
-					random();
-				}
-			}
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
-	}
-	
-	public void checkOTP(ActionEvent ex) {
-		int input = Integer.parseInt(txtsend.getText());
-		if (input == result) {
-			try {
-				pst.executeUpdate();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			Stage stage = (Stage) root.getScene().getWindow();
-			stage.close();
-
-			try {
-				Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
-				Scene scene = new Scene(root);
-				stage.setScene(scene);
-				stage.show();
-				stage.setResizable(false);
-				String css = this.getClass().getResource("styleLogin.css").toExternalForm();
-				stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/image/logo.png")));
-				stage.setTitle("Đăng nhập Studio Breakfast");
-				scene.getStylesheets().add(css);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-		} else System.out.println("Update fail");
-	}
-
-	public void random() {
-		while (true) {
-			result = (int) Math.floor(Math.random() * 10000);
-			lblOTP.setText("Mã OTP :: " + result);
-			if (result > 2000) {
-				break;
-			}
-		}
-	}
-	
-	public void refresh() {
-		random();
 	}
 }
