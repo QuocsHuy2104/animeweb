@@ -3,11 +3,11 @@ package model;
 public class KhachHangModel {
 
 	private String maKH, tenKH, diachi, sdt;
-	private boolean gioiTinh;
+	private String gioiTinh;
 	private String email;
 	private boolean trangThai;
 
-	public KhachHangModel(String maKH, String tenKH, String diachi, String sdt, boolean gioiTinh, String email,
+	public KhachHangModel(String maKH, String tenKH, String diachi, String sdt, String gioiTinh, String email,
 			boolean trangThai) {
 		super();
 		this.maKH = maKH;
@@ -50,12 +50,13 @@ public class KhachHangModel {
 	public void setSdt(String sdt) {
 		this.sdt = sdt;
 	}
+	
 
-	public boolean isGioiTinh() {
+	public String getGioiTinh() {
 		return gioiTinh;
 	}
 
-	public void setGioiTinh(boolean gioiTinh) {
+	public void setGioiTinh(String gioiTinh) {
 		this.gioiTinh = gioiTinh;
 	}
 

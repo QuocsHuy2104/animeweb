@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.effect.DropShadow?>
@@ -8,17 +9,21 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Welcome">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="401.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Welcome">
    <children>
-      <ImageView fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="400.0" fitWidth="715.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@backgroundLogin.jpg" />
+            <Image url="@../image/wedding-dress-studio-upscaled.png" />
          </image>
       </ImageView>
-      <ProgressBar fx:id="myProgressBar" layoutY="373.0" prefHeight="26.0" prefWidth="600.0" progress="0.0" />
+      <ProgressBar fx:id="myProgressBar" layoutX="3.0" layoutY="375.0" prefHeight="26.0" prefWidth="696.0" progress="0.0" stylesheets="@styleLogin.css">
+         <cursor>
+            <Cursor fx:constant="WAIT" />
+         </cursor></ProgressBar>
       <Label fx:id="lblLoading" layoutX="14.0" layoutY="339.0" prefHeight="33.0" prefWidth="122.0" stylesheets="@styleLogin.css" text="Loading ..." />
-      <Circle fx:id="circle1" fill="#1f93ff00" layoutX="300.0" layoutY="200.0" radius="108.0" stroke="#f700ff" strokeType="INSIDE" strokeWidth="2.0" style="-fx-stroke-dash-array: 41;">
+      <Circle fx:id="circle1" fill="#1f93ff00" layoutX="350.0" layoutY="202.0" radius="108.0" stroke="#f700ff" strokeType="INSIDE" strokeWidth="2.0" style="-fx-stroke-dash-array: 41;">
          <effect>
             <DropShadow spread="0.73">
                <color>
@@ -27,7 +32,7 @@
             </DropShadow>
          </effect>
       </Circle>
-      <Circle fx:id="circle2" fill="#1f93ff00" layoutX="300.0" layoutY="200.0" radius="80.0" stroke="#04ff00" strokeType="INSIDE" strokeWidth="2.0" style="-fx-stroke-dash-array: 41;">
+      <Circle fx:id="circle2" fill="#1f93ff00" layoutX="350.0" layoutY="202.0" radius="80.0" stroke="#04ff00" strokeType="INSIDE" strokeWidth="2.0" style="-fx-stroke-dash-array: 41;">
          <effect>
             <DropShadow spread="0.64">
                <color>
@@ -36,6 +41,9 @@
             </DropShadow>
          </effect>
       </Circle>
-      <Label fx:id="lblValue" alignment="CENTER" layoutX="257.0" layoutY="180.0" prefHeight="40.0" prefWidth="86.0" stylesheets="@styleLogin.css" text="0%" textAlignment="CENTER" />
+      <Label fx:id="lblValue" alignment="CENTER" layoutX="301.0" layoutY="170.0" prefHeight="62.0" prefWidth="97.0" stylesheets="@styleLogin.css" text="0%" textAlignment="CENTER">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
    </children>
 </AnchorPane>

@@ -28,7 +28,7 @@ public class IKhachHang implements DAOInterface<KhachHangModel> {
 			pst.setString(2, reneric.getTenKH());
 			pst.setString(3, reneric.getDiachi());
 			pst.setString(4, reneric.getSdt());
-			pst.setBoolean(5, reneric.isGioiTinh());
+			pst.setString(5, reneric.getGioiTinh());
 			pst.setString(6, reneric.getEmail());
 			result = pst.executeUpdate();
 
@@ -95,10 +95,10 @@ public class IKhachHang implements DAOInterface<KhachHangModel> {
 				String email = rs.getString("setString");
 				int tt = rs.getInt("trangThai");
 
-				boolean genders = role == 1 ? true : false;
+				String genders = role == 1 ? "Nữ" : "Nam";
 				boolean trangThai = tt == 1 ? true : false;
 
-				result = new KhachHangModel(id, name, address, contact, genders, email, trangThai);
+				result = new KhachHangModel(id, name, address, contact, genders,email, trangThai);
 			}
 			pst.close();
 			rs.close();
@@ -125,7 +125,7 @@ public class IKhachHang implements DAOInterface<KhachHangModel> {
 				String email = rs.getString("Email");
 				int tt = rs.getInt("trangThai");
 
-				boolean genders = gender == 1 ? true : false;
+				String genders = gender == 1 ? "Nữ" : "Nam";
 				boolean trangThai = tt == 1 ? true : false;
 
 				KhachHangModel kh = new KhachHangModel(id, name, address, phone, genders, email, trangThai);

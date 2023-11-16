@@ -9,7 +9,7 @@
 #btnLogout,
 #btnLogin,
 #btnConfirm {
-	-fx-background-color: #19ff3c;
+	-fx-background-color: #FFFF;
 	-fx-cursor: hand;
 	-fx-border-radius: 8px;
 }
@@ -107,14 +107,19 @@
 }
 
 #forgotPassword:hover {
-	-fx-text-fill: #ff00f2;
+	-fx-effect: dropshadow(three-pass-box, #FF00FF, 10, 0, 1, 2);
+	-fx-cursor: hand;
 }
 
 #lblValue,
 #lblLoading {
 	-fx-text-alignment: justify;
-	-fx-text-fill: #fff;
-	-fx-font-size: 18px;
+	-fx-text-fill: #000;
+	-fx-font-size: 20px;
+}
+
+#myProgressBar {
+	-fx-accent: #FF66FF;
 }
 
 

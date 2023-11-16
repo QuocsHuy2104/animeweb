@@ -7,19 +7,27 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
+
+import org.hibernate.dialect.HANACloudColumnStoreDialect;
 
 import IDAO.IHoaDon;
 import IDAO.IKhachHang;
 import IDAO.INhanVien;
 import IDAO.ISanPham;
+import IDAO.ITrademark;
+import connectJDBC.JDBCUtil;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -44,6 +52,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -53,10 +62,12 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.*;
+import utilities.AutoString;
 import utilities.MessageDigest;
 import utilities.Notification;
 import utilities.PasswordRegex;
 import utilities.PhoneRegex;
+import utilities.ReadExcel;
 
 public class HomeController implements Initializable {
 
@@ -137,7 +148,7 @@ public class HomeController implements Initializable {
 	private RadioButton rbtnStaff, rbtnManage;
 
 	@FXML
-	private Button addStaffButton, editStaffButton, delStaffButton, refreshStaffButton;
+	private Button addStaffButton, delStaffButton;
 
 	@FXML
 	private TableView<NhanVienModel> tableStaff;
@@ -184,7 +195,7 @@ public class HomeController implements Initializable {
 	private TableColumn<KhachHangModel, String> phoneClientCol;
 
 	@FXML
-	private TableColumn<KhachHangModel, Boolean> genderClientCol;
+	private TableColumn<KhachHangModel, String> genderClientCol;
 
 	// Table Product
 
@@ -208,7 +219,6 @@ public class HomeController implements Initializable {
 
 	@FXML
 	private TableColumn<SanPhamModel, String> markProCol;
-
 
 	// Table Bill
 
@@ -275,7 +285,7 @@ public class HomeController implements Initializable {
 
 		hiddenRecControl();
 		recHome.setVisible(true);
-		btnHome.setStyle("-fx-text-fill: orange; -fx-background-color: none");
+		btnHome.setStyle("-fx-text-fill: #33b0f2; -fx-background-color: none");
 		imgHome.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\home-page.png"));
 
 	}
@@ -292,7 +302,7 @@ public class HomeController implements Initializable {
 
 			hiddenRecControl();
 			recStaff.setVisible(true);
-			btnStaff.setStyle("-fx-text-fill: orange; -fx-background-color: none");
+			btnStaff.setStyle("-fx-text-fill: #33b0f2; -fx-background-color: none");
 			imgStaff.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\team-management.png"));
 
 		} else {
@@ -313,8 +323,8 @@ public class HomeController implements Initializable {
 
 		hiddenRecControl();
 		recProduct.setVisible(true);
-		btnProduct.setStyle("-fx-text-fill: orange; -fx-background-color: none");
-		imgProduct.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\order1png.png"));
+		btnProduct.setStyle("-fx-text-fill: #33b0f2; -fx-background-color: none");
+		imgProduct.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\order1.png"));
 
 	}
 
@@ -328,7 +338,7 @@ public class HomeController implements Initializable {
 
 		hiddenRecControl();
 		recService.setVisible(true);
-		btnService.setStyle("-fx-text-fill: orange; -fx-background-color: none");
+		btnService.setStyle("-fx-text-fill: #33b0f2; -fx-background-color: none");
 		imgService.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\service.png"));
 	}
 
@@ -343,8 +353,8 @@ public class HomeController implements Initializable {
 
 		hiddenRecControl();
 		recBill.setVisible(true);
-		btnBill.setStyle("-fx-text-fill: orange; -fx-background-color: none");
-		imgBill.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\mobile-receipt.png"));
+		btnBill.setStyle("-fx-text-fill: #33b0f2; -fx-background-color: none");
+		imgBill.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\bill1.png"));
 
 	}
 
@@ -359,7 +369,7 @@ public class HomeController implements Initializable {
 
 		hiddenRecControl();
 		recClient.setVisible(true);
-		btnClient.setStyle("-fx-text-fill: orange; -fx-background-color: none");
+		btnClient.setStyle("-fx-text-fill: #33b0f2; -fx-background-color: none");
 		imgClient.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\costumer1.png"));
 
 	}
@@ -373,18 +383,18 @@ public class HomeController implements Initializable {
 		recService.setVisible(false);
 		recProduct.setVisible(false);
 
-		btnHome.setTextFill(Color.WHITE);
-		btnStaff.setTextFill(Color.WHITE);
-		btnProduct.setTextFill(Color.WHITE);
-		btnClient.setTextFill(Color.WHITE);
-		btnService.setTextFill(Color.WHITE);
-		btnBill.setTextFill(Color.WHITE);
-		btnBillDeltais.setTextFill(Color.WHITE);
+		btnHome.setTextFill(Color.BLACK);
+		btnStaff.setTextFill(Color.BLACK);
+		btnProduct.setTextFill(Color.BLACK);
+		btnClient.setTextFill(Color.BLACK);
+		btnService.setTextFill(Color.BLACK);
+		btnBill.setTextFill(Color.BLACK);
+		btnBillDeltais.setTextFill(Color.BLACK);
 
 		imgHome.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\home.png"));
 		imgStaff.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\manager.png"));
 		imgClient.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\costumer.png"));
-		imgPaid.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\bill.png"));
+		imgPaid.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\bill-service.png"));
 		imgProduct.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\order.png"));
 		imgBill.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\receipt.png"));
 		imgService.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\customer-service.png"));
@@ -401,8 +411,8 @@ public class HomeController implements Initializable {
 		hiddenRecControl();
 
 		recPaid.setVisible(true);
-		btnBillDeltais.setStyle("-fx-text-fill: orange; -fx-background-color: none");
-		imgPaid.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\bill1.png"));
+		btnBillDeltais.setStyle("-fx-text-fill: #33b0f2; -fx-background-color: none");
+		imgPaid.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\bill-service1.png"));
 	}
 
 	// Controll Setting
@@ -489,18 +499,11 @@ public class HomeController implements Initializable {
 		stage = (Stage) root.getScene().getWindow();
 		stage.close();
 
+		Welcome xc = new Welcome();
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
-			Scene scene = new Scene(root);
-			stage.setScene(scene);
-			stage.show();
-			stage.setResizable(false);
-			String css = this.getClass().getResource("styleLogin.css").toExternalForm();
-			stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/image/logo.png")));
-			stage.setTitle("Đăng nhập Studio Breakfast");
-			scene.getStylesheets().add(css);
-		} catch (IOException ex) {
-			ex.printStackTrace();
+			xc.openLogin();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -561,9 +564,23 @@ public class HomeController implements Initializable {
 		setBillTable();
 		loadDataBill();
 
+		circleLogo
+				.setFill(new ImagePattern(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\logo.png")));
+
 		recLogo.setFill(new ImagePattern(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\logo.png")));
 		lblMail.setText(LoginController.email);
 		lblNameStaff.setText(LoginController.nameStaff);
+
+		if (trademark.getItems().isEmpty() == false) {
+			try {
+				ReadExcel.downDB();
+			} catch (IOException | SQLException e) {
+				e.printStackTrace();
+			}
+		} else {
+
+			loadCbbTrademark();
+		}
 
 		// loadLineChart();
 
@@ -574,6 +591,7 @@ public class HomeController implements Initializable {
 		ToggleGroup group1 = new ToggleGroup();
 		rbtnMan.setToggleGroup(group1);
 		rbtnWoman.setToggleGroup(group1);
+
 	}
 
 	// Home Controll
@@ -627,18 +645,28 @@ public class HomeController implements Initializable {
 			try {
 				String passMD = MessageDigest.getMD5(pass);
 				boolean roles = rbtnManage.isSelected() ? true : false;
-				
+
 				NhanVienModel model = new NhanVienModel(id, ten, diachi, sdt, email, passMD, roles, true);
 				INhanVien.getInstance().insert(model);
+				loadDataStaff();
+				cleanStaff();
 			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
 			}
 		} else {
-			Notification.alert(AlertType.ERROR, "Tối thiểu tám ký tự, ít nhất một chữ cái, một số và một ký tự đặc biệt:");
+			Notification.alert(AlertType.ERROR,
+					"Tối thiểu 8 ký tự, ít nhất 1 chữ cái, 1 số và 1 ký tự đặc biệt:");
 		}
 
-		loadDataStaff();
 
+	}
+
+	public void saveStaff() {
+		int select = tableStaff.getSelectionModel().getSelectedIndex();
+		if (select < 0) {
+			insertStaff();
+		} else if (select > 0)
+			updateStaff();
 	}
 
 	public void updateStaff() {
@@ -662,9 +690,12 @@ public class HomeController implements Initializable {
 
 		NhanVienModel model = new NhanVienModel(id, ten, diachi, sdt, email, pass, roles, true);
 		INhanVien.getInstance().update(model);
+		loadDataStaff();
+		cleanStaff();
 	}
 
 	public void cleanStaff() {
+		IDStaff.setText("");
 		nameStaff.setText("");
 		addressStaff.setText("");
 		phoneStaff.setText("");
@@ -674,9 +705,39 @@ public class HomeController implements Initializable {
 		rbtnStaff.setSelected(false);
 	}
 
+	public void gmailStaff() {
+		emailStaff.setText(AutoString.autoEmail(nameStaff.getText()));
+	}
+
+	// DELETE Staff
+
+	public void deleteStaff() {
+		NhanVienModel col = tableStaff.getSelectionModel().getSelectedItem();
+
+		NhanVienModel model = new NhanVienModel(col.getMaNV(), col.getTenNV(), col.getDiaChi(), col.getSdt(),
+				col.getEmail(), col.getMatKhau(), col.isVaiTro(), col.isTrangThai());
+		INhanVien.getInstance().del(model);
+
+		loadDataStaff();
+		cleanStaff();
+	}
+
+	public void clickItem(MouseEvent arg0) {
+		if (arg0.getClickCount() == 2) {
+			NhanVienModel col = tableStaff.getSelectionModel().getSelectedItem();
+			IDStaff.setText(col.getMaNV());
+			nameStaff.setText(col.getTenNV());
+			phoneStaff.setText(col.getSdt());
+			emailStaff.setText(col.getEmail());
+			addressStaff.setText(col.getDiaChi());
+			rbtnStaff.setSelected(col.isVaiTro());
+			rbtnManage.setSelected(col.isVaiTro());
+		}
+	}
+
 	// Client Controll
 
-	// set column table Staff ('Khách Hàng')
+	// set column table Client ('Khách Hàng')
 
 	public void setClientTable() {
 		client = FXCollections.observableArrayList();
@@ -684,7 +745,7 @@ public class HomeController implements Initializable {
 		nameClientCol.setCellValueFactory(new PropertyValueFactory<KhachHangModel, String>("tenKH"));
 		addressClientCol.setCellValueFactory(new PropertyValueFactory<KhachHangModel, String>("diachi"));
 		phoneClientCol.setCellValueFactory(new PropertyValueFactory<KhachHangModel, String>("sdt"));
-		genderClientCol.setCellValueFactory(new PropertyValueFactory<KhachHangModel, Boolean>("gioiTinh"));
+		genderClientCol.setCellValueFactory(new PropertyValueFactory<KhachHangModel, String>("gioiTinh"));
 	}
 
 	// load data from database enter table in screen
@@ -701,12 +762,24 @@ public class HomeController implements Initializable {
 		tableClient.setItems(client);
 	}
 
+	public void saveClient() {
+		int select = tableClient.getSelectionModel().getSelectedIndex();
+
+		if (select < 0) {
+			insertClient();
+			cleanClient();
+		} else if (select > 0) {
+			updateClient();
+			cleanClient();
+		}
+	}
+
 	public void insertClient() {
 		String id = IDClient.getText();
 		String name = nameClient.getText();
 		String address = addressClient.getText();
 		String phone = phoneClient.getText();
-		boolean gender = rbtnMan.isSelected() ? true : false;
+		String gender = rbtnMan.isSelected() ? "Nam" : "Nữ";
 		String email = emailClient.getText();
 
 		if (id.equals("") || name.equals("") || address.equals("") || phone.equals("")) {
@@ -716,14 +789,28 @@ public class HomeController implements Initializable {
 
 		KhachHangModel kh = new KhachHangModel(id, name, address, phone, gender, email, true);
 		IKhachHang.getInstance().insert(kh);
+
+		loadDataClient();
 	}
 
-	public void updataClient() {
+	// Delete client
+
+	public void delClient() {
+		KhachHangModel col = tableClient.getSelectionModel().getSelectedItem();
+
+		KhachHangModel model = new KhachHangModel(col.getMaKH(), col.getTenKH(), col.getDiachi(), col.getSdt(),
+				col.getGioiTinh(), col.getEmail(), col.isTrangThai());
+		IKhachHang.getInstance().del(model);
+
+		loadDataClient();
+	}
+
+	public void updateClient() {
 		String id = IDClient.getText();
 		String name = nameClient.getText();
 		String address = addressClient.getText();
 		String phone = phoneClient.getText();
-		boolean gender = rbtnMan.isSelected() ? true : false;
+		String gender = rbtnMan.isSelected() ? "Nam" : "Nữ";
 		String email = emailClient.getText();
 
 		if (id.equals("") || name.equals("") || address.equals("") || phone.equals("")) {
@@ -733,6 +820,8 @@ public class HomeController implements Initializable {
 
 		KhachHangModel kh = new KhachHangModel(id, name, address, phone, gender, email, true);
 		IKhachHang.getInstance().update(kh);
+
+		loadDataClient();
 	}
 
 	public void cleanClient() {
@@ -743,41 +832,75 @@ public class HomeController implements Initializable {
 		emailClient.setText("");
 	}
 
+	public void clickTableClient(MouseEvent e) {
+		if (e.getClickCount() == 2) {
+			KhachHangModel col = tableClient.getSelectionModel().getSelectedItem();
+			IDClient.setText(col.getMaKH());
+			nameClient.setText(col.getTenKH());
+			addressClient.setText(col.getDiachi());
+			emailClient.setText(col.getEmail());
+			phoneClient.setText(col.getSdt());
+		}
+	}
+
 	// Product Controll
-	
+
 	public void insertPro() {
 		String id = IDProduct.getText();
 		String name = nameProduct.getText();
 		Float price = Float.parseFloat(priceProduct.getText());
-		
+
 		if (id.equals("") || name.equals("") || trademark.equals("")) {
 			Notification.alert(AlertType.WARNING, "Vui lòng nhập đầy đủ thông tin");
 			return;
 		}
-		
+
 		SanPhamModel model = new SanPhamModel(name, id, name, price);
 		ISanPham.getInstance().insert(model);
 	}
-	
+
 	public void updatePro() {
 		String id = IDProduct.getText();
 		String name = nameProduct.getText();
 		Float price = Float.parseFloat(priceProduct.getText());
-		
+
 		if (id.equals("") || name.equals("") || trademark.equals("")) {
 			Notification.alert(AlertType.WARNING, "Vui lòng nhập đầy đủ thông tin");
 			return;
 		}
-		
+
 		SanPhamModel model = new SanPhamModel(name, id, name, price);
 		ISanPham.getInstance().update(model);
-		
+
 	}
 	
+	public void savePro() {
+		int select = tableProduct.getSelectionModel().getSelectedIndex();
+
+		if (select < 0) {
+			insertPro();
+			cleanPro();
+		} else if (select > 0) {
+			updatePro();
+			cleanPro();
+		}
+	}
+
 	public void cleanPro() {
 		nameProduct.setText("");
 		IDProduct.setText("");
 		priceProduct.setText("");
+	}
+
+	// Delete Product
+
+	public void deleteProduct() {
+		SanPhamModel col = tableProduct.getSelectionModel().getSelectedItem();
+
+		SanPhamModel model = new SanPhamModel(col.getMaSP(), col.getTenSp(), col.getMaTH(), col.getDonGia());
+		ISanPham.getInstance().del(model);
+
+		loadDataProduct();
 	}
 
 	// set column table Product ('Sản Phẩm')
@@ -806,7 +929,7 @@ public class HomeController implements Initializable {
 	}
 
 	// Bill Controll
-	
+
 	// set column table Bill ('Hóa Đơn')
 
 	public void setBillTable() {
@@ -851,41 +974,6 @@ public class HomeController implements Initializable {
 
 		pieChart.getData().addAll(pieChartData);
 
-	}
-
-	// DELETE Staff
-
-	public void deleteStaff() {
-		NhanVienModel col = tableStaff.getSelectionModel().getSelectedItem();
-
-		NhanVienModel model = new NhanVienModel(col.getMaNV(), col.getTenNV(), col.getDiaChi(), col.getSdt(),
-				col.getEmail(), col.getMatKhau(), col.isVaiTro(), col.isTrangThai());
-		INhanVien.getInstance().del(model);
-
-		loadDataStaff();
-	}
-
-	// Delete Product
-
-	public void deleteProduct() {
-		SanPhamModel col = tableProduct.getSelectionModel().getSelectedItem();
-
-		SanPhamModel model = new SanPhamModel(col.getMaSP(), col.getTenSp(), col.getMaTH(), col.getDonGia());
-		ISanPham.getInstance().del(model);
-
-		loadDataProduct();
-	}
-
-	// Delete client
-
-	public void delClient() {
-		KhachHangModel col = tableClient.getSelectionModel().getSelectedItem();
-
-		KhachHangModel model = new KhachHangModel(col.getMaKH(), col.getTenKH(), col.getDiachi(), col.getSdt(),
-				col.isGioiTinh(), col.getEmail(), col.isTrangThai());
-		IKhachHang.getInstance().del(model);
-
-		loadDataClient();
 	}
 
 	// Delete Bill
@@ -947,7 +1035,7 @@ public class HomeController implements Initializable {
 	public void findClient() {
 		String makh = txtFindClient.getText();
 
-		KhachHangModel model = new KhachHangModel(makh, null, null, null, false, null, false);
+		KhachHangModel model = new KhachHangModel(makh, null, null, null, null, null, false);
 
 		if (tableClient.getItems().size() >= 1) {
 			tableClient.getItems().clear();
@@ -985,6 +1073,24 @@ public class HomeController implements Initializable {
 
 		bill.add(hoadon);
 		tableBill.setItems(bill);
+	}
+
+	public void loadCbbTrademark() {
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("Select tenth from thuonghieu");
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				String tenth = rs.getString("tenth");
+				this.trademark.getItems().add(tenth);
+			}
+			rs.close();
+			pst.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }

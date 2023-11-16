@@ -18,9 +18,9 @@
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1368.0" stylesheets="@styleLogin.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.LoginController">
    <children>
-      <ImageView fx:id="imageViewBackground" fitHeight="698.0" fitWidth="984.0" layoutX="42.0" layoutY="36.0" pickOnBounds="true" style="-fx-border-radius: 30px;">
+      <ImageView fx:id="imageViewBackground" fitHeight="743.0" fitWidth="1271.0" layoutX="42.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-radius: 30px;">
          <image>
-            <Image url="@backgroundLogin.jpg" />
+            <Image url="@../image/wedding-dress-studio-upscaled.png" />
          </image>
       </ImageView>
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="641.0" layoutX="876.0" layoutY="92.0" stroke="BLACK" strokeType="INSIDE" width="484.0" />
@@ -77,9 +77,9 @@
                </stops>
             </LinearGradient>
          </fill></Rectangle>
-      <Label fx:id="forgotPassword" alignment="CENTER" contentDisplay="CENTER" layoutX="1144.0" layoutY="371.0" onMouseClicked="#openForgotPassword" prefHeight="27.0" prefWidth="155.0" stylesheets="@styleLogin.css" text="Quên mật khẩu" textAlignment="CENTER" textFill="#5e6bff" textOverrun="LEADING_ELLIPSIS" underline="true">
+      <Label fx:id="forgotPassword" alignment="CENTER" contentDisplay="CENTER" layoutX="1183.0" layoutY="370.0" onMouseClicked="#openForgotPassword" prefHeight="27.0" prefWidth="116.0" stylesheets="@styleLogin.css" text="Quên mật khẩu" textAlignment="CENTER" textFill="WHITE" textOverrun="LEADING_ELLIPSIS" underline="true">
          <font>
-            <Font name="System Italic" size="14.0" />
+            <Font name="System Italic" size="16.0" />
          </font>
       </Label>
       <CheckBox fx:id="myCheckBox" layoutX="936.0" layoutY="376.0" mnemonicParsing="false" text="Nhớ Mật Khẩu" textFill="WHITE">

@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import javax.mail.MessagingException;
+
 import IDAO.INhanVien;
 import connectJDBC.JDBCUtil;
 import javafx.event.ActionEvent;
@@ -29,6 +31,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.NhanVienModel;
+import utilities.Email;
 import utilities.MessageDigest;
 import utilities.Notification;
 import javafx.scene.Node;
@@ -105,11 +108,14 @@ public class LoginController implements Initializable {
 					stage.close();
 
 					try {
-						Parent forgot = FXMLLoader.load(getClass().getResource("Home.fxml"));
-						stage = new Stage();
-						Scene scene = new Scene(forgot);
+						Parent root = FXMLLoader.load(getClass().getResource("Home.fxml"));
+						Scene scene = new Scene(root);
 						stage.setScene(scene);
+						stage.setTitle("Studio Application");
+						stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/image/logo.png")));
 						stage.show();
+						String css = this.getClass().getResource("style.css").toExternalForm();
+						scene.getStylesheets().add(css);
 					} catch (IOException ex) {
 						ex.printStackTrace();
 					}
@@ -117,14 +123,8 @@ public class LoginController implements Initializable {
 				}
 
 				// "ten dang nhap khong ton tai"
-				if (!manv.equals(txtUser.getText())) {
-					Notification.alert(AlertType.WARNING, "Ten đăng nhập không tồn tại");
-				}
-
-				// sai mat khau
-				if (!txtPass.getText().equals(matkhau)) {
-					Notification.alert(AlertType.WARNING, "Mật khẩu không chính xác");
-					return;
+				if (!manv.equals(txtUser.getText()) || !txtPass.getText().equals(matkhau)) {
+					Notification.alert(AlertType.WARNING, "Ten đăng nhập hoặc mật khẩu không chính xác");
 				}
 
 			}

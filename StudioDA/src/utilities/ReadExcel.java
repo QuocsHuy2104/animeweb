@@ -18,7 +18,7 @@ import connectJDBC.JDBCUtil;
 public class ReadExcel {
 	public static final String excelPath = "E:\\Java\\UDPM\\ThuongHieu.xlsx";
 	
-	public void downDB() throws IOException, SQLException {
+	public static void downDB() throws IOException, SQLException {
 	int batchSize = 20;
 	
 		 long start = System.currentTimeMillis();

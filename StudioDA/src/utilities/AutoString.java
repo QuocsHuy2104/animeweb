@@ -19,8 +19,7 @@ public class AutoString {
 		return name + spf + "@gmail.com";
 	}
 	
-	public static String autoID(String username) {
-		int max = 1;
+	public static String autoID(String username, int identity) {
 		String[] split = username.split(" ");
 		
 		String ID = "";
@@ -28,7 +27,7 @@ public class AutoString {
 			ID += split[i].substring(0, 1);
 		}
 		
-		return ID +(String.format("%04d", max));
+		return ID +(String.format("%04d", identity));
 	}
 
 }

@@ -12,18 +12,18 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="628.0" prefWidth="1039.0" style="-fx-background-color: #333;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ForgotPassController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="603.0" prefWidth="1039.0" style="-fx-background-color: #333;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ForgotPassController">
    <children>
-      <ImageView fx:id="imgView" fitHeight="525.0" fitWidth="740.0" layoutX="25.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="imgView" fitHeight="513.0" fitWidth="877.0" layoutX="20.0" layoutY="47.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@backgroundLogin.jpg" />
+            <Image url="@../image/wedding-dress-studio-upscaled.png" />
          </image>
       </ImageView>
-      <Rectangle fx:id="recBackground1" arcHeight="40.0" arcWidth="40.0" height="500.0" layoutX="665.0" layoutY="76.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="359.0" />
-      <Rectangle fx:id="recBackground" arcHeight="40.0" arcWidth="40.0" fill="#333333" height="500.0" layoutX="665.0" layoutY="76.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="359.0" />
+      <Rectangle fx:id="recBackground1" arcHeight="40.0" arcWidth="40.0" height="443.0" layoutX="665.0" layoutY="76.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="359.0" />
+      <Rectangle fx:id="recBackground" arcHeight="40.0" arcWidth="40.0" fill="#333333" height="443.0" layoutX="665.0" layoutY="76.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="359.0" />
       <Pane fx:id="pane1" layoutX="691.0" layoutY="94.0" prefHeight="332.0" prefWidth="306.0">
          <children>
-            <Button fx:id="btnConfirm" alignment="CENTER" layoutX="95.0" layoutY="237.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="34.0" prefWidth="128.0" style="-fx-background-radius: 8px;" stylesheets="@styleLogin.css" text="Xác nhận">
+            <Button fx:id="btnConfirm" alignment="CENTER" layoutX="95.0" layoutY="237.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#sendMail" prefHeight="34.0" prefWidth="128.0" style="-fx-background-radius: 8px;" stylesheets="@styleLogin.css" text="Xác nhận">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -52,7 +52,7 @@
       </Pane>
       <Pane fx:id="pane2" layoutX="691.0" layoutY="94.0" prefHeight="332.0" prefWidth="306.0" visible="false">
          <children>
-            <Button fx:id="btnAuth" alignment="CENTER" layoutX="36.0" layoutY="253.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="34.0" prefWidth="106.0" style="-fx-background-radius: 8px;" stylesheets="@styleLogin.css" text="Xác nhận">
+            <Button fx:id="btnAuth" alignment="CENTER" layoutX="36.0" layoutY="253.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#auth" prefHeight="34.0" prefWidth="106.0" style="-fx-background-radius: 8px;" stylesheets="@styleLogin.css" text="Xác nhận">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -72,7 +72,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Button fx:id="btnBack" alignment="CENTER" layoutX="164.0" layoutY="253.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="34.0" prefWidth="106.0" style="-fx-background-radius: 8px;" stylesheets="@styleLogin.css" text="Quay Lại">
+            <Button fx:id="btnBack" alignment="CENTER" layoutX="164.0" layoutY="253.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#cancel" prefHeight="34.0" prefWidth="106.0" style="-fx-background-radius: 8px;" stylesheets="@styleLogin.css" text="Quay Lại">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

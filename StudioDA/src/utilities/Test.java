@@ -5,14 +5,16 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import javax.mail.MessagingException;
+
 public class Test {
 
 	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		String input = sc.nextLine();
-		int max = 100;
-		System.out.println(AutoString.autoID(input));
-	
+//		Scanner sc = new Scanner(System.in);
+//		String input = sc.nextLine();
+//		int max = 100;
+//		System.out.println(AutoString.autoID(input, max));
+//	
 //		System.out.println(input +(String.format("%04d", max)));
 		
 //		System.out.println(input.replaceAll(" ", ""));
@@ -29,6 +31,13 @@ public class Test {
 		
 		
 		//System.out.println(AutoString.autoEmail("Nguyen Minh Trieu"));
+
+//		int code = (int) Math.floor(((Math.random() * 899999) + 100000));
+//		System.out.println(code);
+		
+		Email email = new Email();
+		System.out.println(email.messageMail);
+		System.out.println(email.messageMail);
 	}
 
 }

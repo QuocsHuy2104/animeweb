@@ -1,6 +1,6 @@
 #root,
 #paneSetting {
-	-fx-background-color: #363636;
+	-fx-background-color: #E8E8E8;
 }
 
 #tableBillDeltais,
@@ -9,7 +9,7 @@
 #tableClient,
 #tableProduct,
 #tableBill {
-	-fx-background-color: #555555;
+	-fx-background-color: #F5F5F5;
 }
 
 #txtFindBill,
@@ -18,7 +18,7 @@
 #txtFindProduct {
 	-fx-background-color: none;
 	-fx-border-width: 1px;
-	-fx-border-color: white;
+	-fx-border-color: #000;
 	-fx-border-radius: 12px;
 	-fx-font-size: 16px;
 }
@@ -29,7 +29,7 @@
 #txtFindProduct:focused {
 	-fx-background-color: none;
 	-fx-text-inner-color: #fff;
-	-fx-border-color: #FF00FF;
+	-fx-border-color: #0000FF;
 	-fx-border-width: 1px;
 }
 
@@ -41,8 +41,7 @@
 #btnService:hover,
 #btnBillDeltais:hover {
 	-fx-cursor: hand;
-	-fx-text-fill: linear-gradient(from 23.4848% 20.8333% to 100.0% 100.0%, #fa7f2d 0.0%, #fa7d2f 10.1845%, #36d7f7 27.0528%, #36d7f7 57.8997%, #f21d96 68.2648%, #f41c93 100.0%);
-	
+	-fx-text-fill: linear-gradient(from 0.0% 19.697% to 100.0% 100.0%, #33b7f2 0.0%, #c74ef5 100.0%);
 }
 
 #addBillButton:hover,
@@ -58,9 +57,7 @@
 #delStaffButton:hover,
 #refreshStaffButton:hover,
 #addClientButton:hover,
-#editClientButton:hover,
-#delClientButton:hover,
-#refreshClientButton:hover {
+#delClientButton:hover {
 	-fx-effect: dropshadow(three-pass-box, #FF00FF, 10, 0, 1, 4);
 }
 
@@ -77,10 +74,8 @@
 #delStaffButton:pressed,
 #refreshStaffButton:pressed,
 #addClientButton:pressed,
-#editClientButton:pressed,
-#delClientButton:pressed,
-#refreshClientButton:pressed {
-	-fx-background-color: #ADFF2F;
+#delClientButton:pressed {
+	-fx-background-color: #0066FF;
 }
 
 #addBillButton,
@@ -96,17 +91,15 @@
 #delProductButton,
 #refreshProductButton,
 #addStaffButton,
-#editStaffButton,
-#delStaffButton,
-#refreshStaffButton {
+#delStaffButton {
 	-fx-pref-height: 35;
 	-fx-pref-width: 95;
 	-fx-background-color: none;
 	-fx-font-size: 16px;
 	-fx-cursor: hand;
 	-fx-border-width: 1px;
-	-fx-border-color: #F5FFFA;
-	-fx-text-fill: #F5FFFA;
+	-fx-border-color: #0066FF;
+	-fx-text-fill: #0066FF;
 	-fx-border-radius: 6px;
 }
 
@@ -119,13 +112,13 @@
 
 #lblAppName,
 #lblNameStaff {
-	-fx-text-fill: #ffffff;
+	-fx-text-fill: #000000;
 	-fx-font-size: 20px;
 }
 
 #lblVersion,
 #lblMail {
-	-fx-text-fill: #ffffff;
+	-fx-text-fill: #000000;
 	-fx-font-size: 16px;
 }
 
@@ -138,8 +131,8 @@
 	-fx-background-color: none;
 	-fx-border-width: 1px;
 	-fx-border-radius: 6px;
-	-fx-border-color: #ffff;
-	-fx-text-fill: #fff;
+	-fx-border-color: #000;
+	-fx-text-fill: #000;
 }
 
 #IDStaff:focused,
@@ -148,8 +141,8 @@
 #emailStaff:focused,
 #password:focused {
 	-fx-background-color: none;
-	-fx-text-inner-color: #FF00FF;
-	-fx-border-color: #363636;
+	-fx-text-inner-color: #000;
+	-fx-border-color: #0066FF;
 }
 
 #IDClient,
@@ -160,8 +153,8 @@
 	-fx-background-color: none;
 	-fx-border-width: 1px;
 	-fx-border-radius: 6px;
-	-fx-border-color: #ffff;
-	-fx-text-fill: #fff;
+	-fx-border-color: #000;
+	-fx-text-fill: #000;
 }
 
 #IDClient:focused,
@@ -169,8 +162,8 @@
 #phoneClient:focused,
 #emailClient:focused {
 	-fx-background-color: none;
-	-fx-text-inner-color: #FF00FF;
-	-fx-border-color: #363636;
+	-fx-text-inner-color: #000;
+	-fx-border-color: #0066FF;
 }
 
 
@@ -182,8 +175,8 @@
 	-fx-background-color: none;
 	-fx-border-width: 1px;
 	-fx-border-radius: 6px;
-	-fx-border-color: #ffff;
-	-fx-text-fill: #fff;
+	-fx-border-color: #000;
+	-fx-text-fill: #000;
 }
 
 #IDProduct:focused,
@@ -191,7 +184,7 @@
 #priceProduct:focused,
 #txtIDStaff:focused {
 	-fx-background-color: none;
-	-fx-text-inner-color: #FF00FF;
-	-fx-border-color: #363636;
+	-fx-text-inner-color: #000;
+	-fx-border-color: #0066FF;
 }
 

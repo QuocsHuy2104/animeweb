@@ -3,6 +3,7 @@ package application;
 import java.io.IOException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 import java.util.Formatter;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -27,7 +28,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import utilities.ReadExcel;
 
 public class Welcome extends Application implements Initializable {
 
@@ -46,6 +49,7 @@ public class Welcome extends Application implements Initializable {
 	@Override
 	public void start(Stage arg0) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("Welcome.fxml"));
+		arg0 = new Stage(StageStyle.UNDECORATED);
 		Scene scene = new Scene(root);
 		arg0.setScene(scene);
 		arg0.show();
@@ -125,6 +129,7 @@ public class Welcome extends Application implements Initializable {
 	}
 
 	public void openLogin() throws IOException {
+		
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
 		Parent root = loader.load();
 		Stage primaryStage = new Stage();

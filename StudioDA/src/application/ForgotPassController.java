@@ -2,6 +2,7 @@ package application;
 
 import java.io.IOException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,6 +10,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
 
+import javax.mail.MessagingException;
+
+import IDAO.INhanVien;
 import connectJDBC.JDBCUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,6 +20,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -27,6 +33,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import utilities.Email;
+import utilities.MessageDigest;
+import utilities.Notification;
+import utilities.PasswordRegex;
 
 public class ForgotPassController implements Initializable {
 
@@ -46,7 +56,7 @@ public class ForgotPassController implements Initializable {
 	private Label lblTitle, lblOTP;
 
 	@FXML
-	private Pane paneAuth;
+	private Pane pane1, pane2;
 
 	@FXML
 	private AnchorPane root;
@@ -61,31 +71,91 @@ public class ForgotPassController implements Initializable {
 
 	public PreparedStatement pst = null;
 
-	public void validate() {
+	public void sendMail() {
 
 		if (txtEmail.getText().equals("")) {
 			txtEmail.setPromptText("Nhập Email");
 			txtEmail.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;-fx-text-inner-color: white;");
+			return;
 		}
-
+		Email email = new Email();
 		if (txtCodeAuth.getText().equals("")) {
-			txtCodeAuth.setPromptText("Nhập Mã Xác Nhận");
-			txtCodeAuth.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;-fx-text-inner-color: white;");
-		}
-
-		if (txtNewPass.getText().equals("")) {
-			txtNewPass.setPromptText("Nhập Mật Khẩu Mới");
-			txtNewPass.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;-fx-text-inner-color: white;");
-			return;
-		}
-
-		if (!txtConfirm.getText().equalsIgnoreCase(txtNewPass.getText())) {
-			txtConfirm.setPromptText("Mật khẩu không trùng");
-			txtConfirm.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;-fx-text-inner-color: white;");
-			return;
+			try {
+				email.mail(txtEmail.getText(), "Mã Xác Thực");
+			} catch (MessagingException e) {
+				e.printStackTrace();
+			}
+		} else if (txtCodeAuth.getText().equals(email.messageMail)){
+			pane1.setVisible(false);
+			pane2.setVisible(true);
 		}
 
 	}
+	
+	public void cancel() {
+		Welcome xc = new Welcome();
+		try {
+			xc.openLogin();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void auth() throws IOException {
+		if (txtNewPass.getText().equals("") || txtConfirm.getText().equals("")) {
+			txtNewPass.setPromptText("Nhập Password");
+			txtNewPass.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;-fx-text-inner-color: white;");
+			
+			txtConfirm.setPromptText("Nhập Password");
+			txtConfirm.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;-fx-text-inner-color: white;");
+			return;
+		}
+		
+		if (!txtConfirm.getText().equals(txtNewPass.getText())) {
+			Notification.alert(AlertType.INFORMATION, "Mật khẩu không trùng khớp");
+		} else {
+			PasswordRegex regex = new PasswordRegex();
+			if (regex.validate(txtNewPass.getText())) {
+				try {
+					String passMD = MessageDigest.getMD5(txtConfirm.getText());
+					Connection conn = JDBCUtil.getConnection();
+					try {
+						PreparedStatement pst = conn.prepareStatement("select manv from nhanvien where email = ?");
+						pst.setString(1, txtEmail.getText());
+						ResultSet rs = pst.executeQuery();
+						while (rs.next()) {
+							String manv = rs.getString("manv");
+							INhanVien.getInstance().updatePass(passMD, manv);
+						}
+						rs.close();
+						pst.close();
+						JDBCUtil.closeConnection(conn);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					
+					Notification.alert(AlertType.INFORMATION, "Đổi mật khẩu thành công");
+					
+					Stage stage = (Stage) root.getScene().getWindow();
+					stage.close();
+					
+					Welcome xc = new Welcome();
+					xc.openLogin();
+					
+				} catch (NoSuchAlgorithmException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			
+		}
+		
+		if (!txtNewPass.getText().equals("") || !txtConfirm.getText().equals("")) {
+		}
+		
+	}
+	
+	
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -93,7 +163,7 @@ public class ForgotPassController implements Initializable {
 		recBackground.setFill(new ImagePattern(img));
 		
 		btnAuth.setOnAction(e -> {
-			validate();
+			sendMail();
 		});
 	}
 
