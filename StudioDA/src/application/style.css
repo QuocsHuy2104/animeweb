@@ -15,7 +15,8 @@
 #txtFindBill,
 #txtFindClient,
 #txtFindStaff,
-#txtFindProduct {
+#txtFindProduct,
+#txtFindSer {
 	-fx-background-color: none;
 	-fx-border-width: 1px;
 	-fx-border-color: #000;
@@ -26,7 +27,8 @@
 #txtFindBill:focused,
 #txtFindStaff:focused,
 #txtClient:focused,
-#txtFindProduct:focused {
+#txtFindProduct:focused,
+#txtFindSer:focused {
 	-fx-background-color: none;
 	-fx-text-inner-color: #fff;
 	-fx-border-color: #0000FF;
@@ -57,7 +59,9 @@
 #delStaffButton:hover,
 #refreshStaffButton:hover,
 #addClientButton:hover,
-#delClientButton:hover {
+#delClientButton:hover,
+#saveSer:hover,
+#delSer:hover {
 	-fx-effect: dropshadow(three-pass-box, #FF00FF, 10, 0, 1, 4);
 }
 
@@ -91,7 +95,9 @@
 #delProductButton,
 #refreshProductButton,
 #addStaffButton,
-#delStaffButton {
+#delStaffButton,
+#saveSer,
+#delSer {
 	-fx-pref-height: 35;
 	-fx-pref-width: 95;
 	-fx-background-color: none;
@@ -183,6 +189,25 @@
 #nameProduct:focused,
 #priceProduct:focused,
 #txtIDStaff:focused {
+	-fx-background-color: none;
+	-fx-text-inner-color: #000;
+	-fx-border-color: #0066FF;
+}
+
+#IDSer,
+#nameSer,
+#priceSer {
+	-fx-font-size: 14px;
+	-fx-background-color: none;
+	-fx-border-width: 1px;
+	-fx-border-radius: 6px;
+	-fx-border-color: #000;
+	-fx-text-fill: #000;
+}
+
+#IDSer:focused,
+#nameSer:focused,
+#priceSer:focused {
 	-fx-background-color: none;
 	-fx-text-inner-color: #000;
 	-fx-border-color: #0066FF;

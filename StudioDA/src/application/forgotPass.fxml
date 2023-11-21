@@ -19,8 +19,8 @@
             <Image url="@../image/wedding-dress-studio-upscaled.png" />
          </image>
       </ImageView>
-      <Rectangle fx:id="recBackground1" arcHeight="40.0" arcWidth="40.0" height="443.0" layoutX="665.0" layoutY="76.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="359.0" />
-      <Rectangle fx:id="recBackground" arcHeight="40.0" arcWidth="40.0" fill="#333333" height="443.0" layoutX="665.0" layoutY="76.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="359.0" />
+      <Rectangle fx:id="recBackground1" arcHeight="40.0" arcWidth="40.0" height="443.0" layoutX="665.0" layoutY="76.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="352.0" />
+      <Rectangle fx:id="recBackground" arcHeight="40.0" arcWidth="40.0" fill="#333333" height="443.0" layoutX="665.0" layoutY="76.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="352.0" />
       <Pane fx:id="pane1" layoutX="691.0" layoutY="94.0" prefHeight="332.0" prefWidth="306.0">
          <children>
             <Button fx:id="btnConfirm" alignment="CENTER" layoutX="95.0" layoutY="237.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#sendMail" prefHeight="34.0" prefWidth="128.0" style="-fx-background-radius: 8px;" stylesheets="@styleLogin.css" text="Xác nhận">
@@ -84,5 +84,10 @@
             </PasswordField>
          </children>
       </Pane>
+      <ImageView fitHeight="34.0" fitWidth="85.0" layoutX="20.0" layoutY="6.0" onMouseClicked="#Back" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../image/left-arrow.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

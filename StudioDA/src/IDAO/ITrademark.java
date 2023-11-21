@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import DAO.DAOInterface;
 import connectJDBC.JDBCUtil;
-import model.NhanVienModel;
 import model.Trademark;
 
 public class ITrademark implements DAOInterface<Trademark> {
@@ -16,7 +15,6 @@ public class ITrademark implements DAOInterface<Trademark> {
 	public static ITrademark getInstance() {
 		return new ITrademark();
 	}
-
 
 	@Override
 	public int insert(Trademark reneric) {

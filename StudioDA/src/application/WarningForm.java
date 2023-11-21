@@ -1,13 +1,8 @@
 package application;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,8 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class ErrorForm extends Application {
-
+public class WarningForm extends Application {
 	@FXML
 	private Button btnOK, btnCancel;
 
@@ -37,7 +31,7 @@ public class ErrorForm extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("Error.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("WarningForm.fxml"));
 			primaryStage = new Stage(StageStyle.UNDECORATED);
 			Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
@@ -59,6 +53,4 @@ public class ErrorForm extends Application {
 		stage = (Stage) root.getScene().getWindow();
 		stage.close();
 	}
-
-	
 }

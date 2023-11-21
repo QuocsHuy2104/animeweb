@@ -1,7 +1,6 @@
 package IDAO;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,7 +9,6 @@ import java.util.ArrayList;
 import DAO.DAOInterface;
 import connectJDBC.JDBCUtil;
 import model.KhachHangModel;
-import model.NhanVienModel;
 
 public class IKhachHang implements DAOInterface<KhachHangModel> {
 
@@ -23,13 +21,15 @@ public class IKhachHang implements DAOInterface<KhachHangModel> {
 		int result = 0;
 		Connection conn = JDBCUtil.getConnection();
 		try {
-			PreparedStatement pst = conn.prepareStatement("insert into khachhang values (?, ?, ?, ?, ?, ?)");
+			PreparedStatement pst = conn.prepareStatement("insert into khachhang values (?, ?, ?, ?, ?, ?, ?)");
 			pst.setString(1, reneric.getMaKH());
 			pst.setString(2, reneric.getTenKH());
 			pst.setString(3, reneric.getDiachi());
 			pst.setString(4, reneric.getSdt());
-			pst.setString(5, reneric.getGioiTinh());
+			int gender = reneric.getGioiTinh().equals("Nữ") ? 1 : 0;
+			pst.setInt(5, gender);
 			pst.setString(6, reneric.getEmail());
+			pst.setBoolean(7, true);
 			result = pst.executeUpdate();
 
 			pst.close();
@@ -92,7 +92,7 @@ public class IKhachHang implements DAOInterface<KhachHangModel> {
 				String address = rs.getString("DIACHI");
 				String contact = rs.getString("SDT");
 				int role = rs.getInt("GioiTinh");
-				String email = rs.getString("setString");
+				String email = rs.getString("email");
 				int tt = rs.getInt("trangThai");
 
 				String genders = role == 1 ? "Nữ" : "Nam";

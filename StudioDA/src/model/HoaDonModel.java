@@ -1,22 +1,24 @@
 package model;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class HoaDonModel {
 	
 	private String mahd;
-	private String ngay;
+	private Date ngay;
 	private float thanhToan;
-	private int ID_KhachHang;
-	private int ID_NV ;
+	private String tenKH; // id khach hang
+	private String tenNV ; // id nhan vien
+	private String trangThai;
 	
-	public HoaDonModel(String mahd, String ngay, float thanhToan, int iD_KhachHang, int iD_NV) {
+	public HoaDonModel(String mahd, Date ngay, float thanhToan, String tenKH, String tenNV, String trangThai) {
 		super();
 		this.mahd = mahd;
 		this.ngay = ngay;
 		this.thanhToan = thanhToan;
-		this.ID_KhachHang = iD_KhachHang;
-		this.ID_NV = iD_NV;
+		this.tenKH = tenKH;
+		this.tenNV = tenNV;
+		this.trangThai = trangThai;
 	}
 
 	public String getMahd() {
@@ -27,11 +29,11 @@ public class HoaDonModel {
 		this.mahd = mahd;
 	}
 
-	public String getNgay() {
+	public Date getNgay() {
 		return ngay;
 	}
 
-	public void setNgay(String ngay) {
+	public void setNgay(Date ngay) {
 		this.ngay = ngay;
 	}
 
@@ -43,20 +45,29 @@ public class HoaDonModel {
 		this.thanhToan = thanhToan;
 	}
 
-	public int getID_KhachHang() {
-		return ID_KhachHang;
+	public String getTenKH() {
+		return tenKH;
 	}
 
-	public void setID_KhachHang(int iD_KhachHang) {
-		ID_KhachHang = iD_KhachHang;
+	public void setTenKH(String tenKH) {
+		this.tenKH = tenKH;
 	}
 
-	public int getID_NV() {
-		return ID_NV;
+	public String getTenNV() {
+		return tenNV;
 	}
 
-	public void setID_NV(int iD_NV) {
-		ID_NV = iD_NV;
+	public void setTenNV(String tenNV) {
+		this.tenNV = tenNV;
 	}
+
+	public String getTrangThai() {
+		return trangThai;
+	}
+
+	public void setTrangThai(String trangThai) {
+		this.trangThai = trangThai;
+	}
+	
 	
 }

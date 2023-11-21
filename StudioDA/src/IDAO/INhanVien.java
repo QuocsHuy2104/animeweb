@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import DAO.DAOInterface;
+import application.ForgotPassController;
 import connectJDBC.JDBCUtil;
 import model.NhanVienModel;
 
@@ -83,8 +84,9 @@ public class INhanVien implements DAOInterface<NhanVienModel> {
 		NhanVienModel result = null;
 		Connection conn = JDBCUtil.getConnection();
 		try {
-			PreparedStatement pst = conn.prepareStatement("Select * from nhanvien where manv = ?");
+			PreparedStatement pst = conn.prepareStatement("select * from nhanvien where manv like ? or TenNV like ?");
 			pst.setString(1, generic.getMaNV());
+			pst.setString(2, generic.getTenNV());
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 				String id = rs.getString("MaNV");
@@ -145,9 +147,9 @@ public class INhanVien implements DAOInterface<NhanVienModel> {
 	public int updatePass(String pass, String manv) {
 		int result = 0;
 
-		Connection conn = JDBCUtil.getConnection();
+		Connection conn = JDBCUtil.getConnectionDefault();
 		try {
-			PreparedStatement pst = conn.prepareStatement("Update pass = ? where manv = ?");
+			PreparedStatement pst = conn.prepareStatement("Update nhanvien set pass = ? where manv = ?");
 			pst.setString(1, pass);
 			pst.setString(2, manv);
 			result = pst.executeUpdate();
@@ -158,6 +160,28 @@ public class INhanVien implements DAOInterface<NhanVienModel> {
 		}
 
 		return result;
+	}
+	
+	public boolean existMail() {
+		
+		String email = "";
+		Connection conn = JDBCUtil.getConnectionDefault();
+		try {
+			PreparedStatement pst = conn.prepareStatement("Select Email from nhanvien where Email like ?");
+			pst.setString(1, ForgotPassController.mail);
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				email += rs.getString(1);
+			}
+			pst.close();
+			rs.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if (email.equals("")) return false;
+		else return true;
 	}
 
 	public int selectCount() {

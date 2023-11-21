@@ -10,11 +10,9 @@ import java.util.Date;
 import DAO.DAOInterface;
 import connectJDBC.JDBCUtil;
 import model.HoaDonModel;
-import model.KhachHangModel;
-import model.SanPhamModel;
 
 public class IHoaDon implements DAOInterface<HoaDonModel> {
-	
+
 	public static IHoaDon getInstance() {
 		return new IHoaDon();
 	}
@@ -23,42 +21,38 @@ public class IHoaDon implements DAOInterface<HoaDonModel> {
 	public int insert(HoaDonModel reneric) {
 		int result = 0;
 		Connection conn = JDBCUtil.getConnection();
-//		String sql = "insert into hoadon values (?, ?,(select GiaDichVu\r\n"
-//				+ "	from SANPHAM\r\n"
-//				+ "	inner join KHACHHANG on KHACHHANG.id_sanpham = SANPHAM.ID_SANPHAM\r\n"
-//				+ "	where makh = (select MaKH from KHACHHANG where ID_KhachHang = ?)"
-//				+ " ,?,?)";
-		
-		String sql = "insert into hoadon values (?, ?, ?, ?, ?)";
+
+		String sql = "insert into hoadon values (?, ?, ?, ?, (select makh from khachhang where tenkh like ?), (select manv from nhanvien where tennv like ?))";
 		try {
 			PreparedStatement pst = conn.prepareStatement(sql);
 			pst.setString(1, reneric.getMahd());
-			pst.setString(2, reneric.getNgay());
+			pst.setDate(2, reneric.getNgay());
 			pst.setFloat(3, reneric.getThanhToan());
-			pst.setInt(4, reneric.getID_KhachHang());
-			pst.setInt(5, reneric.getID_NV());
-			
+			pst.setInt(4, Integer.parseInt(reneric.getTrangThai()));
+			pst.setString(5, reneric.getTenKH());
+			pst.setString(6, reneric.getTenNV());
+
 			result = pst.executeUpdate();
-			
+
 			pst.close();
 			JDBCUtil.closeConnection(conn);
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return result;
 	}
 
 	@Override
 	public int del(HoaDonModel reneric) {
-		int result  = 0;
+		int result = 0;
 		Connection conn = JDBCUtil.getConnection();
 		PreparedStatement pst;
 		try {
 			pst = conn.prepareStatement("delete from hoadon where mahd = ?");
 			pst.setString(1, reneric.getMahd());
-			
+
 			result = pst.executeUpdate();
 			pst.close();
 			JDBCUtil.closeConnection(conn);
@@ -72,20 +66,17 @@ public class IHoaDon implements DAOInterface<HoaDonModel> {
 	public int update(HoaDonModel reneric) {
 		int result = 0;
 		Connection conn = JDBCUtil.getConnection();
-//		String sql = "update HOADON set Ngay = ?, ThanhToan = (select GiaDichVu\\r\\n\"\r\n"
-//				+ "					+ \"	from SANPHAM\\r\\n\"\r\n"
-//				+ "					+ \"	inner join KHACHHANG on KHACHHANG.id_sanpham = SANPHAM.ID_SANPHAM\\r\\n\"\r\n"
-//				+ "					+ \"	where makh = (select MaKH from KHACHHANG where ID_KhachHang = ?)), ID_NV = ? where MaHD = ?";
-		String sql = "update hoadon set ngay = ?, thanhtoan = ?, id_nv = ? where mahd = ?";
-		
+		String sql = "update hoadon set ngay = ?, thanhtoan = ?, makh = (select makh from khachhang where tenkh = ?), manv = (select manv from nhanvien where tennv = ?) where mahd = ?";
+
 		try {
 			PreparedStatement pst = conn.prepareStatement(sql);
-			
-			pst.setString(1, reneric.getNgay());
+
+			pst.setDate(1, reneric.getNgay());
 			pst.setFloat(2, reneric.getThanhToan());
-			pst.setInt(3, reneric.getID_NV());
-			pst.setString(4, reneric.getMahd());
-			
+			pst.setString(3, reneric.getTenKH());
+			pst.setString(4, reneric.getTenNV());
+			pst.setString(5, reneric.getMahd());
+
 			result = pst.executeUpdate();
 			pst.close();
 			JDBCUtil.closeConnection(conn);
@@ -93,7 +84,7 @@ public class IHoaDon implements DAOInterface<HoaDonModel> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return result;
 	}
 
@@ -102,16 +93,20 @@ public class IHoaDon implements DAOInterface<HoaDonModel> {
 		HoaDonModel result = null;
 		Connection conn = JDBCUtil.getConnection();
 		try {
-			PreparedStatement pst = conn.prepareStatement("Select * from hoadon where mahd = ?");
+			PreparedStatement pst = conn.prepareStatement("select mahd, ngaylaphd, thanhtoan, HOADON.TrangThai, tenkh, tennv from HoaDon\r\n"
+					+ "inner join nhanvien on hoadon.MaNV = NHANVIEN.MaNV\r\n"
+					+ "inner join KHACHHANG on HOADON.MaKH = KHACHHANG.MaKH\r\n"
+					+ "where MaHD like = ?");
 			pst.setString(1, generic.getMahd());
 			ResultSet rs = pst.executeQuery();
-			while(rs.next()) {
-				String id = rs.getString("Mahd");
-				String ngay = rs.getString("ngay");
+			while (rs.next()) {
+				String ma = rs.getString("mahd");
+				Date ngay = rs.getDate("ngaylaphd");
 				float thanhtoan = rs.getFloat("thanhtoan");
-				int idkh = rs.getInt("id_khachhang");
-				int idnv = rs.getInt("id_nv");
-				result = new HoaDonModel(id, ngay, thanhtoan, idkh, idnv);
+				String trangthai = String.valueOf(rs.getInt("trangthai"));
+				String tenkhach = rs.getString("tenkh");
+				String tennv = rs.getString("tenNV");
+				result = new HoaDonModel(ma, (java.sql.Date) ngay, thanhtoan, tenkhach, tennv, trangthai);
 			}
 			pst.close();
 			rs.close();
@@ -126,18 +121,21 @@ public class IHoaDon implements DAOInterface<HoaDonModel> {
 	public ArrayList<HoaDonModel> selectAll() {
 		ArrayList<HoaDonModel> reuslt = new ArrayList<HoaDonModel>();
 		Connection conn = JDBCUtil.getConnection();
-		
+
 		try {
-			PreparedStatement pst = conn.prepareStatement("select * from hoadon");
+			PreparedStatement pst = conn.prepareStatement("select mahd, ngaylaphd, thanhtoan, HOADON.TrangThai, tenkh, tennv from HoaDon\r\n"
+					+ "inner join nhanvien on hoadon.MaNV = NHANVIEN.MaNV\r\n"
+					+ "inner join KHACHHANG on HOADON.MaKH = KHACHHANG.MaKH\r\n");
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
-				String mahd = rs.getString("mahd");
-				String ngay = rs.getString("ngay");
-				float thanhToan = rs.getFloat("ThanhToan");
-				int idkh = rs.getInt("ID_KhachHang");
-				int idnv = rs.getInt("ID_NV");
+				String ma = rs.getString("mahd");
+				Date ngay = rs.getDate("ngaylaphd");
+				float thanhtoan = rs.getFloat("thanhtoan");
+				String trangthai = String.valueOf(rs.getInt("trangthai"));
+				String tenkhach = rs.getString("tenkh");
+				String tennv = rs.getString("tenNV");
 
-				HoaDonModel model = new HoaDonModel(mahd, ngay, thanhToan, idkh, idnv);
+				HoaDonModel model = new HoaDonModel(ma, (java.sql.Date)ngay, thanhtoan, tenkhach, tennv, trangthai);
 				reuslt.add(model);
 			}
 			pst.close();
@@ -148,7 +146,7 @@ public class IHoaDon implements DAOInterface<HoaDonModel> {
 		}
 		return reuslt;
 	}
-	
+
 	public int selectCount() {
 		int hoadon = 0;
 		Connection conn = JDBCUtil.getConnection();
@@ -167,6 +165,5 @@ public class IHoaDon implements DAOInterface<HoaDonModel> {
 		}
 		return hoadon;
 	}
-	
-	
+
 }

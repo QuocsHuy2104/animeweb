@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Date;
-
 public class NhanVienModel {
 	private String maNV, tenNV, diaChi, sdt, email, matKhau;
 	private boolean vaiTro;

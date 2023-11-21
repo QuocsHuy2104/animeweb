@@ -23,50 +23,50 @@ import javafx.stage.Stage;
 import utilities.PasswordRegex;
 import application.ErrorForm;
 
-public class ChangePassController implements Initializable{
+public class ChangePassController implements Initializable {
 
 	@FXML
 	private PasswordField txtCurrentPass, txtNewPass, txtAuthPass;
-	
+
 	@FXML
 	private Button btnOK;
-	
+
 	@FXML
 	private Rectangle recBackground;
-	
+
 	@FXML
 	private AnchorPane parent;
-	
+
+	private Stage stage;
+
 	public void changePass(ActionEvent event) {
 		String user = LoginController.user;
 		String currentPass = txtCurrentPass.getText().trim();
 		String newPass = txtNewPass.getText().trim();
 		String authPass = txtAuthPass.getText().trim();
-		
+
 		// check input textfield
-		
+
 		if (currentPass.equals("")) {
 			txtCurrentPass.setPromptText("Nhập mật khẩu cũ");
 		}
-		
+
 		if (newPass.equals("")) {
 			txtCurrentPass.setPromptText("Nhập mật khẩu mới");
 		}
-		
+
 		PasswordRegex passwordRegex = new PasswordRegex();
 		if (passwordRegex.validate(newPass) == false) {
-			Alert alert = new Alert(AlertType.CONFIRMATION);
-			alert.setTitle("Thông Báo");
-			alert.setHeaderText("Thông Báo");
-			alert.setContentText("Mật khẩu không trùng khớp");
+			WarningForm wn = new WarningForm();
+			wn.start(stage);
 			return;
 		}
-		
+
 		if (authPass.equals("")) {
 			txtCurrentPass.setPromptText("Xác nhận mật khẩu");
 			return;
 		}
-		
+
 		if (!newPass.equals(authPass)) {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Thông Báo");
@@ -74,27 +74,36 @@ public class ChangePassController implements Initializable{
 			alert.setContentText("Mật khẩu không trùng khớp");
 			return;
 		}
-		
+
 		INhanVien.getInstance().updatePass(user, authPass);
-		
-		Stage stage = (Stage) parent.getScene().getWindow();
+
+		stage = (Stage) parent.getScene().getWindow();
 		stage.close();
 
-		try {
-			Parent root = FXMLLoader.load(getClass().getResource("Login.fxml"));
-			stage = new Stage();
-			Scene scene = new Scene(root);
-			stage.setScene(scene);
-			stage.show();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+		Main main = new Main();
+		main.start(stage);
+
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		recBackground.setFill(new ImagePattern(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\application\\backgroundFrom.png")));
+		recBackground.setFill(new ImagePattern(
+				new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\application\\backgroundFrom.png")));
 	}
-	
+
+	public void back() {
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("Home.fxml"));
+			Stage stage = new Stage();
+			Scene scene = new Scene(root);
+			stage.setScene(scene);
+			stage.setTitle("Studio Application");
+			stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/image/logo.png")));
+			stage.show();
+			String css = this.getClass().getResource("style.css").toExternalForm();
+			scene.getStylesheets().add(css);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
 }

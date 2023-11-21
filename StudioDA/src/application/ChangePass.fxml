@@ -10,27 +10,32 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="parent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="613.0" prefWidth="1123.0" style="-fx-background-color: #333;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ChangePassController">
+<AnchorPane fx:id="parent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="527.0" prefWidth="1123.0" style="-fx-background-color: #333;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ChangePassController">
    <children>
-      <ImageView fx:id="imgView" fitHeight="525.0" fitWidth="740.0" layoutX="35.0" layoutY="44.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="imgView" fitHeight="525.0" fitWidth="740.0" layoutX="42.0" layoutY="52.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@backgroundLogin.jpg" />
+            <Image url="@../image/wedding-dress-studio-upscaled.png" />
          </image>
       </ImageView>
-      <Rectangle fx:id="recBackground" arcHeight="40.0" arcWidth="40.0" height="500.0" layoutX="675.0" layoutY="86.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="359.0" />
-      <Rectangle fx:id="recBackground" arcHeight="40.0" arcWidth="40.0" fill="#333333" height="500.0" layoutX="675.0" layoutY="86.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="359.0" />
-      <Button fx:id="btnChangePass" alignment="CENTER" layoutX="782.0" layoutY="392.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="34.0" prefWidth="145.0" style="-fx-background-radius: 8px;" stylesheets="@styleLogin.css" text="Xác nhận">
+      <Rectangle fx:id="recBackground" arcHeight="40.0" arcWidth="40.0" height="500.0" layoutX="699.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="359.0" />
+      <Rectangle fx:id="recBackground" arcHeight="40.0" arcWidth="40.0" fill="#333333" height="500.0" layoutX="699.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="359.0" />
+      <Button fx:id="btnChangePass" alignment="CENTER" layoutX="806.0" layoutY="320.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="34.0" prefWidth="145.0" style="-fx-background-radius: 8px;" stylesheets="@styleLogin.css" text="Xác nhận">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Label fx:id="lblTitle" alignment="CENTER" layoutX="723.0" layoutY="128.0" prefHeight="58.0" prefWidth="262.0" text="Quên mật khẩu" textAlignment="CENTER" textFill="WHITE">
+      <Label fx:id="lblTitle" alignment="CENTER" layoutX="747.0" layoutY="56.0" prefHeight="58.0" prefWidth="262.0" text="Quên mật khẩu" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <PasswordField fx:id="txtCurrentPass" layoutX="723.0" layoutY="210.0" prefHeight="41.0" prefWidth="262.0" promptText="Mật Khẩu Cũ" stylesheets="@styleLogin.css" />
-      <PasswordField fx:id="txtNewPass" layoutX="723.0" layoutY="270.0" prefHeight="41.0" prefWidth="262.0" promptText="Mật Khẩu Mới" stylesheets="@styleLogin.css" />
-      <PasswordField fx:id="txtAuthPass" layoutX="723.0" layoutY="330.0" prefHeight="41.0" prefWidth="262.0" promptText="Xác Nhận Mật Khẩu" stylesheets="@styleLogin.css" />
+      <PasswordField fx:id="txtCurrentPass" layoutX="747.0" layoutY="138.0" prefHeight="41.0" prefWidth="262.0" promptText="Mật Khẩu Cũ" stylesheets="@styleLogin.css" />
+      <PasswordField fx:id="txtNewPass" layoutX="747.0" layoutY="198.0" prefHeight="41.0" prefWidth="262.0" promptText="Mật Khẩu Mới" stylesheets="@styleLogin.css" />
+      <PasswordField fx:id="txtAuthPass" layoutX="747.0" layoutY="258.0" prefHeight="41.0" prefWidth="262.0" promptText="Xác Nhận Mật Khẩu" stylesheets="@styleLogin.css" />
+      <ImageView fitHeight="34.0" fitWidth="34.0" layoutX="14.0" layoutY="7.0" onMouseClicked="#back" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../image/left-arrow.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

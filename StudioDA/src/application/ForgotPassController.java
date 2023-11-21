@@ -71,6 +71,8 @@ public class ForgotPassController implements Initializable {
 
 	public PreparedStatement pst = null;
 
+	public static String mail;
+
 	public void sendMail() {
 
 		if (txtEmail.getText().equals("")) {
@@ -78,20 +80,28 @@ public class ForgotPassController implements Initializable {
 			txtEmail.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;-fx-text-inner-color: white;");
 			return;
 		}
-		Email email = new Email();
-		if (txtCodeAuth.getText().equals("")) {
-			try {
-				email.mail(txtEmail.getText(), "Mã Xác Thực");
-			} catch (MessagingException e) {
-				e.printStackTrace();
+
+		mail = txtEmail.getText();
+
+		if (INhanVien.getInstance().existMail()) {
+
+			Email email = new Email();
+			if (txtCodeAuth.getText().equals("")) {
+				try {
+					email.mail(txtEmail.getText(), "Mã Xác Thực");
+				} catch (MessagingException e) {
+					e.printStackTrace();
+				}
+			} else if (txtCodeAuth.getText().equals(email.messageMail)) {
+				pane1.setVisible(false);
+				pane2.setVisible(true);
 			}
-		} else if (txtCodeAuth.getText().equals(email.messageMail)){
-			pane1.setVisible(false);
-			pane2.setVisible(true);
+		} else {
+			Notification.alert(AlertType.ERROR, "Không thuộc email nhân viên");
 		}
 
 	}
-	
+
 	public void cancel() {
 		Welcome xc = new Welcome();
 		try {
@@ -100,90 +110,69 @@ public class ForgotPassController implements Initializable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void auth() throws IOException {
 		if (txtNewPass.getText().equals("") || txtConfirm.getText().equals("")) {
 			txtNewPass.setPromptText("Nhập Password");
 			txtNewPass.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;-fx-text-inner-color: white;");
-			
+
 			txtConfirm.setPromptText("Nhập Password");
 			txtConfirm.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;-fx-text-inner-color: white;");
 			return;
 		}
-		
+
 		if (!txtConfirm.getText().equals(txtNewPass.getText())) {
 			Notification.alert(AlertType.INFORMATION, "Mật khẩu không trùng khớp");
+		}
+
+		PasswordRegex regex = new PasswordRegex();
+		if (regex.validate(txtNewPass.getText()) == false) {
+			Notification.alert(AlertType.ERROR, "Mật khẩu không đúng định dạng");
 		} else {
-			PasswordRegex regex = new PasswordRegex();
-			if (regex.validate(txtNewPass.getText())) {
+			try {
+				String passMD = MessageDigest.getMD5(txtConfirm.getText());
+				Connection conn = JDBCUtil.getConnectionDefault();
 				try {
-					String passMD = MessageDigest.getMD5(txtConfirm.getText());
-					Connection conn = JDBCUtil.getConnection();
-					try {
-						PreparedStatement pst = conn.prepareStatement("select manv from nhanvien where email = ?");
-						pst.setString(1, txtEmail.getText());
-						ResultSet rs = pst.executeQuery();
-						while (rs.next()) {
-							String manv = rs.getString("manv");
-							INhanVien.getInstance().updatePass(passMD, manv);
-						}
-						rs.close();
-						pst.close();
-						JDBCUtil.closeConnection(conn);
-					} catch (SQLException e) {
-						e.printStackTrace();
+					PreparedStatement pst = conn.prepareStatement("select manv from nhanvien where email like ?");
+					pst.setString(1, txtEmail.getText());
+					ResultSet rs = pst.executeQuery();
+					while (rs.next()) {
+						String manv = rs.getString("manv");
+						INhanVien.getInstance().updatePass(passMD, manv);
 					}
-					
-					Notification.alert(AlertType.INFORMATION, "Đổi mật khẩu thành công");
-					
-					Stage stage = (Stage) root.getScene().getWindow();
-					stage.close();
-					
-					Welcome xc = new Welcome();
-					xc.openLogin();
-					
-				} catch (NoSuchAlgorithmException e) {
+					rs.close();
+					pst.close();
+					JDBCUtil.closeConnection(conn);
+				} catch (SQLException e) {
 					e.printStackTrace();
 				}
+				
+				Notification.alert(AlertType.INFORMATION, "Đổi mật khẩu thành công");
+				
+				Stage stage = (Stage) root.getScene().getWindow();
+				stage.close();
+				
+				Main main = new Main();
+				main.start(stage);
+				
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
 			}
-			
-			
 		}
-		
-		if (!txtNewPass.getText().equals("") || !txtConfirm.getText().equals("")) {
-		}
-		
+
 	}
-	
-	
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		Image img = new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\application\\backgroundFrom.png");
 		recBackground.setFill(new ImagePattern(img));
-		
-		btnAuth.setOnAction(e -> {
-			sendMail();
-		});
 	}
 
 	public void Back() {
 		Stage stage = (Stage) root.getScene().getWindow();
 		stage.close();
 
-		try {
-			Parent login = FXMLLoader.load(getClass().getResource("Login.fxml"));
-			Scene scene = new Scene(login);
-			stage.setScene(scene);
-			stage.show();
-			stage.setResizable(false);
-			String css = this.getClass().getResource("styleLogin.css").toExternalForm();
-			stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/image/logo.png")));
-			stage.setTitle("Đăng nhập Studio Breakfast");
-			scene.getStylesheets().add(css);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Main main = new Main();
+		main.start(stage);
 	}
 }

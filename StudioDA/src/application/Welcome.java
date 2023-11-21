@@ -2,10 +2,6 @@ package application;
 
 import java.io.IOException;
 import java.net.URL;
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
-import java.util.Formatter;
-import java.util.Random;
 import java.util.ResourceBundle;
 
 import javafx.animation.Interpolator;
@@ -13,24 +9,19 @@ import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import utilities.ReadExcel;
 
 public class Welcome extends Application implements Initializable {
 
@@ -129,37 +120,19 @@ public class Welcome extends Application implements Initializable {
 	}
 
 	public void openLogin() throws IOException {
-		
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
-		Parent root = loader.load();
-		Stage primaryStage = new Stage();
-		Scene scene = new Scene(root);
-		primaryStage.setScene(scene);
-
-		LoginController controller = loader.getController();
-
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-			@Override
-			public void handle(KeyEvent arg0) {
-				if (arg0.getCode() == KeyCode.ENTER) {
-					try {
-						controller.LoginEvent();
-					} catch (NoSuchAlgorithmException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				} else if (arg0.getCode() == KeyCode.ESCAPE)
-					controller.exitForm();
-			}
-
-		});
-		primaryStage.show();
-		primaryStage.setResizable(false);
-		String css = this.getClass().getResource("styleLogin.css").toExternalForm();
-		primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/image/logo.png")));
-		primaryStage.setTitle("Đăng nhập Studio Breakfast");
-		scene.getStylesheets().add(css);
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("Home.fxml"));
+			Stage stage = new Stage();
+			Scene scene = new Scene(root);
+			stage.setScene(scene);
+			stage.setTitle("Studio Application");
+			stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/image/logo.png")));
+			stage.show();
+			String css = this.getClass().getResource("style.css").toExternalForm();
+			scene.getStylesheets().add(css);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 }

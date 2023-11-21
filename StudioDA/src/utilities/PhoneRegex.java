@@ -2,6 +2,11 @@ package utilities;
 
 public class PhoneRegex extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public PhoneRegex(String str) {
 		super(str);
 	}
@@ -13,8 +18,6 @@ public class PhoneRegex extends Exception {
 
 		if (kt == false) {
 			throw new PhoneRegex("Loi: Khong dung dinh dang!");
-		} else {
-			System.out.println("Dung dinh dang so dien thoai!");
-		}
+		} 
 	}
 }

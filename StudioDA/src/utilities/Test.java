@@ -1,11 +1,24 @@
 package utilities;
 
 import java.lang.reflect.Array;
+
 import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.mail.MessagingException;
+
+import IDAO.INhanVien;
+import application.ErrorForm;
+import connectJDBC.JDBCUtil;
+import javafx.stage.Stage;
+import model.NhanVienModel;
 
 public class Test {
 
@@ -35,9 +48,40 @@ public class Test {
 //		int code = (int) Math.floor(((Math.random() * 899999) + 100000));
 //		System.out.println(code);
 		
-		Email email = new Email();
-		System.out.println(email.messageMail);
-		System.out.println(email.messageMail);
+//		Email email = new Email();
+//		System.out.println(email.messageMail);
+//		System.out.println(email.messageMail);
+		
+//		Connection conn = JDBCUtil.getConnection();
+//		int id = 0;
+//		try {
+//			PreparedStatement pst = conn.prepareStatement("SELECT Max(MaKH) as LastID FROM KHACHHANG");
+//			ResultSet rs = pst.executeQuery();
+//			String makh = "";
+//			while(rs.next()) {
+//				makh += rs.getString(1);
+//			}
+//			
+//			System.out.println(makh);
+//			
+//			String[] split = makh.split("000");
+//			for (int i = 1; i < split.length; i++) {
+//				id = Integer.parseInt(split[i]);
+//				
+//			}
+//			pst.close();
+//			rs.close();
+//			conn.close();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		System.out.println(String.format("%04d", id + 1));
+		
+		NhanVienModel model = new NhanVienModel("KyDV", null, null, null, null, null, false, false);
+		INhanVien.getInstance().selectByID(model);
+		
 	}
 
 }

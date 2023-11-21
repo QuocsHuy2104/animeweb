@@ -13,11 +13,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="433.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ErrorForm">
+<VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="433.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.WarningForm">
    <children>
-      <Pane prefHeight="34.0" prefWidth="398.0">
+      <Pane prefHeight="34.0" prefWidth="398.0" style="-fx-background-color: #333;">
          <children>
-            <Label fx:id="lblType" alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="398.0" text="Error" textAlignment="CENTER" textFill="#2900ff">
+            <Label fx:id="lblType" alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="398.0" text="Warning" textAlignment="CENTER" textFill="#2900ff">
                <font>
                   <Font size="18.0" />
                </font>
@@ -27,7 +27,6 @@
                   <Image url="@../image/x.png" />
                </image>
             </ImageView>
-            <Separator layoutY="37.0" prefHeight="3.0" prefWidth="433.0" />
          </children>
       </Pane>
       <HBox prefHeight="97.0" prefWidth="398.0">

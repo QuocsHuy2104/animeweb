@@ -9,19 +9,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-import javax.mail.MessagingException;
 
-import IDAO.INhanVien;
 import connectJDBC.JDBCUtil;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -30,11 +24,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import model.NhanVienModel;
-import utilities.Email;
+import javafx.stage.StageStyle;
 import utilities.MessageDigest;
-import utilities.Notification;
-import javafx.scene.Node;
 
 public class LoginController implements Initializable {
 
@@ -90,7 +81,7 @@ public class LoginController implements Initializable {
 		Connection conn = JDBCUtil.getConnection();
 
 		try {
-			PreparedStatement pst = conn.prepareStatement("select * from nhanvien where manv = ?");
+			PreparedStatement pst = conn.prepareStatement("select * from nhanvien where manv like ?");
 			pst.setString(1, txtUser.getText());
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
@@ -100,33 +91,34 @@ public class LoginController implements Initializable {
 				nameStaff = rs.getString("TenNV");
 				email = rs.getString("email");
 
-				String manv = rs.getString("manv");
+				String manv = rs.getString("manv").toLowerCase();
 				String matkhau = rs.getString("pass");
 
-				if (txtUser.getText().equals(manv) && (MessageDigest.verify(txtPass.getText(), matkhau) || txtPass.getText().equals(matkhau))) {
+				
+
+				if (txtUser.getText().equals(manv)
+						&& (MessageDigest.verify(txtPass.getText(), matkhau) || txtPass.getText().equals(matkhau))) {
 					stage = (Stage) root.getScene().getWindow();
 					stage.close();
 
+					Parent root;
 					try {
-						Parent root = FXMLLoader.load(getClass().getResource("Home.fxml"));
+						root = FXMLLoader.load(getClass().getResource("Welcome.fxml"));
+						stage = new Stage(StageStyle.UNDECORATED);
 						Scene scene = new Scene(root);
 						stage.setScene(scene);
-						stage.setTitle("Studio Application");
 						stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/image/logo.png")));
 						stage.show();
-						String css = this.getClass().getResource("style.css").toExternalForm();
-						scene.getStylesheets().add(css);
-					} catch (IOException ex) {
-						ex.printStackTrace();
+						stage.setResizable(false);
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
 					return;
 				}
-
-				// "ten dang nhap khong ton tai"
-				if (!manv.equals(txtUser.getText()) || !txtPass.getText().equals(matkhau)) {
-					Notification.alert(AlertType.WARNING, "Ten đăng nhập hoặc mật khẩu không chính xác");
+				if (!txtPass.getText().equals(matkhau)) {
+					ErrorForm er = new ErrorForm();
+					er.start(stage);
 				}
-
 			}
 
 		} catch (SQLException ex) {

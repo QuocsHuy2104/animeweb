@@ -8,8 +8,6 @@ import java.util.ArrayList;
 
 import DAO.DAOInterface;
 import connectJDBC.JDBCUtil;
-import model.KhachHangModel;
-import model.NhanVienModel;
 import model.SanPhamModel;
 
 public class ISanPham implements DAOInterface<SanPhamModel> {
@@ -23,11 +21,11 @@ public class ISanPham implements DAOInterface<SanPhamModel> {
 		int result = 0;
 		Connection conn = JDBCUtil.getConnection();
 		try {
-			PreparedStatement pst = conn.prepareStatement("insert into sanpham values (?,?,?,?)");
+			PreparedStatement pst = conn.prepareStatement("insert into sanpham values (?,?,?, (select math from thuonghieu where tenth like ?))");
 			pst.setString(1, reneric.getMaSP());
 			pst.setString(2, reneric.getTenSp());
 			pst.setFloat(3, reneric.getDonGia());
-			pst.setString(4, reneric.getMaTH());
+			pst.setString(4, reneric.getTenTH());
 			
 			result = pst.executeUpdate();
 			pst.close();
@@ -65,7 +63,7 @@ public class ISanPham implements DAOInterface<SanPhamModel> {
 			PreparedStatement pst = conn.prepareStatement("update sanpham set tensp = ?, dongia = ? where masp = ?");
 			pst.setString(1, reneric.getTenSp());
 			pst.setFloat(2, reneric.getDonGia());
-			pst.setString(6, reneric.getMaSP());
+			pst.setString(3, reneric.getMaSP());
 			
 			result = pst.executeUpdate();
 			pst.close();
@@ -82,15 +80,16 @@ public class ISanPham implements DAOInterface<SanPhamModel> {
 		SanPhamModel result = null;
 		Connection conn = JDBCUtil.getConnection();
 		try {
-			PreparedStatement pst = conn.prepareStatement("Select * from sanpham where masp = ?");
+			PreparedStatement pst = conn.prepareStatement("select MaSP, tensp, DonGia, tenth from SANPHAM\r\n"
+					+ "inner join THUONGHIEU on SANPHAM.MaTH = THUONGHIEU.MaTH where MaSP like ?");
 			pst.setString(1, generic.getMaSP());
 			ResultSet rs = pst.executeQuery();
 			while(rs.next()) {
 				String id = rs.getString("Masp");
 				String name = rs.getString("Tensp");
-				String maTH = rs.getString("MaTH");
+				String maTH = rs.getString("TenTH");
 				Float donGia = rs.getFloat("dongia");
-				result = new SanPhamModel(id, name, maTH, donGia);
+				result = new SanPhamModel(id, name, donGia, maTH);
 			}
 			pst.close();
 			rs.close();
@@ -106,15 +105,16 @@ public class ISanPham implements DAOInterface<SanPhamModel> {
 		ArrayList<SanPhamModel> result = new ArrayList<SanPhamModel>();
 		Connection conn = JDBCUtil.getConnection();
 		try {
-			PreparedStatement pst = conn.prepareStatement("SELECT * FROM SanPham");
+			PreparedStatement pst = conn.prepareStatement("select MaSP, tensp, DonGia, tenth from SANPHAM\r\n"
+					+ "inner join THUONGHIEU on SANPHAM.MaTH = THUONGHIEU.MaTH");
 			ResultSet rs = pst.executeQuery();
 			while(rs.next()) {
 				String id = rs.getString("Masp");
 				String name = rs.getString("Tensp");
-				String maTH = rs.getString("MaTH");
 				Float donGia = rs.getFloat("dongia");
+				String tenth = rs.getString("tenth");
 				
-				SanPhamModel sp = new SanPhamModel(id, name, maTH, donGia);
+				SanPhamModel sp = new SanPhamModel(id, name, donGia, tenth);
 				result.add(sp);
 			}
 			pst.close();
