@@ -72,6 +72,8 @@ public class ForgotPassController implements Initializable {
 	public PreparedStatement pst = null;
 
 	public static String mail;
+	
+	private Stage stage;
 
 	public void sendMail() {
 
@@ -103,12 +105,8 @@ public class ForgotPassController implements Initializable {
 	}
 
 	public void cancel() {
-		Welcome xc = new Welcome();
-		try {
-			xc.openLogin();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Main main = new Main();
+		main.start(stage);
 	}
 
 	public void auth() throws IOException {

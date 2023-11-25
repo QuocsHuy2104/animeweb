@@ -13,6 +13,7 @@ module StudioDA {
 	requires net.bytebuddy;
 	requires org.apache.poi.poi;
 	requires org.apache.poi.ooxml;
+	requires org.controlsfx.controls;
 	
 	opens application to javafx.graphics,javafx.fxml,javafx.controls;
 	opens model to javafx.base;

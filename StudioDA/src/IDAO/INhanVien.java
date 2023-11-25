@@ -149,7 +149,7 @@ public class INhanVien implements DAOInterface<NhanVienModel> {
 
 		Connection conn = JDBCUtil.getConnectionDefault();
 		try {
-			PreparedStatement pst = conn.prepareStatement("Update nhanvien set pass = ? where manv = ?");
+			PreparedStatement pst = conn.prepareStatement("Update nhanvien set pass = ? where manv like ?");
 			pst.setString(1, pass);
 			pst.setString(2, manv);
 			result = pst.executeUpdate();
@@ -201,6 +201,21 @@ public class INhanVien implements DAOInterface<NhanVienModel> {
 			e.printStackTrace();
 		}
 		return nhanvien;
+	}
+	
+	public void changePassword(String newpassword, String oldpassword, String user)	{
+		Connection conn = JDBCUtil.getConnection();
+        try {
+            PreparedStatement pst = conn.prepareStatement("Update nhanvien set pass = ? where pass = ? and manv = ?");
+            pst.setString(1, newpassword);
+            pst.setString(2, oldpassword);
+            pst.setString(3, user);
+            pst.executeUpdate();
+            pst.close();
+            JDBCUtil.closeConnection(conn);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 	}
 
 }

@@ -158,5 +158,24 @@ public class IKhachHang implements DAOInterface<KhachHangModel> {
 		}
 		return khachhang;
 	}
+	
+	public String selectByPhone(String numberPhone) {
+		String tenkh = "";
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("select tenkh from khachhang where sdt like ?");
+			pst.setString(1, "%" + numberPhone + "%");
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+                tenkh = rs.getString(1);
+            }
+			pst.close();
+			rs.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return tenkh;
+	}
 
 }

@@ -19,7 +19,7 @@
       </ImageView>
       <Rectangle fx:id="recBackground" arcHeight="40.0" arcWidth="40.0" height="500.0" layoutX="699.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="359.0" />
       <Rectangle fx:id="recBackground" arcHeight="40.0" arcWidth="40.0" fill="#333333" height="500.0" layoutX="699.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="359.0" />
-      <Button fx:id="btnChangePass" alignment="CENTER" layoutX="806.0" layoutY="320.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="34.0" prefWidth="145.0" style="-fx-background-radius: 8px;" stylesheets="@styleLogin.css" text="Xác nhận">
+      <Button fx:id="btnChangePass" alignment="CENTER" layoutX="806.0" layoutY="320.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#changePass" prefHeight="34.0" prefWidth="145.0" style="-fx-background-radius: 8px;" stylesheets="@styleLogin.css" text="Xác nhận">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>

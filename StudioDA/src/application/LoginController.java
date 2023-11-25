@@ -7,8 +7,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.ResourceBundle;
+import java.util.Set;
 
+import org.controlsfx.control.textfield.AutoCompletionBinding;
+import org.controlsfx.control.textfield.TextFields;
 
 import connectJDBC.JDBCUtil;
 import javafx.fxml.FXML;
@@ -56,6 +61,8 @@ public class LoginController implements Initializable {
 	Stage stage;
 	Scene scene;
 	Parent root1;
+	
+	int cnt = 0;
 
 	public static int roles;
 
@@ -66,7 +73,7 @@ public class LoginController implements Initializable {
 		database = txtDatabase.getText();
 		passDB = txtPassDB.getText();
 		user = txtUser.getText();
-		password = txtPass.getText();
+		password = MessageDigest.getMD5(txtPass.getText());
 
 		// check username
 		if (txtUser.getText().equals("")) {
@@ -81,43 +88,45 @@ public class LoginController implements Initializable {
 		Connection conn = JDBCUtil.getConnection();
 
 		try {
-			PreparedStatement pst = conn.prepareStatement("select * from nhanvien where manv like ?");
+			PreparedStatement pst = conn.prepareStatement("select * from nhanvien where manv = ? and pass = ?");
 			pst.setString(1, txtUser.getText());
+			pst.setString(2, password);
 			ResultSet rs = pst.executeQuery();
-			while (rs.next()) {
+			if (rs.next()) {
 
 				roles = rs.getInt("vaitro");
 
 				nameStaff = rs.getString("TenNV");
 				email = rs.getString("email");
 
-				String manv = rs.getString("manv").toLowerCase();
 				String matkhau = rs.getString("pass");
 
-				
+				stage = (Stage) root.getScene().getWindow();
+				stage.close();
 
-				if (txtUser.getText().equals(manv)
-						&& (MessageDigest.verify(txtPass.getText(), matkhau) || txtPass.getText().equals(matkhau))) {
-					stage = (Stage) root.getScene().getWindow();
-					stage.close();
-
-					Parent root;
-					try {
-						root = FXMLLoader.load(getClass().getResource("Welcome.fxml"));
-						stage = new Stage(StageStyle.UNDECORATED);
-						Scene scene = new Scene(root);
-						stage.setScene(scene);
-						stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/image/logo.png")));
-						stage.show();
-						stage.setResizable(false);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					return;
+				Parent root;
+				try {
+					root = FXMLLoader.load(getClass().getResource("Welcome.fxml"));
+					stage = new Stage(StageStyle.UNDECORATED);
+					Scene scene = new Scene(root);
+					stage.setScene(scene);
+					stage.getIcons().add(new Image(this.getClass().getResourceAsStream("/image/logo.png")));
+					stage.show();
+					stage.setResizable(false);
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-				if (!txtPass.getText().equals(matkhau)) {
-					ErrorForm er = new ErrorForm();
-					er.start(stage);
+				return;
+
+			} else {
+				try {
+					cnt ++;
+					
+					MessageLocked ml = new MessageLocked();
+					ml.start(stage);
+					
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 

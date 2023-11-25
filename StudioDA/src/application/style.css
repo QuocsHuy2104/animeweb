@@ -18,10 +18,10 @@
 #txtFindProduct,
 #txtFindSer {
 	-fx-background-color: none;
-	-fx-border-width: 1px;
+	-fx-border-width: 1.0px;
 	-fx-border-color: #000;
-	-fx-border-radius: 12px;
-	-fx-font-size: 16px;
+	-fx-border-radius: 12.0px;
+	-fx-font-size: 16.0px;
 }
 
 #txtFindBill:focused,
@@ -30,9 +30,9 @@
 #txtFindProduct:focused,
 #txtFindSer:focused {
 	-fx-background-color: none;
-	-fx-text-inner-color: #fff;
+	-fx-text-inner-color: #000;
 	-fx-border-color: #0000FF;
-	-fx-border-width: 1px;
+	-fx-border-width: 1.0px;
 }
 
 #btnHome:hover,
@@ -62,7 +62,7 @@
 #delClientButton:hover,
 #saveSer:hover,
 #delSer:hover {
-	-fx-effect: dropshadow(three-pass-box, #FF00FF, 10, 0, 1, 4);
+	-fx-effect: dropshadow(three-pass-box, #FF00FF, 10.0, 0.0, 1.0, 4.0);
 }
 
 #addBillButton:pressed,
@@ -79,7 +79,7 @@
 #refreshStaffButton:pressed,
 #addClientButton:pressed,
 #delClientButton:pressed {
-	-fx-background-color: #0066FF;
+	-fx-background-color: #00FFFF;
 }
 
 #addBillButton,
@@ -98,15 +98,15 @@
 #delStaffButton,
 #saveSer,
 #delSer {
-	-fx-pref-height: 35;
-	-fx-pref-width: 95;
+	-fx-pref-height: 35.0;
+	-fx-pref-width: 95.0;
 	-fx-background-color: none;
-	-fx-font-size: 16px;
+	-fx-font-size: 16.0px;
 	-fx-cursor: hand;
-	-fx-border-width: 1px;
+	-fx-border-width: 1.0px;
 	-fx-border-color: #0066FF;
 	-fx-text-fill: #0066FF;
-	-fx-border-radius: 6px;
+	-fx-border-radius: 6.0px;
 }
 
 #rbtnStaff,
@@ -119,13 +119,13 @@
 #lblAppName,
 #lblNameStaff {
 	-fx-text-fill: #000000;
-	-fx-font-size: 20px;
+	-fx-font-size: 20.0px;
 }
 
 #lblVersion,
 #lblMail {
 	-fx-text-fill: #000000;
-	-fx-font-size: 16px;
+	-fx-font-size: 16.0px;
 }
 
 #IDStaff,
@@ -133,10 +133,10 @@
 #phoneStaff,
 #emailStaff,
 #password {
-	-fx-font-size: 14px;
+	-fx-font-size: 14.0px;
 	-fx-background-color: none;
-	-fx-border-width: 1px;
-	-fx-border-radius: 6px;
+	-fx-border-width: 1.0px;
+	-fx-border-radius: 6.0px;
 	-fx-border-color: #000;
 	-fx-text-fill: #000;
 }
@@ -155,10 +155,10 @@
 #nameClient,
 #phoneClient,
 #emailClient {
-	-fx-font-size: 14px;
+	-fx-font-size: 14.0px;
 	-fx-background-color: none;
-	-fx-border-width: 1px;
-	-fx-border-radius: 6px;
+	-fx-border-width: 1.0px;
+	-fx-border-radius: 6.0px;
 	-fx-border-color: #000;
 	-fx-text-fill: #000;
 }
@@ -177,10 +177,10 @@
 #nameProduct,
 #priceProduct,
 #txtIDStaff {
-	-fx-font-size: 14px;
+	-fx-font-size: 14.0px;
 	-fx-background-color: none;
-	-fx-border-width: 1px;
-	-fx-border-radius: 6px;
+	-fx-border-width: 1.0px;
+	-fx-border-radius: 6.0px;
 	-fx-border-color: #000;
 	-fx-text-fill: #000;
 }
@@ -197,10 +197,10 @@
 #IDSer,
 #nameSer,
 #priceSer {
-	-fx-font-size: 14px;
+	-fx-font-size: 14.0px;
 	-fx-background-color: none;
-	-fx-border-width: 1px;
-	-fx-border-radius: 6px;
+	-fx-border-width: 1.0px;
+	-fx-border-radius: 6.0px;
 	-fx-border-color: #000;
 	-fx-text-fill: #000;
 }
@@ -212,4 +212,82 @@
 	-fx-text-inner-color: #000;
 	-fx-border-color: #0066FF;
 }
+
+#IDBill,
+#nameStaffOfBill,
+#nameClientOfBill {
+	-fx-font-size: 14.0px;
+    -fx-background-color: none;
+    -fx-border-width: 1.0px;
+    -fx-border-radius: 6.0px;
+    -fx-border-color: #000;
+    -fx-text-fill: #0066FF;
+	
+}
+#sumMoney,
+#changeMoney {
+	-fx-font-size: 14.0px;
+    -fx-background-color: none;
+    -fx-border-width: 1.0px;
+    -fx-border-radius: 6.0px;
+    -fx-border-color: #000;
+    -fx-text-fill: #ff0000;
+}
+
+#phoneClientOfBill,
+#paidBill,
+#clientMoney,
+#quantity {
+	-fx-font-size: 14.0px;
+	-fx-background-color: none;
+	-fx-border-width: 1.0px;
+	-fx-border-radius: 6.0px;
+	-fx-border-color: #000;
+	-fx-text-fill: #000;
+}
+
+#IDBill:focused,
+#nameStaffOfBill:focused,
+#phoneClientOfBill:focused,
+#paidBill:focused,
+#sumMoney:focused,
+#nameClientOfBill:focused,
+#clientMoney:focused,
+#changeMoney:focused,
+#quantity:focused {
+	-fx-background-color: none;
+	-fx-text-inner-color: #000;
+	-fx-border-color: #0066FF;
+}
+
+#btnRemove,
+#btnDeleteBill,
+#btnPrint {
+	-fx-pref-height: 35.0;
+    -fx-pref-width: 135.0;
+    -fx-background-color: #fff;
+    -fx-background-radius: 7px;
+    -fx-font-size: 16.0px;
+    -fx-cursor: hand;
+    -fx-border-width: 1.0px;
+    -fx-border-color: #0066FF;
+    -fx-text-fill: #0066FF;
+    -fx-border-radius: 6.0px;
+}
+
+#btnSaveBill:pressed,
+#btnDeleteBill:pressed,
+#btnPrint:pressed {
+	-fx-background-color: #00FFFF;
+}
+
+
+#btnSaveBill:hover,
+#btnDeleteBill:hover,
+#btnPrint:hover {
+	-fx-effect: dropshadow(three-pass-box, #FF00FF, 10.0, 0.0, 1.0, 4.0);
+	-fx-cursor: hand;
+}
+
+
 

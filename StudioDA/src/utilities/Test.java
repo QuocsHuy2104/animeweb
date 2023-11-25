@@ -7,15 +7,23 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import javax.mail.MessagingException;
 
 import IDAO.INhanVien;
 import application.ErrorForm;
+import application.HomeController;
 import connectJDBC.JDBCUtil;
 import javafx.stage.Stage;
 import model.NhanVienModel;
@@ -79,8 +87,12 @@ public class Test {
 //		
 //		System.out.println(String.format("%04d", id + 1));
 		
-		NhanVienModel model = new NhanVienModel("KyDV", null, null, null, null, null, false, false);
-		INhanVien.getInstance().selectByID(model);
+//		NhanVienModel model = new NhanVienModel("KyDV", null, null, null, null, null, false, false);
+//		INhanVien.getInstance().selectByID(model);
+		
+//		DecimalFormat d = new DecimalFormat("###,##0.000");
+//		System.out.println(d.format(scanner.nextDouble()));
+		
 		
 	}
 

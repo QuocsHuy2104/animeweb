@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.text.Normalizer;
 import java.util.regex.Pattern;
 
@@ -52,6 +53,11 @@ public class AutoString {
 		}
 
 		return type + (String.format("%04d", id + 1));
+	}
+	
+	public static String formatMoney(Float value) {
+		DecimalFormat df = new DecimalFormat("###,##0.000");
+		return df.format(Float.valueOf(value).toString());
 	}
 
 }

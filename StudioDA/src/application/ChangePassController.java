@@ -2,6 +2,7 @@ package application;
 
 import java.io.IOException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
 
 import IDAO.INhanVien;
@@ -20,6 +21,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import utilities.MessageDigest;
 import utilities.PasswordRegex;
 import application.ErrorForm;
 
@@ -40,7 +42,7 @@ public class ChangePassController implements Initializable {
 	private Stage stage;
 
 	public void changePass(ActionEvent event) {
-		String user = LoginController.user;
+		String username = LoginController.user;
 		String currentPass = txtCurrentPass.getText().trim();
 		String newPass = txtNewPass.getText().trim();
 		String authPass = txtAuthPass.getText().trim();
@@ -67,7 +69,7 @@ public class ChangePassController implements Initializable {
 			return;
 		}
 
-		if (!newPass.equals(authPass)) {
+		if (!authPass.equals(newPass)) {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Thông Báo");
 			alert.setHeaderText("Thông Báo");
@@ -75,13 +77,20 @@ public class ChangePassController implements Initializable {
 			return;
 		}
 
-		INhanVien.getInstance().updatePass(user, authPass);
+		try {
+			String auth = MessageDigest.getMD5(authPass);
 
-		stage = (Stage) parent.getScene().getWindow();
-		stage.close();
+			INhanVien.getInstance().changePassword(auth, currentPass, username);
 
-		Main main = new Main();
-		main.start(stage);
+			stage = (Stage) parent.getScene().getWindow();
+			stage.close();
+
+			Main main = new Main();
+			main.start(stage);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

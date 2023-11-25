@@ -8,11 +8,20 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.chrono.ChronoLocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
 
 import IDAO.IDichVu;
+import IDAO.IHDCT;
 import IDAO.IHoaDon;
 import IDAO.IKhachHang;
 import IDAO.INhanVien;
@@ -37,6 +46,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
@@ -253,7 +263,31 @@ public class HomeController implements Initializable {
 	// Table Bill
 
 	@FXML
+	private TextField nameStaffOfBill, nameClientOfBill, phoneClientOfBill, quantity, mydate, sumMoney, clientMoney,
+			changeMoney;
+
+	@FXML
+	private DatePicker dateBill;
+
+	@FXML
+	private TableView<SanPhamModel> tableProBill;
+
+	@FXML
 	private TableView tableBill;
+
+	@FXML
+	private TableColumn<SanPhamModel, String> nameProOfBill;
+
+	@FXML
+	private TableColumn<SanPhamModel, Float> priceProOfBill;
+
+	@FXML
+	private TableColumn<SanPhamModel, String> trademarkOfBill;
+
+	// =================================================
+
+	@FXML
+	private TableColumn<HDCTModel, String> idProOfBill;
 
 	@FXML
 	private TableColumn<HDCTModel, String> nameBillCol;
@@ -262,13 +296,7 @@ public class HomeController implements Initializable {
 	private TableColumn<HDCTModel, Integer> qiantityBillCol;
 
 	@FXML
-	private TableColumn<HDCTModel, Float> priceBillCol;
-
-	@FXML
-	private TableColumn<HDCTModel, String> trademarkBillCol;
-
-	@FXML
-	private TableColumn<HoaDonModel, Date> dayBillCol;
+	private TableColumn<SanPhamModel, Float> priceBillCol;
 
 	@FXML
 	private TableColumn<HoaDonModel, Float> paidBillCol;
@@ -287,7 +315,9 @@ public class HomeController implements Initializable {
 
 	private ObservableList<DichVuModel> service;
 
-	private ObservableList<HoaDonModel> bill;
+	private ObservableList bill;
+
+	private ObservableList<SanPhamModel> proBill;
 
 	private ObservableList revenue;
 
@@ -555,7 +585,6 @@ public class HomeController implements Initializable {
 						try {
 							controller.LoginEvent();
 						} catch (NoSuchAlgorithmException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					} else if (arg0.getCode() == KeyCode.ESCAPE)
@@ -637,6 +666,11 @@ public class HomeController implements Initializable {
 		setServiceTable();
 		loadService();
 
+		setProBill();
+		loadDataProBill();
+
+		getCurrentDate();
+
 		circleLogo
 				.setFill(new ImagePattern(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\logo.png")));
 
@@ -672,6 +706,8 @@ public class HomeController implements Initializable {
 		revenue = FXCollections.observableArrayList();
 		productCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, String>("tenSp"));
 		priceCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, Float>("donGia"));
+		discountCol.setCellValueFactory(new PropertyValueFactory<NhanVienModel, String>("maNV"));
+
 	}
 
 	public void loadDataRevenue() {
@@ -680,9 +716,14 @@ public class HomeController implements Initializable {
 		}
 
 		ArrayList<SanPhamModel> list = ISanPham.getInstance().selectAll();
+		ArrayList<NhanVienModel> list1 = INhanVien.getInstance().selectAll();
 		for (SanPhamModel sanPhamModel : list) {
-			revenue.add(sanPhamModel);
+			for (NhanVienModel nhanVienModel : list1) {
+				revenue.add(sanPhamModel);
+				revenue.add(nhanVienModel);
+			}
 		}
+
 		tblRevenue.setItems(revenue);
 	}
 
@@ -1239,11 +1280,12 @@ public class HomeController implements Initializable {
 
 	public void setBillTable() {
 		bill = FXCollections.observableArrayList();
-		nameBillCol.setCellValueFactory(new PropertyValueFactory<HDCTModel, String>("tenSP"));
+		// idProOfBill.setCellValueFactory(new PropertyValueFactory<HDCTModel,
+		// String>(""));
+		// nameBillCol.setCellValueFactory(new PropertyValueFactory<HDCTModel,
+		// String>("tenSp"));
 		qiantityBillCol.setCellValueFactory(new PropertyValueFactory<HDCTModel, Integer>("soLuong"));
-		priceBillCol.setCellValueFactory(new PropertyValueFactory<HDCTModel, Float>("donGia"));
-		trademarkBillCol.setCellValueFactory(new PropertyValueFactory<HDCTModel, String>("ngay"));
-		dayBillCol.setCellValueFactory(new PropertyValueFactory<HoaDonModel, Date>("ngay"));
+		priceBillCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, Float>("donGia"));
 		paidBillCol.setCellValueFactory(new PropertyValueFactory<HoaDonModel, Float>("thanhToan"));
 		storyBillCol.setCellValueFactory(new PropertyValueFactory<HoaDonModel, String>("trangThai"));
 	}
@@ -1255,14 +1297,97 @@ public class HomeController implements Initializable {
 			tableBill.getItems().clear();
 		}
 
-		ArrayList<HoaDonModel> list = IHoaDon.getInstance().selectAll();
-		for (HoaDonModel hoaDonModel : list) {
-			bill.add(hoaDonModel);
+		ArrayList<HDCTModel> list = IHDCT.getInstance().selectAll();
+		for (HDCTModel hdctModel : list) {
+			bill.add(hdctModel);
 		}
-
 		tableBill.setItems(bill);
 	}
 
+	public void setProBill() {
+		proBill = FXCollections.observableArrayList();
+		nameProOfBill.setCellValueFactory(new PropertyValueFactory<SanPhamModel, String>("tenSp"));
+		priceProOfBill.setCellValueFactory(new PropertyValueFactory<SanPhamModel, Float>("donGia"));
+		trademarkOfBill.setCellValueFactory(new PropertyValueFactory<SanPhamModel, String>("tenTH"));
+	}
+
+	public void loadDataProBill() {
+		if (tableProBill.getItems().size() >= 1) {
+			tableProBill.getItems().clear();
+		}
+
+		ArrayList<SanPhamModel> list = ISanPham.getInstance().selectAll();
+		for (SanPhamModel sanPhamModel : list) {
+			proBill.add(sanPhamModel);
+		}
+		tableProBill.setItems(proBill);
+	}
+
+	public void getClient() {
+		nameClientOfBill.setText(IKhachHang.getInstance().selectByPhone(phoneClientOfBill.getText()));
+	}
+
+	public void getCurrentDate() {
+		Date date = new Date();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		LocalDate ld = Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+
+		dateBill.setValue(ld);
+
+		nameStaffOfBill.setText(LoginController.nameStaff);
+	}
+
+	float money = 0;
+	String tensp = "";
+
+	public void clickItemBill(MouseEvent event) {
+		try {
+			if (event.getClickCount() == 2) {
+				SanPhamModel col = tableProBill.getSelectionModel().getSelectedItem();
+				tensp = col.getTenSp();
+				money = col.getDonGia();
+				String sl = quantity.getText();
+				int quantity = Integer.valueOf(sl);
+				sumMoney.setText(money * quantity + "");
+			}
+		} catch (Exception e) {
+			Notification.alert(AlertType.ERROR, "Vui lòng nhập số lượng");
+		}
+	}
+
+	public void comfy() {
+		try {
+
+			float tongTien = Float.valueOf(sumMoney.getText());
+			float tienKhach = Float.valueOf(clientMoney.getText());
+
+			changeMoney.setText(tienKhach - tongTien + " ");
+		} catch (NumberFormatException nfe) {
+			nfe.printStackTrace();
+		}
+	}
+
+	public void insertBill() {
+		String mahd = AutoString.autoID("HD", "mahd", "HoaDon");
+		LocalDate localDate = dateBill.getValue();
+
+		java.sql.Date myDate = java.sql.Date.valueOf(localDate);
+
+		float thanhtoan = Float.valueOf(sumMoney.getText());
+		String nameKH = nameClientOfBill.getText();
+		String nameStaff = nameStaffOfBill.getText();
+
+		int sl = Integer.valueOf(quantity.getText());
+
+		HoaDonModel model = new HoaDonModel(mahd, myDate, thanhtoan, nameKH, nameStaff, "Chưa Thanh Toán");
+		IHoaDon.getInstance().insert(model);
+
+		String mahdct = AutoString.autoID("HDCT", "MaHDCT", "HDCT");
+
+		HDCTModel hdct = new HDCTModel(mahdct, money, sl, mahd, tensp);
+		IHDCT.getInstance().insert(hdct);
+
+	}
 	// set PieChart
 
 	public void setPieChart() {
@@ -1416,10 +1541,6 @@ public class HomeController implements Initializable {
 
 	public void autoIDPRo() {
 		IDProduct.setText(AutoString.autoID("SP", "masp", "SanPham"));
-	}
-
-	public void autoIDBill() {
-		AutoString.autoID("HD", "maHD", "hoaDon");
 	}
 
 }

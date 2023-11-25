@@ -28,7 +28,8 @@ public class IHoaDon implements DAOInterface<HoaDonModel> {
 			pst.setString(1, reneric.getMahd());
 			pst.setDate(2, reneric.getNgay());
 			pst.setFloat(3, reneric.getThanhToan());
-			pst.setInt(4, Integer.parseInt(reneric.getTrangThai()));
+			int story = reneric.getTrangThai().equals("Thanh Toán") ? 1 : 0;
+			pst.setInt(4, story);
 			pst.setString(5, reneric.getTenKH());
 			pst.setString(6, reneric.getTenNV());
 
@@ -93,20 +94,25 @@ public class IHoaDon implements DAOInterface<HoaDonModel> {
 		HoaDonModel result = null;
 		Connection conn = JDBCUtil.getConnection();
 		try {
-			PreparedStatement pst = conn.prepareStatement("select mahd, ngaylaphd, thanhtoan, HOADON.TrangThai, tenkh, tennv from HoaDon\r\n"
-					+ "inner join nhanvien on hoadon.MaNV = NHANVIEN.MaNV\r\n"
-					+ "inner join KHACHHANG on HOADON.MaKH = KHACHHANG.MaKH\r\n"
-					+ "where MaHD like = ?");
+			PreparedStatement pst = conn.prepareStatement(
+					"select mahd, ngaylaphd, thanhtoan, HOADON.TrangThai, tenkh, tennv from HoaDon\r\n"
+							+ "inner join nhanvien on hoadon.MaNV = NHANVIEN.MaNV\r\n"
+							+ "inner join KHACHHANG on HOADON.MaKH = KHACHHANG.MaKH\r\n" + "where MaHD like = ?");
 			pst.setString(1, generic.getMahd());
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 				String ma = rs.getString("mahd");
 				Date ngay = rs.getDate("ngaylaphd");
 				float thanhtoan = rs.getFloat("thanhtoan");
-				String trangthai = String.valueOf(rs.getInt("trangthai"));
+				int trangthai = rs.getInt("trangthai");
+				String story;
+				if (trangthai == 1)
+					story = "Thanh Toán";
+				else
+					story = "Chưa Thanh Toán";
 				String tenkhach = rs.getString("tenkh");
 				String tennv = rs.getString("tenNV");
-				result = new HoaDonModel(ma, (java.sql.Date) ngay, thanhtoan, tenkhach, tennv, trangthai);
+				result = new HoaDonModel(ma, (java.sql.Date) ngay, thanhtoan, tenkhach, tennv, story);
 			}
 			pst.close();
 			rs.close();
@@ -123,19 +129,26 @@ public class IHoaDon implements DAOInterface<HoaDonModel> {
 		Connection conn = JDBCUtil.getConnection();
 
 		try {
-			PreparedStatement pst = conn.prepareStatement("select mahd, ngaylaphd, thanhtoan, HOADON.TrangThai, tenkh, tennv from HoaDon\r\n"
-					+ "inner join nhanvien on hoadon.MaNV = NHANVIEN.MaNV\r\n"
-					+ "inner join KHACHHANG on HOADON.MaKH = KHACHHANG.MaKH\r\n");
+			PreparedStatement pst = conn.prepareStatement(
+					"select mahd, ngaylaphd, thanhtoan, HOADON.TrangThai, tenkh, tennv from HoaDon\r\n"
+							+ "inner join nhanvien on hoadon.MaNV = NHANVIEN.MaNV\r\n"
+							+ "inner join KHACHHANG on HOADON.MaKH = KHACHHANG.MaKH\r\n");
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 				String ma = rs.getString("mahd");
 				Date ngay = rs.getDate("ngaylaphd");
 				float thanhtoan = rs.getFloat("thanhtoan");
-				String trangthai = String.valueOf(rs.getInt("trangthai"));
+				int trangthai = rs.getInt("trangthai");
+				String story;
+				if (trangthai == 1)
+					story = "Thanh Toán";
+				else
+					story = "Chưa Thanh Toán";
+				
 				String tenkhach = rs.getString("tenkh");
 				String tennv = rs.getString("tenNV");
 
-				HoaDonModel model = new HoaDonModel(ma, (java.sql.Date)ngay, thanhtoan, tenkhach, tennv, trangthai);
+				HoaDonModel model = new HoaDonModel(ma, (java.sql.Date) ngay, thanhtoan, tenkhach, tennv, story);
 				reuslt.add(model);
 			}
 			pst.close();

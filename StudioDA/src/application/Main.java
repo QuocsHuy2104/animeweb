@@ -34,7 +34,6 @@ public class Main extends Application {
 						try {
 							controller.LoginEvent();
 						} catch (NoSuchAlgorithmException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					} else if (arg0.getCode() == KeyCode.ESCAPE)
