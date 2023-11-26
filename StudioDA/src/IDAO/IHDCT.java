@@ -5,13 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 
 import DAO.DAOInterface;
 import connectJDBC.JDBCUtil;
 import model.HDCTModel;
-import model.HoaDonModel;
-
 public class IHDCT implements DAOInterface<HDCTModel> {
 
 	@Override
@@ -20,12 +17,11 @@ public class IHDCT implements DAOInterface<HDCTModel> {
 		Connection conn = JDBCUtil.getConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement(
-					"insert into HoaDon values (?, ?, ?, ?, (select masp from sanpham where tensp like ?))");
+					"insert into HDCT values (?, ?, ?, (select MAX(mahd) from HoaDon), (select masp from sanpham where tensp like ?))");
 			ps.setString(1, reneric.getMaHDCT());
 			ps.setFloat(2, reneric.getDonGia());
 			ps.setInt(3, reneric.getSoLuong());
-			ps.setString(4, reneric.getMaHD());
-			ps.setString(5, reneric.getMaSP());
+			ps.setString(4, reneric.getMasp());
 
 			result = ps.executeUpdate();
 			ps.close();
@@ -39,13 +35,43 @@ public class IHDCT implements DAOInterface<HDCTModel> {
 
 	@Override
 	public int del(HDCTModel reneric) {
-		return 0;
+		int result = 0;
+		Connection conn = JDBCUtil.getConnection();
+		PreparedStatement pst;
+		try {
+			pst = conn.prepareStatement("delete from HDCT where MaSP like ?");
+			pst.setString(1, reneric.getMasp());
+
+			result = pst.executeUpdate();
+			pst.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	@Override
 	public int update(HDCTModel reneric) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = 0;
+		Connection conn = JDBCUtil.getConnection();
+		String sql = "update hdct set dongia = ?, soluong = ? where mahdct = ?";
+
+		try {
+			PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setFloat(1, reneric.getDonGia());
+			pst.setInt(2, reneric.getSoLuong());
+			pst.setString(3, reneric.getMaHDCT());
+
+			result = pst.executeUpdate();
+			pst.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
 	}
 
 	@Override
@@ -60,10 +86,9 @@ public class IHDCT implements DAOInterface<HDCTModel> {
 		Connection conn = JDBCUtil.getConnection();
 
 		try {
-			PreparedStatement pst = conn
-					.prepareStatement("SELECT A.MaSP,TenSP, A.DonGia, SoLuong, ThanhToan,TrangThai FROM SANPHAM A\r\n"
-							+ "INNER JOIN HDCT B ON A.MaSP = B.MaSP\r\n" 
-							+ "INNER JOIN HOADON C ON B.MaHD = C.MaHD");
+			PreparedStatement pst = conn.prepareStatement(
+					"select MaSP, (select tensp from SANPHAM where MaSP = HDCT.MaSP), HDCT.DonGia, SoLuong, DonGia * SoLuong as thanhToan, trangthai from hdct\r\n"
+							+ "inner join HOADON on HDCT.MaHD = HOADON.MaHD where HDCT.mahd like (select max(mahd) from HOADON)");
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 				String masp = rs.getString(1);
@@ -71,9 +96,14 @@ public class IHDCT implements DAOInterface<HDCTModel> {
 				float dongia = rs.getFloat(3);
 				int soluong = rs.getInt(4);
 				float thanhtoan = rs.getFloat(5);
-				String trangthai = rs.getString(6);
+				int trangthai = rs.getInt(6);
+				String story;
+				if (trangthai == 0)
+					story = "Chưa Thanh Toán";
+				else
+					story = "Đã Thanh Toán";
 
-				HDCTModel model = new HDCTModel(dongia, soluong, tensp, masp, trangthai, thanhtoan);
+				HDCTModel model = new HDCTModel(dongia, soluong, tensp, masp, story, thanhtoan);
 				reuslt.add(model);
 			}
 			pst.close();
@@ -87,6 +117,52 @@ public class IHDCT implements DAOInterface<HDCTModel> {
 
 	public static IHDCT getInstance() {
 		return new IHDCT();
+	}
+
+	public float selectPaid(String mahd) {
+		float result = 0;
+
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement ps = conn
+					.prepareStatement("select sum(dongia * soluong) as thanhtona from HDCT where MaHD like ?");
+			ps.setString(1, mahd);
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				result = rs.getFloat(1);
+			}
+			ps.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	public String selectMaxID() {
+
+		String result = "";
+
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("select MAX(mahd) from HOADON");
+			ResultSet rs = pst.executeQuery();
+
+			while (rs.next()) {
+				result = rs.getString(1);
+			}
+
+			rs.close();
+			pst.close();
+			JDBCUtil.closeConnection(conn);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
 	}
 
 }

@@ -15,7 +15,7 @@
 
 <VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="433.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.WarningForm">
    <children>
-      <Pane prefHeight="34.0" prefWidth="398.0" style="-fx-background-color: #333;">
+      <Pane prefHeight="34.0" prefWidth="398.0">
          <children>
             <Label fx:id="lblType" alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="398.0" text="Warning" textAlignment="CENTER" textFill="#2900ff">
                <font>
@@ -33,12 +33,12 @@
          <children>
             <Pane prefHeight="98.0" prefWidth="320.0">
                <children>
-                  <Label fx:id="lblHeader" layoutX="14.0" layoutY="23.0" prefHeight="27.0" prefWidth="257.0" text="Lỗi" textFill="#4400ff">
+                  <Label fx:id="lblHeader" layoutX="14.0" layoutY="23.0" prefHeight="27.0" prefWidth="257.0" text="Cảnh Báo" textFill="#4400ff">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="lblContent" layoutX="14.0" layoutY="50.0" prefHeight="27.0" prefWidth="297.0" text="Tên đăng nhập hoặc mật khẩu không chính xác" textFill="#0004ff">
+                  <Label fx:id="lblContent" layoutX="14.0" layoutY="50.0" prefHeight="27.0" prefWidth="297.0" text="Vui lòng chọn sản phẩm và nhập số lượng" textFill="#0004ff">
                      <font>
                         <Font size="14.0" />
                      </font>

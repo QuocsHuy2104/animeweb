@@ -1,20 +1,15 @@
 package application;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -264,8 +259,11 @@ public class HomeController implements Initializable {
 
 	@FXML
 	private TextField nameStaffOfBill, nameClientOfBill, phoneClientOfBill, quantity, mydate, sumMoney, clientMoney,
-			changeMoney;
+			changeMoney, IDBill;
 
+	@FXML
+	private Button btnRemove;
+	
 	@FXML
 	private DatePicker dateBill;
 
@@ -273,7 +271,10 @@ public class HomeController implements Initializable {
 	private TableView<SanPhamModel> tableProBill;
 
 	@FXML
-	private TableView tableBill;
+	private TableView<HDCTModel> tableBillDeltais;
+
+	@FXML
+	private TableView<HoaDonModel> tableBill;
 
 	@FXML
 	private TableColumn<SanPhamModel, String> nameProOfBill;
@@ -296,16 +297,29 @@ public class HomeController implements Initializable {
 	private TableColumn<HDCTModel, Integer> qiantityBillCol;
 
 	@FXML
-	private TableColumn<SanPhamModel, Float> priceBillCol;
+	private TableColumn<HDCTModel, Float> priceBillCol;
 
 	@FXML
-	private TableColumn<HoaDonModel, Float> paidBillCol;
+	private TableColumn<HDCTModel, Float> paidBillCol;
 
 	@FXML
-	private TableColumn<HoaDonModel, String> storyBillCol;
+	private TableColumn<HDCTModel, String> storyBillCol;
+
+	// ================================================
+
+	@FXML
+	private TableColumn<HoaDonModel, String> IDBillCol;
+
+	@FXML
+	private TableColumn<HoaDonModel, Date> date;
+
+	@FXML
+	private TableColumn<HoaDonModel, Float> moneyBill;
 
 	@FXML
 	private TextField txtFindStaff, txtFindClient, txtFindProduct, txtFindBill;
+
+	private ObservableList<HoaDonModel> bill;
 
 	private ObservableList<NhanVienModel> staff;
 
@@ -315,7 +329,7 @@ public class HomeController implements Initializable {
 
 	private ObservableList<DichVuModel> service;
 
-	private ObservableList bill;
+	private ObservableList<HDCTModel> billDeltais;
 
 	private ObservableList<SanPhamModel> proBill;
 
@@ -657,8 +671,8 @@ public class HomeController implements Initializable {
 		setProductTable();
 		loadDataProduct();
 
-		setBillTable();
-		loadDataBill();
+		setBillDeltaislTable();
+		loadDataBillDeltais();
 
 		setCellRevenue();
 		loadDataRevenue();
@@ -669,7 +683,18 @@ public class HomeController implements Initializable {
 		setProBill();
 		loadDataProBill();
 
+		setCellTableBill();
+		loadDataBill();
+
 		getCurrentDate();
+		
+		tableProduct.setOnMouseClicked(e -> {
+			clickTableProduct(e);
+		});
+		
+		btnRemove.setOnAction(e -> {
+			removeBill();
+		});
 
 		circleLogo
 				.setFill(new ImagePattern(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\logo.png")));
@@ -706,7 +731,6 @@ public class HomeController implements Initializable {
 		revenue = FXCollections.observableArrayList();
 		productCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, String>("tenSp"));
 		priceCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, Float>("donGia"));
-		discountCol.setCellValueFactory(new PropertyValueFactory<NhanVienModel, String>("maNV"));
 
 	}
 
@@ -716,12 +740,10 @@ public class HomeController implements Initializable {
 		}
 
 		ArrayList<SanPhamModel> list = ISanPham.getInstance().selectAll();
-		ArrayList<NhanVienModel> list1 = INhanVien.getInstance().selectAll();
 		for (SanPhamModel sanPhamModel : list) {
-			for (NhanVienModel nhanVienModel : list1) {
-				revenue.add(sanPhamModel);
-				revenue.add(nhanVienModel);
-			}
+
+			revenue.add(sanPhamModel);
+
 		}
 
 		tblRevenue.setItems(revenue);
@@ -1278,30 +1300,29 @@ public class HomeController implements Initializable {
 
 	// set column table Bill ('Hóa Đơn')
 
-	public void setBillTable() {
-		bill = FXCollections.observableArrayList();
-		// idProOfBill.setCellValueFactory(new PropertyValueFactory<HDCTModel,
-		// String>(""));
-		// nameBillCol.setCellValueFactory(new PropertyValueFactory<HDCTModel,
-		// String>("tenSp"));
+	public void setBillDeltaislTable() {
+		billDeltais = FXCollections.observableArrayList();
+		idProOfBill.setCellValueFactory(new PropertyValueFactory<HDCTModel, String>("masp"));
+		nameBillCol.setCellValueFactory(new PropertyValueFactory<HDCTModel, String>("tenSP"));
 		qiantityBillCol.setCellValueFactory(new PropertyValueFactory<HDCTModel, Integer>("soLuong"));
-		priceBillCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, Float>("donGia"));
-		paidBillCol.setCellValueFactory(new PropertyValueFactory<HoaDonModel, Float>("thanhToan"));
-		storyBillCol.setCellValueFactory(new PropertyValueFactory<HoaDonModel, String>("trangThai"));
+		priceBillCol.setCellValueFactory(new PropertyValueFactory<HDCTModel, Float>("donGia"));
+		paidBillCol.setCellValueFactory(new PropertyValueFactory<HDCTModel, Float>("thanhTien"));
+		storyBillCol.setCellValueFactory(new PropertyValueFactory<HDCTModel, String>("trangThai"));
 	}
 
 	// load data from database enter table in screen
 
-	public void loadDataBill() {
-		if (tableBill.getItems().size() >= 1) {
-			tableBill.getItems().clear();
+	public void loadDataBillDeltais() {
+		if (tableBillDeltais.getItems().size() >= 1) {
+			tableBillDeltais.getItems().clear();
 		}
 
 		ArrayList<HDCTModel> list = IHDCT.getInstance().selectAll();
 		for (HDCTModel hdctModel : list) {
-			bill.add(hdctModel);
+			billDeltais.add(hdctModel);
 		}
-		tableBill.setItems(bill);
+		tableBillDeltais.setItems(billDeltais);
+		;
 	}
 
 	public void setProBill() {
@@ -1335,6 +1356,10 @@ public class HomeController implements Initializable {
 		dateBill.setValue(ld);
 
 		nameStaffOfBill.setText(LoginController.nameStaff);
+		IDBill.setText(IHDCT.getInstance().selectMaxID());
+
+		quantity.setText("1");
+		sumMoney.setText(Float.valueOf(IHDCT.getInstance().selectPaid(IHDCT.getInstance().selectMaxID())).toString());
 	}
 
 	float money = 0;
@@ -1346,9 +1371,6 @@ public class HomeController implements Initializable {
 				SanPhamModel col = tableProBill.getSelectionModel().getSelectedItem();
 				tensp = col.getTenSp();
 				money = col.getDonGia();
-				String sl = quantity.getText();
-				int quantity = Integer.valueOf(sl);
-				sumMoney.setText(money * quantity + "");
 			}
 		} catch (Exception e) {
 			Notification.alert(AlertType.ERROR, "Vui lòng nhập số lượng");
@@ -1360,64 +1382,148 @@ public class HomeController implements Initializable {
 
 			float tongTien = Float.valueOf(sumMoney.getText());
 			float tienKhach = Float.valueOf(clientMoney.getText());
+			float tienThua = tienKhach - tongTien;
 
-			changeMoney.setText(tienKhach - tongTien + " ");
+			changeMoney.setText(Float.valueOf(tienThua).toString());
 		} catch (NumberFormatException nfe) {
-			nfe.printStackTrace();
 		}
 	}
 
+	public void insertBillDeltais() {
+		String mahdct = AutoString.autoID("HDCT", "maHDCT", "HDCT");
+		String sl = quantity.getText();
+
+		if (tensp.equals("") || sl == "") {
+			WarningForm wf = new WarningForm();
+			wf.start(stage);
+
+			quantity.requestFocus();
+
+			return;
+		}
+
+		int quantity = Integer.parseInt(sl);
+
+		String mahd = IDBill.getText();
+
+		HDCTModel model = new HDCTModel(mahdct, money, quantity, mahd, tensp);
+		IHDCT.getInstance().insert(model);
+
+		loadDataBillDeltais();
+
+		sumMoney.setText(Float.valueOf(IHDCT.getInstance().selectPaid(IHDCT.getInstance().selectMaxID())).toString());
+
+	}
+
 	public void insertBill() {
-		String mahd = AutoString.autoID("HD", "mahd", "HoaDon");
+
+		String mahd = AutoString.autoID("HD", "maHD", "HoaDon");
+
 		LocalDate localDate = dateBill.getValue();
 
 		java.sql.Date myDate = java.sql.Date.valueOf(localDate);
 
-		float thanhtoan = Float.valueOf(sumMoney.getText());
 		String nameKH = nameClientOfBill.getText();
 		String nameStaff = nameStaffOfBill.getText();
 
-		int sl = Integer.valueOf(quantity.getText());
-
-		HoaDonModel model = new HoaDonModel(mahd, myDate, thanhtoan, nameKH, nameStaff, "Chưa Thanh Toán");
+		HoaDonModel model = new HoaDonModel(mahd, myDate, 0, nameKH, nameStaff, "Chưa Thanh Toán");
 		IHoaDon.getInstance().insert(model);
 
-		String mahdct = AutoString.autoID("HDCT", "MaHDCT", "HDCT");
-
-		HDCTModel hdct = new HDCTModel(mahdct, money, sl, mahd, tensp);
-		IHDCT.getInstance().insert(hdct);
-
+		loadDataBill();
 	}
-	// set PieChart
 
-	public void setPieChart() {
+	public void setCellTableBill() {
+		bill = FXCollections.observableArrayList();
+		IDBillCol.setCellValueFactory(new PropertyValueFactory<HoaDonModel, String>("mahd"));
+		moneyBill.setCellValueFactory(new PropertyValueFactory<HoaDonModel, Float>("thanhToan"));
+		date.setCellValueFactory(new PropertyValueFactory<HoaDonModel, Date>("ngay"));
+	}
 
-		int staff = INhanVien.getInstance().selectCount();
-		int service = ISanPham.getInstance().selectCount();
-		int client = IKhachHang.getInstance().selectCount();
-		int bill = IHoaDon.getInstance().selectCount();
+	public void loadDataBill() {
+		if (tableBill.getItems().size() >= 1) {
+			tableBill.getItems().clear();
+		}
 
-		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
-				new PieChart.Data("Nhân Viên", staff), new PieChart.Data("Dịch Vụ", service),
-				new PieChart.Data("Khách Hàng", client), new PieChart.Data("Hóa Đơn", bill));
+		ArrayList<HoaDonModel> list = IHoaDon.getInstance().selectAll();
+		for (HoaDonModel model : list) {
+			bill.add(model);
+		}
 
-		pieChartData.forEach(data -> data.nameProperty()
-				.bind(Bindings.concat(data.getName(), " Số Lượng --> ", data.pieValueProperty())));
-
-		pieChart.getData().addAll(pieChartData);
+		tableBill.setItems(bill);
 
 	}
 
 	// Delete Bill
 
 	public void delBill() {
-		HoaDonModel col = (HoaDonModel) tableBill.getSelectionModel().getSelectedItem();
+		HoaDonModel col = tableBill.getSelectionModel().getSelectedItem();
 
 		HoaDonModel model = new HoaDonModel(col.getMahd(), col.getNgay(), col.getThanhToan(), col.getTenKH(),
 				col.getTenNV(), col.getTrangThai());
 		IHoaDon.getInstance().del(model);
 
 		loadDataBill();
+	}
+
+	public void delBillDeltais() {
+		HDCTModel col = tableBillDeltais.getSelectionModel().getSelectedItem();
+
+		HDCTModel model = new HDCTModel(col.getDonGia(), col.getSoLuong(), col.getTenSP(), col.getMasp(),
+				col.getTrangThai(), col.getThanhTien());
+		IHDCT.getInstance().del(model);
+
+		loadDataBillDeltais();
+
+		sumMoney.setText(Float.valueOf(IHDCT.getInstance().selectPaid(IHDCT.getInstance().selectMaxID())).toString());
+	}
+
+	public void updateDataBillDeltais() {
+		HDCTModel col = tableBillDeltais.getSelectionModel().getSelectedItem();
+
+		HDCTModel model = new HDCTModel(col.getMaHDCT(), col.getDonGia(), col.getSoLuong(), col.getMaHD(),
+				col.getMasp());
+		IHDCT.getInstance().update(model);
+
+		loadDataBillDeltais();
+
+		Message msg = new Message();
+		msg.start(stage);
+	}
+
+	public void paidBill() {
+		if (clientMoney.getText().equals("")) {
+			Notification.alert(AlertType.INFORMATION, "Nhập tiền của khách");
+			clientMoney.requestFocus();
+			return;
+		}
+
+		String mahd = IDBill.getText();
+
+		float paid = IHDCT.getInstance().selectPaid(mahd);
+
+		HoaDonModel model = new HoaDonModel(mahd, null, paid, null, null, null);
+		IHoaDon.getInstance().update(model);
+
+		Message smg = new Message();
+		smg.start(stage);
+
+		loadDataBill();
+		
+		loadDataBillDeltais();
+
+	}
+	
+	public void removeBill() {
+		String mahd = IHDCT.getInstance().selectMaxID();
+		
+		HoaDonModel model = new HoaDonModel(mahd, null, 0, null, null, null);
+		IHoaDon.getInstance().del(model);
+		
+		Notification.alert(AlertType.INFORMATION, "Đã Hủy hóa đơn thành công");
+	}
+
+	public void printBill() {
+
 	}
 
 	// load line chart
@@ -1507,20 +1613,6 @@ public class HomeController implements Initializable {
 		tableSer.setItems(service);
 	}
 
-	public void findBill() {
-		String mahd = txtFindBill.getText();
-
-		HoaDonModel model = new HoaDonModel(mahd, null, 0, null, null, null);
-		HoaDonModel hoadon = IHoaDon.getInstance().selectByID(model);
-
-		if (tableBill.getItems().size() >= 1) {
-			tableBill.getItems().clear();
-		}
-
-		bill.add(hoadon);
-		tableBill.setItems(bill);
-	}
-
 	public void loadCbbTrademark() {
 		Connection conn = JDBCUtil.getConnection();
 		try {
@@ -1543,4 +1635,23 @@ public class HomeController implements Initializable {
 		IDProduct.setText(AutoString.autoID("SP", "masp", "SanPham"));
 	}
 
+	// set PieChart
+
+	public void setPieChart() {
+
+		int staff = INhanVien.getInstance().selectCount();
+		int service = ISanPham.getInstance().selectCount();
+		int client = IKhachHang.getInstance().selectCount();
+		int bill = IHoaDon.getInstance().selectCount();
+
+		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+				new PieChart.Data("Nhân Viên", staff), new PieChart.Data("Dịch Vụ", service),
+				new PieChart.Data("Khách Hàng", client), new PieChart.Data("Hóa Đơn", bill));
+
+		pieChartData.forEach(data -> data.nameProperty()
+				.bind(Bindings.concat(data.getName(), " Số Lượng --> ", data.pieValueProperty())));
+
+		pieChart.getData().addAll(pieChartData);
+
+	}
 }

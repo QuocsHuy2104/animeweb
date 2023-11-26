@@ -177,5 +177,35 @@ public class IKhachHang implements DAOInterface<KhachHangModel> {
 		}
 		return tenkh;
 	}
+	
+	public ArrayList<KhachHangModel> selectMax() {
+		ArrayList<KhachHangModel> result = new ArrayList<KhachHangModel>();
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("SELECT * FROM KHACHHANG ORDER BY MaKH DESC");
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				String id = rs.getString("MaKH");
+				String name = rs.getString("TenKH");
+				String address = rs.getString("DiaChi");
+				String phone = rs.getString("SDT");
+				int gender = rs.getInt("GioiTinh");
+				String email = rs.getString("Email");
+				int tt = rs.getInt("trangThai");
+
+				String genders = gender == 1 ? "Nữ" : "Nam";
+				boolean trangThai = tt == 1 ? true : false;
+
+				KhachHangModel kh = new KhachHangModel(id, name, address, phone, genders, email, trangThai);
+				result.add(kh);
+			}
+			pst.close();
+			rs.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 }

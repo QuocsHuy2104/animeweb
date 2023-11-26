@@ -25,7 +25,7 @@ public class Main extends Application {
 			primaryStage.setScene(scene);
 
 			LoginController controller = loader.getController();
-
+			
 			scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
 				@Override

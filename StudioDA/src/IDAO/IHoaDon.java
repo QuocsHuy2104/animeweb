@@ -67,22 +67,18 @@ public class IHoaDon implements DAOInterface<HoaDonModel> {
 	public int update(HoaDonModel reneric) {
 		int result = 0;
 		Connection conn = JDBCUtil.getConnection();
-		String sql = "update hoadon set ngay = ?, thanhtoan = ?, makh = (select makh from khachhang where tenkh = ?), manv = (select manv from nhanvien where tennv = ?) where mahd = ?";
+		String sql = "update hoadon set thanhtoan = ? where mahd = ?";
 
 		try {
 			PreparedStatement pst = conn.prepareStatement(sql);
 
-			pst.setDate(1, reneric.getNgay());
-			pst.setFloat(2, reneric.getThanhToan());
-			pst.setString(3, reneric.getTenKH());
-			pst.setString(4, reneric.getTenNV());
-			pst.setString(5, reneric.getMahd());
+			pst.setFloat(1, reneric.getThanhToan());
+			pst.setString(2, reneric.getMahd());
 
 			result = pst.executeUpdate();
 			pst.close();
 			JDBCUtil.closeConnection(conn);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

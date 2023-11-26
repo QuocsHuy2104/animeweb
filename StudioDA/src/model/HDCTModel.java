@@ -17,14 +17,14 @@ public class HDCTModel {
 		this.trangThai = trangThai;
 		this.thanhTien = thanhTien;
 	}
-	
-	public HDCTModel(String maHDCT, float donGia, int soLuong, String maHD, String tenSP) {
+
+	public HDCTModel(String maHDCT, float donGia, int soLuong, String maHD, String masp) {
 		super();
 		this.maHDCT = maHDCT;
 		this.donGia = donGia;
 		this.soLuong = soLuong;
 		this.maHD = maHD;
-		this.tenSP = tenSP;
+		this.masp = masp;
 	}
 
 	public String getMaHDCT() {
@@ -55,11 +55,11 @@ public class HDCTModel {
 		return maHD;
 	}
 
-	public void setTenHD(String tenSP) {
-		this.tenSP = tenSP;
+	public void setMaHD(String maHD) {
+		this.maHD = maHD;
 	}
 
-	public String getMaSP() {
+	public String getTenSP() {
 		return tenSP;
 	}
 
@@ -90,6 +90,5 @@ public class HDCTModel {
 	public void setThanhTien(float thanhTien) {
 		this.thanhTien = thanhTien;
 	}
-	
-	
+
 }

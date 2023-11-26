@@ -260,8 +260,10 @@
 	-fx-border-color: #0066FF;
 }
 
+#btnCreateBill,
+#btnAddProForBill,
 #btnRemove,
-#btnDeleteBill,
+#btnPaidBill,
 #btnPrint {
 	-fx-pref-height: 35.0;
     -fx-pref-width: 135.0;
@@ -274,16 +276,19 @@
     -fx-text-fill: #0066FF;
     -fx-border-radius: 6.0px;
 }
-
-#btnSaveBill:pressed,
-#btnDeleteBill:pressed,
+#btnCreateBill:focused,
+#btnAddProForBill:focused,
+#btnRemove:focused,
+#btnPaidBill:pressed,
 #btnPrint:pressed {
 	-fx-background-color: #00FFFF;
 }
 
 
-#btnSaveBill:hover,
-#btnDeleteBill:hover,
+#btnCreateBill:hover,
+#btnAddProForBill:hover,
+#btnRemove:hover,
+#btnPaidBill:hover,
 #btnPrint:hover {
 	-fx-effect: dropshadow(three-pass-box, #FF00FF, 10.0, 0.0, 1.0, 4.0);
 	-fx-cursor: hand;

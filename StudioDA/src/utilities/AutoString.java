@@ -34,7 +34,7 @@ public class AutoString {
 		Connection conn = JDBCUtil.getConnection();
 		try {
 			PreparedStatement pst = conn.prepareStatement("SELECT Max(" + idTable + ") as LastID FROM " + Table);
-			ResultSet rs = pst.executeQuery();
+			ResultSet rs = pst.executeQuery(); 
 			String makh = "";
 			while (rs.next()) {
 				makh += rs.getString(1);
@@ -55,7 +55,7 @@ public class AutoString {
 		return type + (String.format("%04d", id + 1));
 	}
 	
-	public static String formatMoney(Float value) {
+	public static String formatMoney(float value) {
 		DecimalFormat df = new DecimalFormat("###,##0.000");
 		return df.format(Float.valueOf(value).toString());
 	}

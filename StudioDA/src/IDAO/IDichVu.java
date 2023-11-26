@@ -154,5 +154,32 @@ public class IDichVu implements DAOInterface<DichVuModel> {
 		return list;
 		
 	}
+	
+	public ArrayList<DichVuModel> selectMax() {
+		ArrayList<DichVuModel> result = new ArrayList<DichVuModel>();
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("select MaDV, TenDV, GiaDV, MoTaDV, TenSP from DICHVU\r\n"
+					+ "inner join SANPHAM on DICHVU.MaSP = SANPHAM.MaSP\r\n"
+					+ "ORDER BY MaDV DESC");
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				String id = rs.getString("MaDV");
+				String name = rs.getString("TenDV");
+				Float donGia = rs.getFloat("GiaDV");
+				String tenth = rs.getString("MoTaDV");
+				String tensp = rs.getString("TenSP");
+
+				DichVuModel sp = new DichVuModel(id, name, donGia, tenth, tensp);
+				result.add(sp);
+			}
+			pst.close();
+			rs.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 }

@@ -144,5 +144,31 @@ public class ISanPham implements DAOInterface<SanPhamModel> {
 		}
 		return service;
 	}
+	
+	public ArrayList<SanPhamModel> selectMax() {
+		ArrayList<SanPhamModel> result = new ArrayList<SanPhamModel>();
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("select MaSP, tensp, DonGia, tenth from SANPHAM\r\n"
+					+ "inner join THUONGHIEU on SANPHAM.MaTH = THUONGHIEU.MaTH\r\n"
+					+ "ORDER BY MaSP DESC");
+			ResultSet rs = pst.executeQuery();
+			while(rs.next()) {
+				String id = rs.getString("Masp");
+				String name = rs.getString("Tensp");
+				Float donGia = rs.getFloat("dongia");
+				String tenth = rs.getString("tenth");
+				
+				SanPhamModel sp = new SanPhamModel(id, name, donGia, tenth);
+				result.add(sp);
+			}
+			pst.close();
+			rs.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 }
