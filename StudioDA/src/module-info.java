@@ -14,6 +14,7 @@ module StudioDA {
 	requires org.apache.poi.poi;
 	requires org.apache.poi.ooxml;
 	requires org.controlsfx.controls;
+	requires itextpdf;
 	
 	opens application to javafx.graphics,javafx.fxml,javafx.controls;
 	opens model to javafx.base;

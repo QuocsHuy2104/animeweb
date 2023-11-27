@@ -277,7 +277,7 @@
 		</Pane>
 		<Pane fx:id="ContentPane" layoutX="210.0" layoutY="81.0" onMouseClicked="#closeSetting" prefHeight="680.0" prefWidth="1131.0">
 			<children>
-				<Pane fx:id="paneHome" layoutX="14.0" layoutY="14.0" prefHeight="665.0" prefWidth="1117.0">
+				<Pane fx:id="paneHome" layoutX="14.0" layoutY="14.0" prefHeight="665.0" prefWidth="1117.0" visible="false">
 					<children>
 						<LineChart fx:id="myLineChart" layoutX="14.0" layoutY="338.0" prefHeight="301.0" prefWidth="500.0" style="-fx-background-color: #fff;">
 							<xAxis>
@@ -830,7 +830,7 @@
 						</TableView>
 					</children>
 				</Pane>
-				<Pane fx:id="paneBill" layoutX="14.0" layoutY="14.0" prefHeight="665.0" prefWidth="1117.0" visible="false">
+				<Pane fx:id="paneBill" layoutX="14.0" layoutY="14.0" prefHeight="665.0" prefWidth="1117.0">
 					<children>
 						<TableView fx:id="tableBillDeltais" layoutX="14.0" layoutY="244.0" prefHeight="178.0" prefWidth="1086.0" style="-fx-background-color: #fff;">
 							<columns>
@@ -839,7 +839,6 @@
 								<TableColumn fx:id="qiantityBillCol" prefWidth="124.0" text="Số Lượng" />
 								<TableColumn fx:id="priceBillCol" prefWidth="132.00006103515625" text="Giá Bán" />
 								<TableColumn fx:id="paidBillCol" prefWidth="148.79998779296875" text="Thành Tiền" />
-								<TableColumn fx:id="storyBillCol" prefWidth="172.7999267578125" text="Trạng Thái" />
 							</columns>
 							<columnResizePolicy>
 								<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -1001,6 +1000,7 @@
 								<TableColumn fx:id="IDBillCol" prefWidth="75.0" text="Mã Hóa Đơn" />
 								<TableColumn fx:id="moneyBill" prefWidth="75.0" text="Số Tiền" />
 								<TableColumn fx:id="date" prefWidth="75.0" text="Ngày" />
+                        <TableColumn fx:id="storyBillCol" prefWidth="75.0" text="Trạng Thái" />
 							</columns>
 							<columnResizePolicy>
 								<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

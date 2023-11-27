@@ -263,7 +263,7 @@ public class HomeController implements Initializable {
 
 	@FXML
 	private Button btnRemove;
-	
+
 	@FXML
 	private DatePicker dateBill;
 
@@ -302,9 +302,6 @@ public class HomeController implements Initializable {
 	@FXML
 	private TableColumn<HDCTModel, Float> paidBillCol;
 
-	@FXML
-	private TableColumn<HDCTModel, String> storyBillCol;
-
 	// ================================================
 
 	@FXML
@@ -315,6 +312,9 @@ public class HomeController implements Initializable {
 
 	@FXML
 	private TableColumn<HoaDonModel, Float> moneyBill;
+
+	@FXML
+	private TableColumn<HoaDonModel, String> storyBillCol;
 
 	@FXML
 	private TextField txtFindStaff, txtFindClient, txtFindProduct, txtFindBill;
@@ -687,11 +687,11 @@ public class HomeController implements Initializable {
 		loadDataBill();
 
 		getCurrentDate();
-		
+
 		tableProduct.setOnMouseClicked(e -> {
 			clickTableProduct(e);
 		});
-		
+
 		btnRemove.setOnAction(e -> {
 			removeBill();
 		});
@@ -1307,7 +1307,6 @@ public class HomeController implements Initializable {
 		qiantityBillCol.setCellValueFactory(new PropertyValueFactory<HDCTModel, Integer>("soLuong"));
 		priceBillCol.setCellValueFactory(new PropertyValueFactory<HDCTModel, Float>("donGia"));
 		paidBillCol.setCellValueFactory(new PropertyValueFactory<HDCTModel, Float>("thanhTien"));
-		storyBillCol.setCellValueFactory(new PropertyValueFactory<HDCTModel, String>("trangThai"));
 	}
 
 	// load data from database enter table in screen
@@ -1424,12 +1423,22 @@ public class HomeController implements Initializable {
 		java.sql.Date myDate = java.sql.Date.valueOf(localDate);
 
 		String nameKH = nameClientOfBill.getText();
+
+		if (nameKH.equals("")) {
+			Notification.alert(AlertType.INFORMATION, "Vui lòng nhập số điện thoại");
+			return;
+		}
+
 		String nameStaff = nameStaffOfBill.getText();
 
 		HoaDonModel model = new HoaDonModel(mahd, myDate, 0, nameKH, nameStaff, "Chưa Thanh Toán");
 		IHoaDon.getInstance().insert(model);
 
 		loadDataBill();
+
+		loadDataBillDeltais();
+
+		IDBill.setText(IHDCT.getInstance().selectMaxID());
 	}
 
 	public void setCellTableBill() {
@@ -1437,6 +1446,7 @@ public class HomeController implements Initializable {
 		IDBillCol.setCellValueFactory(new PropertyValueFactory<HoaDonModel, String>("mahd"));
 		moneyBill.setCellValueFactory(new PropertyValueFactory<HoaDonModel, Float>("thanhToan"));
 		date.setCellValueFactory(new PropertyValueFactory<HoaDonModel, Date>("ngay"));
+		storyBillCol.setCellValueFactory(new PropertyValueFactory<HoaDonModel, String>("trangThai"));
 	}
 
 	public void loadDataBill() {
@@ -1469,7 +1479,7 @@ public class HomeController implements Initializable {
 		HDCTModel col = tableBillDeltais.getSelectionModel().getSelectedItem();
 
 		HDCTModel model = new HDCTModel(col.getDonGia(), col.getSoLuong(), col.getTenSP(), col.getMasp(),
-				col.getTrangThai(), col.getThanhTien());
+				col.getThanhTien());
 		IHDCT.getInstance().del(model);
 
 		loadDataBillDeltais();
@@ -1496,30 +1506,51 @@ public class HomeController implements Initializable {
 			clientMoney.requestFocus();
 			return;
 		}
+		
+		if (Float.valueOf(changeMoney.getText()) < 0) {
+			Notification.alert(AlertType.INFORMATION, "Thanh Toán thiếu tiền rồi ní ơi !!!");
+			clientMoney.requestFocus();
+			return;
+		}
 
 		String mahd = IDBill.getText();
 
 		float paid = IHDCT.getInstance().selectPaid(mahd);
-
-		HoaDonModel model = new HoaDonModel(mahd, null, paid, null, null, null);
-		IHoaDon.getInstance().update(model);
-
-		Message smg = new Message();
-		smg.start(stage);
-
-		loadDataBill();
 		
-		loadDataBillDeltais();
+		
+
+		HoaDonModel model = new HoaDonModel(mahd, null, paid, null, null, "Đã Thanh Toán");
+		
+		if (IHoaDon.getInstance().update(model) == 0) {
+			
+			Notification.alert(AlertType.INFORMATION, "Hóa Đơn đã được thanh toán");
+			return;
+			
+		} else {
+
+			IHoaDon.getInstance().update(model);
+			Message smg = new Message();
+			smg.start(stage);
+
+			loadDataBill();
+
+			loadDataBillDeltais();
+
+		}
 
 	}
-	
+
 	public void removeBill() {
 		String mahd = IHDCT.getInstance().selectMaxID();
-		
+
 		HoaDonModel model = new HoaDonModel(mahd, null, 0, null, null, null);
 		IHoaDon.getInstance().del(model);
-		
+
 		Notification.alert(AlertType.INFORMATION, "Đã Hủy hóa đơn thành công");
+
+		loadDataBill();
+
+		loadDataBillDeltais();
 	}
 
 	public void printBill() {

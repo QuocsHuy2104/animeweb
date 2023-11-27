@@ -28,7 +28,7 @@ public class IHoaDon implements DAOInterface<HoaDonModel> {
 			pst.setString(1, reneric.getMahd());
 			pst.setDate(2, reneric.getNgay());
 			pst.setFloat(3, reneric.getThanhToan());
-			int story = reneric.getTrangThai().equals("Thanh Toán") ? 1 : 0;
+			int story = reneric.getTrangThai().equals("Đã Thanh Toán") ? 1 : 0;
 			pst.setInt(4, story);
 			pst.setString(5, reneric.getTenKH());
 			pst.setString(6, reneric.getTenNV());
@@ -67,13 +67,15 @@ public class IHoaDon implements DAOInterface<HoaDonModel> {
 	public int update(HoaDonModel reneric) {
 		int result = 0;
 		Connection conn = JDBCUtil.getConnection();
-		String sql = "update hoadon set thanhtoan = ? where mahd = ?";
+		String sql = "update hoadon set thanhtoan = ?, trangthai = ? where mahd = ? and trangthai = 0";
 
 		try {
 			PreparedStatement pst = conn.prepareStatement(sql);
 
 			pst.setFloat(1, reneric.getThanhToan());
-			pst.setString(2, reneric.getMahd());
+			int trangthai = reneric.getTrangThai().equals("Đã Thanh Toán") ? 1 : 0;
+			pst.setInt(2, trangthai);
+			pst.setString(3, reneric.getMahd());
 
 			result = pst.executeUpdate();
 			pst.close();
@@ -137,7 +139,7 @@ public class IHoaDon implements DAOInterface<HoaDonModel> {
 				int trangthai = rs.getInt("trangthai");
 				String story;
 				if (trangthai == 1)
-					story = "Thanh Toán";
+					story = "Đã Thanh Toán";
 				else
 					story = "Chưa Thanh Toán";
 				

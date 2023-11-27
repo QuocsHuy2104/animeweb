@@ -87,7 +87,7 @@ public class IHDCT implements DAOInterface<HDCTModel> {
 
 		try {
 			PreparedStatement pst = conn.prepareStatement(
-					"select MaSP, (select tensp from SANPHAM where MaSP = HDCT.MaSP), HDCT.DonGia, SoLuong, DonGia * SoLuong as thanhToan, trangthai from hdct\r\n"
+					"select MaSP, (select tensp from SANPHAM where MaSP = HDCT.MaSP), HDCT.DonGia, SoLuong, DonGia * SoLuong as thanhToan from hdct\r\n"
 							+ "inner join HOADON on HDCT.MaHD = HOADON.MaHD where HDCT.mahd like (select max(mahd) from HOADON)");
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
@@ -96,14 +96,9 @@ public class IHDCT implements DAOInterface<HDCTModel> {
 				float dongia = rs.getFloat(3);
 				int soluong = rs.getInt(4);
 				float thanhtoan = rs.getFloat(5);
-				int trangthai = rs.getInt(6);
-				String story;
-				if (trangthai == 0)
-					story = "Chưa Thanh Toán";
-				else
-					story = "Đã Thanh Toán";
+				
 
-				HDCTModel model = new HDCTModel(dongia, soluong, tensp, masp, story, thanhtoan);
+				HDCTModel model = new HDCTModel(dongia, soluong, tensp, masp, thanhtoan);
 				reuslt.add(model);
 			}
 			pst.close();

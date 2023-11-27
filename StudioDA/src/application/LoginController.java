@@ -95,7 +95,6 @@ public class LoginController implements Initializable {
 			if (rs.next()) {
 
 				roles = rs.getInt("vaitro");
-
 				nameStaff = rs.getString("TenNV");
 				email = rs.getString("email");
 

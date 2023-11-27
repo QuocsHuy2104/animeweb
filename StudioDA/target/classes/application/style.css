@@ -276,9 +276,9 @@
     -fx-text-fill: #0066FF;
     -fx-border-radius: 6.0px;
 }
-#btnCreateBill:focused,
-#btnAddProForBill:focused,
-#btnRemove:focused,
+#btnCreateBill:pressed,
+#btnAddProForBill:pressed,
+#btnRemove:pressed,
 #btnPaidBill:pressed,
 #btnPrint:pressed {
 	-fx-background-color: #00FFFF;
