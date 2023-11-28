@@ -21,6 +21,7 @@ import IDAO.IHoaDon;
 import IDAO.IKhachHang;
 import IDAO.INhanVien;
 import IDAO.ISanPham;
+import IDAO.IThongKe;
 import connectJDBC.JDBCUtil;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -51,6 +52,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -75,17 +77,18 @@ import utilities.ReadExcel;
 public class HomeController implements Initializable {
 
 	@FXML
-	private ImageView imageHeart, imgHome, imgStaff, imgClient, imgProduct, imgService, imgBill, imgPaid, setting;
+	private ImageView imageHeart, imgHome, imgStaff, imgClient, imgProduct, imgService, imgBill, imgPaid, setting,
+			imgRev;
 
 	@FXML
 	private Pane MenuPane, ContentPane, paneSetting, paneStaff, paneHome, paneClient, paneProduct, paneService,
-			paneBill;
+			paneBill, paneRevenue;
 
 	@FXML
 	private Rectangle recHome, recStaff, recPaid, recProduct, recBill, recClient, recService;
 
 	@FXML
-	private Button btnHome, btnStaff, btnClient, btnProduct, btnService, btnBill, btnBillDeltais;
+	private Button btnHome, btnStaff, btnClient, btnProduct, btnService, btnBill, btnBillDeltais, btnRev;
 
 	@FXML
 	private Line lineMenu;
@@ -148,7 +151,7 @@ public class HomeController implements Initializable {
 	private PasswordField password;
 
 	@FXML
-	private RadioButton rbtnStaff, rbtnManage;
+	private RadioButton rbtnStaff, rbtnManage, rbtnFrom, rbtnMonth, rbtnYear;
 
 	@FXML
 	private Button addStaffButton, delStaffButton;
@@ -265,7 +268,7 @@ public class HomeController implements Initializable {
 	private Button btnRemove;
 
 	@FXML
-	private DatePicker dateBill;
+	private DatePicker dateBill, dateFrom, dateTo;
 
 	@FXML
 	private TableView<SanPhamModel> tableProBill;
@@ -316,6 +319,26 @@ public class HomeController implements Initializable {
 	@FXML
 	private TableColumn<HoaDonModel, String> storyBillCol;
 
+	// ==================================================
+
+	@FXML
+	private ComboBox<String> cbbMonth, cbbYear, cbbYear2;
+
+	@FXML
+	private TableView<ThongKeModel> tableRevenue2;
+
+	@FXML
+	private TableColumn<ThongKeModel, String> IDProOfRev;
+
+	@FXML
+	private TableColumn<ThongKeModel, String> IDBillOfRev;
+
+	@FXML
+	private TableColumn<ThongKeModel, Integer> quantityProOfRev;
+
+	@FXML
+	private TableColumn<ThongKeModel, Float> priceBillOfRev;
+
 	@FXML
 	private TextField txtFindStaff, txtFindClient, txtFindProduct, txtFindBill;
 
@@ -332,6 +355,8 @@ public class HomeController implements Initializable {
 	private ObservableList<HDCTModel> billDeltais;
 
 	private ObservableList<SanPhamModel> proBill;
+
+	private ObservableList<ThongKeModel> revenue2;
 
 	private ObservableList revenue;
 
@@ -364,6 +389,7 @@ public class HomeController implements Initializable {
 		paneProduct.setVisible(false);
 		paneService.setVisible(false);
 		paneBill.setVisible(false);
+		paneRevenue.setVisible(false);
 
 		hiddenRecControl();
 		recHome.setVisible(true);
@@ -381,12 +407,14 @@ public class HomeController implements Initializable {
 			paneProduct.setVisible(false);
 			paneService.setVisible(false);
 			paneBill.setVisible(false);
+			paneRevenue.setVisible(false);
 
 			hiddenRecControl();
 			recStaff.setVisible(true);
 			btnStaff.setStyle("-fx-text-fill: #33b0f2; -fx-background-color: none");
 			imgStaff.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\team-management.png"));
 
+			loadDataStaff();
 		} else {
 			ErrorForm errorForm = new ErrorForm();
 			errorForm.start(stage);
@@ -402,12 +430,30 @@ public class HomeController implements Initializable {
 		paneProduct.setVisible(true);
 		paneService.setVisible(false);
 		paneBill.setVisible(false);
+		paneRevenue.setVisible(false);
 
 		hiddenRecControl();
 		recProduct.setVisible(true);
 		btnProduct.setStyle("-fx-text-fill: #33b0f2; -fx-background-color: none");
 		imgProduct.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\order1.png"));
 
+		loadDataProduct();
+
+	}
+
+	public void openRev() {
+		paneStaff.setVisible(false);
+		paneHome.setVisible(false);
+		paneClient.setVisible(false);
+		paneProduct.setVisible(false);
+		paneService.setVisible(false);
+		paneBill.setVisible(false);
+		paneRevenue.setVisible(true);
+
+		hiddenRecControl();
+
+		btnRev.setStyle("-fx-text-fill: #33b0f2; -fx-background-color: none");
+		imgRev.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\statistics.png"));
 	}
 
 	public void openService() {
@@ -417,11 +463,15 @@ public class HomeController implements Initializable {
 		paneProduct.setVisible(false);
 		paneService.setVisible(true);
 		paneBill.setVisible(false);
+		paneRevenue.setVisible(false);
 
 		hiddenRecControl();
 		recService.setVisible(true);
 		btnService.setStyle("-fx-text-fill: #33b0f2; -fx-background-color: none");
 		imgService.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\service.png"));
+
+		loadService();
+		loadCbbSer();
 	}
 
 	public void openBill() {
@@ -432,11 +482,16 @@ public class HomeController implements Initializable {
 		paneClient.setVisible(false);
 		paneProduct.setVisible(false);
 		paneService.setVisible(false);
+		paneRevenue.setVisible(false);
 
 		hiddenRecControl();
 		recBill.setVisible(true);
 		btnBill.setStyle("-fx-text-fill: #33b0f2; -fx-background-color: none");
 		imgBill.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\bill1.png"));
+
+		loadDataBill();
+		loadDataBillDeltais();
+		loadDataProBill();
 
 	}
 
@@ -448,11 +503,14 @@ public class HomeController implements Initializable {
 		paneProduct.setVisible(false);
 		paneService.setVisible(false);
 		paneBill.setVisible(false);
+		paneRevenue.setVisible(false);
 
 		hiddenRecControl();
 		recClient.setVisible(true);
 		btnClient.setStyle("-fx-text-fill: #33b0f2; -fx-background-color: none");
 		imgClient.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\costumer1.png"));
+
+		loadDataClient();
 
 	}
 
@@ -480,6 +538,7 @@ public class HomeController implements Initializable {
 		imgProduct.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\order.png"));
 		imgBill.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\receipt.png"));
 		imgService.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\customer-service.png"));
+		imgRev.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\economy.png"));
 	}
 
 	public void openPaid() {
@@ -489,6 +548,7 @@ public class HomeController implements Initializable {
 		paneProduct.setVisible(false);
 		paneService.setVisible(false);
 		paneBill.setVisible(false);
+		paneRevenue.setVisible(false);
 
 		hiddenRecControl();
 
@@ -688,13 +748,26 @@ public class HomeController implements Initializable {
 
 		getCurrentDate();
 
+		setCellRevenue2();
+
+		btnRev.setOnAction(e -> {
+			if (rbtnFrom.isSelected())
+				loadDataRevenueFromTo();
+			else if (rbtnMonth.isSelected())
+				loadDataRevenueMonth();
+			else
+				loadDataRevenueYear();
+		});
+
 		tableProduct.setOnMouseClicked(e -> {
 			clickTableProduct(e);
 		});
 
 		btnRemove.setOnAction(e -> {
-			removeBill();
+			removeAll();
 		});
+
+		loadCbbDate();
 
 		circleLogo
 				.setFill(new ImagePattern(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\logo.png")));
@@ -1120,9 +1193,9 @@ public class HomeController implements Initializable {
 		alert.setContentText("Bạn có chắc chắc muốn xóa hông");
 		alert.showAndWait();
 
+		SanPhamModel model = new SanPhamModel(col.getMaSP(), col.getTenSp(), col.getDonGia(), col.getTenTH());
 		if (alert.getResult() == ButtonType.OK) {
 
-			SanPhamModel model = new SanPhamModel(col.getMaSP(), col.getTenSp(), col.getDonGia(), col.getTenTH());
 			ISanPham.getInstance().del(model);
 
 			loadDataProduct();
@@ -1311,6 +1384,7 @@ public class HomeController implements Initializable {
 
 	// load data from database enter table in screen
 
+	// fill data theo mã hóa đơn
 	public void loadDataBillDeltais() {
 		if (tableBillDeltais.getItems().size() >= 1) {
 			tableBillDeltais.getItems().clear();
@@ -1331,6 +1405,7 @@ public class HomeController implements Initializable {
 		trademarkOfBill.setCellValueFactory(new PropertyValueFactory<SanPhamModel, String>("tenTH"));
 	}
 
+	// load data sản phẩm lên table sản phẩm
 	public void loadDataProBill() {
 		if (tableProBill.getItems().size() >= 1) {
 			tableProBill.getItems().clear();
@@ -1343,16 +1418,19 @@ public class HomeController implements Initializable {
 		tableProBill.setItems(proBill);
 	}
 
+	// Hiển thị khách hàng theo số điện thoại
 	public void getClient() {
 		nameClientOfBill.setText(IKhachHang.getInstance().selectByPhone(phoneClientOfBill.getText()));
 	}
 
+	// Lấy ra ngày hiện tại
 	public void getCurrentDate() {
 		Date date = new Date();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		LocalDate ld = Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 
 		dateBill.setValue(ld);
+		dateTo.setValue(ld);
 
 		nameStaffOfBill.setText(LoginController.nameStaff);
 		IDBill.setText(IHDCT.getInstance().selectMaxID());
@@ -1364,9 +1442,10 @@ public class HomeController implements Initializable {
 	float money = 0;
 	String tensp = "";
 
+	// Click table sản phẩm trong hóa đơn lấy mã sản phẩm, đơn giá
 	public void clickItemBill(MouseEvent event) {
 		try {
-			if (event.getClickCount() == 2) {
+			if (event.getClickCount() == 1) {
 				SanPhamModel col = tableProBill.getSelectionModel().getSelectedItem();
 				tensp = col.getTenSp();
 				money = col.getDonGia();
@@ -1376,6 +1455,7 @@ public class HomeController implements Initializable {
 		}
 	}
 
+	// Tiện ích tính tiền
 	public void comfy() {
 		try {
 
@@ -1388,6 +1468,7 @@ public class HomeController implements Initializable {
 		}
 	}
 
+	// Thêm sản phẩm vào hóa đơn chi tiết
 	public void insertBillDeltais() {
 		String mahdct = AutoString.autoID("HDCT", "maHDCT", "HDCT");
 		String sl = quantity.getText();
@@ -1402,18 +1483,38 @@ public class HomeController implements Initializable {
 		}
 
 		int quantity = Integer.parseInt(sl);
+		int sumPro = 0;
+		String masp = "";
 
 		String mahd = IDBill.getText();
 
-		HDCTModel model = new HDCTModel(mahdct, money, quantity, mahd, tensp);
-		IHDCT.getInstance().insert(model);
+		// select sản tất cả hdct có mã hóa đơn mới nhất
+		ArrayList<HDCTModel> models = IHDCT.getInstance().selectAll();
+		for (HDCTModel hdctModel : models) {
+			if (hdctModel.getTenSP().equals(tensp)) {
+				sumPro += hdctModel.getSoLuong(); // Lấy số lượng của sản phẩm có trong hdct theo ten
+				masp = hdctModel.getMasp(); // Lấy ra mã sản phẩm
+			}
+		}
+
+		if (sumPro != 0) {
+			int sum = sumPro + quantity;
+
+			// Cập nhật lại số lượng nếu sản phẩm đó được thêm vào rồi
+			HDCTModel hdctModel = new HDCTModel(mahdct, 0, sum, mahd, masp);
+			IHDCT.getInstance().update(hdctModel);
+		} else {
+			// Thêm sản phẩm vào hóa đơn chi tiết
+			HDCTModel model = new HDCTModel(mahdct, money, quantity, mahd, tensp);
+			IHDCT.getInstance().insert(model);
+		}
 
 		loadDataBillDeltais();
-
 		sumMoney.setText(Float.valueOf(IHDCT.getInstance().selectPaid(IHDCT.getInstance().selectMaxID())).toString());
 
 	}
 
+	// Thêm hóa đơn
 	public void insertBill() {
 
 		String mahd = AutoString.autoID("HD", "maHD", "HoaDon");
@@ -1475,6 +1576,7 @@ public class HomeController implements Initializable {
 		loadDataBill();
 	}
 
+	// xóa sản phẩm trong hóa đơn chi tiết
 	public void delBillDeltais() {
 		HDCTModel col = tableBillDeltais.getSelectionModel().getSelectedItem();
 
@@ -1487,11 +1589,13 @@ public class HomeController implements Initializable {
 		sumMoney.setText(Float.valueOf(IHDCT.getInstance().selectPaid(IHDCT.getInstance().selectMaxID())).toString());
 	}
 
+	// Cập nhật số lượng sản phẩm trong hóa dơn chi tiết
 	public void updateDataBillDeltais() {
 		HDCTModel col = tableBillDeltais.getSelectionModel().getSelectedItem();
-
-		HDCTModel model = new HDCTModel(col.getMaHDCT(), col.getDonGia(), col.getSoLuong(), col.getMaHD(),
-				col.getMasp());
+		
+		int soluong = Integer.parseInt(quantity.getText());
+		
+		HDCTModel model = new HDCTModel(col.getMaHDCT(), col.getDonGia(), soluong, col.getMaHD(), col.getTenSP());
 		IHDCT.getInstance().update(model);
 
 		loadDataBillDeltais();
@@ -1500,13 +1604,14 @@ public class HomeController implements Initializable {
 		msg.start(stage);
 	}
 
+	// Cập nhật lại tiền thanh toán và trạng thái trong hóa dơn
 	public void paidBill() {
 		if (clientMoney.getText().equals("")) {
 			Notification.alert(AlertType.INFORMATION, "Nhập tiền của khách");
 			clientMoney.requestFocus();
 			return;
 		}
-		
+
 		if (Float.valueOf(changeMoney.getText()) < 0) {
 			Notification.alert(AlertType.INFORMATION, "Thanh Toán thiếu tiền rồi ní ơi !!!");
 			clientMoney.requestFocus();
@@ -1516,16 +1621,14 @@ public class HomeController implements Initializable {
 		String mahd = IDBill.getText();
 
 		float paid = IHDCT.getInstance().selectPaid(mahd);
-		
-		
 
 		HoaDonModel model = new HoaDonModel(mahd, null, paid, null, null, "Đã Thanh Toán");
-		
+
 		if (IHoaDon.getInstance().update(model) == 0) {
-			
+
 			Notification.alert(AlertType.INFORMATION, "Hóa Đơn đã được thanh toán");
 			return;
-			
+
 		} else {
 
 			IHoaDon.getInstance().update(model);
@@ -1540,10 +1643,11 @@ public class HomeController implements Initializable {
 
 	}
 
+	// xóa hóa đơn
 	public void removeBill() {
 		String mahd = IHDCT.getInstance().selectMaxID();
 
-		HoaDonModel model = new HoaDonModel(mahd, null, 0, null, null, null);
+		HoaDonModel model = new HoaDonModel(mahd, null, money, mahd, mahd, mahd);
 		IHoaDon.getInstance().del(model);
 
 		Notification.alert(AlertType.INFORMATION, "Đã Hủy hóa đơn thành công");
@@ -1551,6 +1655,24 @@ public class HomeController implements Initializable {
 		loadDataBill();
 
 		loadDataBillDeltais();
+	}
+
+	// Xóa hóa đơn chi tiết theo mã hóa đơn
+	public void removeBillDeltais() {
+		String mahd = IHDCT.getInstance().selectMaxID();
+
+		HDCTModel model = new HDCTModel(mahd, money, 0, mahd, mahd);
+		IHDCT.getInstance().delByBill(model);
+
+		loadDataBill();
+		loadDataBillDeltais();
+
+	}
+
+	// Sự kiện hủy hóa đơn
+	public void removeAll() {
+		removeBillDeltais();
+		removeBill();
 	}
 
 	public void printBill() {
@@ -1586,6 +1708,7 @@ public class HomeController implements Initializable {
 		myLineChart.getData().add(series);
 	}
 
+	// Tìm kiếm nhân viên
 	public void findStaff() {
 
 		String manv = txtFindStaff.getText();
@@ -1601,6 +1724,7 @@ public class HomeController implements Initializable {
 
 	}
 
+	// Tìm Kiến khách hàng
 	public void findClient() {
 		String makh = txtFindClient.getText();
 
@@ -1615,6 +1739,7 @@ public class HomeController implements Initializable {
 		tableClient.setItems(client);
 	}
 
+	// Tìm kiếm sản phẩm
 	public void findProduct() {
 
 		String masp = txtFindProduct.getText();
@@ -1630,6 +1755,7 @@ public class HomeController implements Initializable {
 		tableProduct.setItems(product);
 	}
 
+	// Tìm kiếm dịch vụ
 	public void findService() {
 		String masp = txtFindSer.getText();
 
@@ -1644,6 +1770,7 @@ public class HomeController implements Initializable {
 		tableSer.setItems(service);
 	}
 
+	// fill data combbobox Thương Hiệu
 	public void loadCbbTrademark() {
 		Connection conn = JDBCUtil.getConnection();
 		try {
@@ -1685,4 +1812,139 @@ public class HomeController implements Initializable {
 		pieChart.getData().addAll(pieChartData);
 
 	}
+
+	public void setCellRevenue2() {
+		revenue2 = FXCollections.observableArrayList();
+		IDProOfRev.setCellValueFactory(new PropertyValueFactory<ThongKeModel, String>("masp"));
+		IDBillOfRev.setCellValueFactory(new PropertyValueFactory<ThongKeModel, String>("mahd"));
+		quantityProOfRev.setCellValueFactory(new PropertyValueFactory<ThongKeModel, Integer>("soluong"));
+		priceBillOfRev.setCellValueFactory(new PropertyValueFactory<ThongKeModel, Float>("giaBan"));
+	}
+
+	public void loadDataRevenueFromTo() {
+		if (tableRevenue2.getItems().size() >= 1) {
+			tableRevenue2.getItems().clear();
+		}
+
+		LocalDate ldfrom = dateFrom.getValue();
+		String from = ldfrom.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+		if (from.equals("")) {
+			Notification.alert(AlertType.INFORMATION, "Chưa chọn ngày bắt đầu");
+			return;
+		}
+
+		LocalDate ldto = dateTo.getValue();
+		String to = ldto.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		ArrayList<ThongKeModel> list = IThongKe.getInstance().selectFromTo(from.toString(), to.toString());
+		if (list == null) {
+			Notification.alert(AlertType.INFORMATION, "Không có hóa đơn phù hợp");
+			return;
+		} else {
+			for (ThongKeModel thongKeModel : list) {
+				revenue2.add(thongKeModel);
+			}
+
+			tableRevenue2.setItems(revenue2);
+		}
+
+	}
+
+	public void loadDataRevenueMonth() {
+		if (tableRevenue2.getItems().size() >= 1) {
+			tableRevenue2.getItems().clear();
+		}
+
+		String month = cbbMonth.getValue();
+		String thang = "";
+		switch (month) {
+		case "January":
+			thang = "01";
+			break;
+		case "February":
+			thang = "02";
+			break;
+		case "March":
+			thang = "03";
+			break;
+		case "April":
+			thang = "04";
+			break;
+		case "May":
+			thang = "05";
+			break;
+		case "June":
+			thang = "06";
+			break;
+		case "July":
+			thang = "07";
+			break;
+		case "August":
+			thang = "08";
+			break;
+		case "September":
+			thang = "09";
+			break;
+		case "October":
+			thang = "10";
+			break;
+		case "November":
+			thang = "11";
+			break;
+		default:
+			thang = "12";
+			break;
+		}
+
+		String year = cbbYear.getValue();
+
+		ArrayList<ThongKeModel> list = IThongKe.getInstance().selectMonth(thang, year);
+		if (list == null) {
+			Notification.alert(AlertType.INFORMATION, "Không có hóa đơn phù hợp");
+			return;
+		} else {
+			for (ThongKeModel thongKeModel : list) {
+				revenue2.add(thongKeModel);
+			}
+
+			tableRevenue2.setItems(revenue2);
+		}
+	}
+
+	public void loadDataRevenueYear() {
+		if (tableRevenue2.getItems().size() >= 1) {
+			tableRevenue2.getItems().clear();
+		}
+
+		String year = cbbYear2.getValue();
+
+		ArrayList<ThongKeModel> list = IThongKe.getInstance().selectYear(year);
+		if (list == null) {
+			Notification.alert(AlertType.INFORMATION, "Không có hóa đơn phù hợp");
+			return;
+		} else {
+			for (ThongKeModel thongKeModel : list) {
+				revenue2.add(thongKeModel);
+			}
+			tableRevenue2.setItems(revenue2);
+		}
+	}
+
+	public void loadCbbDate() {
+		String[] month = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
+				"October", "November", "December" };
+
+		for (String string : month) {
+			cbbMonth.getItems().add(string);
+		}
+
+		String[] year = { "2020", "2021", "2022", "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030",
+				"2031", "2032", "2033", "2034", "2035", "2036" };
+
+		for (String string : year) {
+			cbbYear.getItems().add(string);
+			cbbYear2.getItems().add(string);
+		}
+	}
+
 }

@@ -32,7 +32,7 @@ public class ReadExcel {
          
          Connection conn = JDBCUtil.getConnection();
          conn.setAutoCommit(false);
-         
+  
          String sql = "INSERT INTO THUONGHIEU VALUES (?, ?)";
          PreparedStatement statement = conn.prepareStatement(sql);    
          

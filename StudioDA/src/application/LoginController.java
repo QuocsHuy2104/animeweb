@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -22,6 +22,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
@@ -58,10 +59,15 @@ public class LoginController implements Initializable {
 	@FXML
 	private AnchorPane root;
 
+	Set<String> posibles = new HashSet<String>();
+	private AutoCompletionBinding<String> autoCompletionBindings;
+
+	String[] users = {};
+
 	Stage stage;
 	Scene scene;
 	Parent root1;
-	
+
 	int cnt = 0;
 
 	public static int roles;
@@ -98,8 +104,6 @@ public class LoginController implements Initializable {
 				nameStaff = rs.getString("TenNV");
 				email = rs.getString("email");
 
-				String matkhau = rs.getString("pass");
-
 				stage = (Stage) root.getScene().getWindow();
 				stage.close();
 
@@ -119,11 +123,15 @@ public class LoginController implements Initializable {
 
 			} else {
 				try {
-					cnt ++;
-					
+					cnt++;
+
 					MessageLocked ml = new MessageLocked();
 					ml.start(stage);
 					
+					if (cnt == 5) {
+						locked();
+					}
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -163,10 +171,59 @@ public class LoginController implements Initializable {
 		stage.close();
 	}
 
+	public void saveLogin() {
+		Collections.addAll(posibles, users);
+		autoCompletionBindings = TextFields.bindAutoCompletion(txtUser, posibles);
+
+		txtUser.setOnKeyPressed(e -> {
+			switch (e.getCode()) {
+			case TAB:
+				learner(txtUser.getText());
+				break;
+			default:
+				break;
+			}
+		});
+	}
+
+	public void learner(String text) {
+		posibles.add(text);
+
+		if (autoCompletionBindings != null) {
+			autoCompletionBindings.dispose();
+		}
+
+		autoCompletionBindings = TextFields.bindAutoCompletion(txtUser, posibles);
+	}
+	
+	public void check() {
+		if (myCheckBox.isSelected()) {
+           saveLogin();
+        }
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		btnLogout.setOnAction(event -> {
 			exitForm();
 		});
+
+		myCheckBox.setOnAction(event -> {
+			check();
+		});
+
+	}
+	
+	public void locked() {
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("Locked.fxml"));
+			stage = new Stage(StageStyle.UNDECORATED);
+			scene = new Scene(root);
+			stage.setScene(scene);
+			stage.show();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

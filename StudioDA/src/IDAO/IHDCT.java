@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import DAO.DAOInterface;
 import connectJDBC.JDBCUtil;
 import model.HDCTModel;
+import model.HoaDonModel;
 public class IHDCT implements DAOInterface<HDCTModel> {
 
 	@Override
@@ -55,13 +56,13 @@ public class IHDCT implements DAOInterface<HDCTModel> {
 	public int update(HDCTModel reneric) {
 		int result = 0;
 		Connection conn = JDBCUtil.getConnection();
-		String sql = "update hdct set dongia = ?, soluong = ? where mahdct = ?";
+		String sql = "update HDCT set SoLuong = ? where MaHDCT = (select MaHDCT from HDCT where masp like ? and MaHD = ?)";
 
 		try {
 			PreparedStatement pst = conn.prepareStatement(sql);
-			pst.setFloat(1, reneric.getDonGia());
-			pst.setInt(2, reneric.getSoLuong());
-			pst.setString(3, reneric.getMaHDCT());
+			pst.setInt(1, reneric.getSoLuong());
+			pst.setString(2, reneric.getMasp());
+			pst.setString(3, reneric.getMaHD());
 
 			result = pst.executeUpdate();
 			pst.close();
@@ -157,6 +158,22 @@ public class IHDCT implements DAOInterface<HDCTModel> {
 			e.printStackTrace();
 		}
 
+		return result;
+	}
+	
+	public int delByBill(HDCTModel model) {
+		int result = 0;
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("Delete from hdct where mahd like ?");
+			ps.setString(1, model.getMaHD());
+			
+			result = ps.executeUpdate();
+			ps.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return result;
 	}
 
