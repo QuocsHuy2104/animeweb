@@ -18,11 +18,12 @@ public class IHDCT implements DAOInterface<HDCTModel> {
 		Connection conn = JDBCUtil.getConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement(
-					"insert into HDCT values (?, ?, ?, (select MAX(mahd) from HoaDon), (select masp from sanpham where tensp like ?))");
+					"insert into HDCT values (?, ?, ?, (select MAX(?) from HoaDon), (select masp from sanpham where tensp like ?))");
 			ps.setString(1, reneric.getMaHDCT());
 			ps.setFloat(2, reneric.getDonGia());
 			ps.setInt(3, reneric.getSoLuong());
-			ps.setString(4, reneric.getMasp());
+			ps.setString(4, reneric.getMaHD());
+			ps.setString(5, reneric.getMasp());
 
 			result = ps.executeUpdate();
 			ps.close();
@@ -175,6 +176,37 @@ public class IHDCT implements DAOInterface<HDCTModel> {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	//
+	public ArrayList<HDCTModel> selectAllByIDBill(String mahd) {
+		ArrayList<HDCTModel> reuslt = new ArrayList<HDCTModel>();
+		Connection conn = JDBCUtil.getConnection();
+
+		try {
+			PreparedStatement pst = conn.prepareStatement(
+					"select MaSP, (select tensp from SANPHAM where MaSP = HDCT.MaSP), HDCT.DonGia, SoLuong, DonGia * SoLuong as thanhToan from hdct\r\n"
+							+ "inner join HOADON on HDCT.MaHD = HOADON.MaHD where HDCT.mahd like (select max(?) from HOADON)");
+			pst.setString(1, mahd);
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				String masp = rs.getString(1);
+				String tensp = rs.getString(2);
+				float dongia = rs.getFloat(3);
+				int soluong = rs.getInt(4);
+				float thanhtoan = rs.getFloat(5);
+				
+
+				HDCTModel model = new HDCTModel(dongia, soluong, tensp, masp, thanhtoan);
+				reuslt.add(model);
+			}
+			pst.close();
+			rs.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return reuslt;
 	}
 
 }

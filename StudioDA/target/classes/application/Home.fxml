@@ -963,7 +963,7 @@
 						</Pane>
 						<HBox alignment="CENTER" layoutX="691.0" layoutY="605.0" prefHeight="46.0" prefWidth="412.0">
 							<children>
-								<Button fx:id="btnRemove" mnemonicParsing="false" text="Hủy">
+								<Button fx:id="btnRemove" mnemonicParsing="false" text="Xóa">
 									<HBox.margin>
 										<Insets right="20.0" />
 									</HBox.margin>
@@ -973,7 +973,7 @@
 										<Insets right="20.0" />
 									</HBox.margin>
 								</Button>
-								<Button fx:id="btnPrint" mnemonicParsing="false" text="In HĐ" />
+								<Button fx:id="btnPrint" mnemonicParsing="false" onAction="#printBill" text="In HĐ" />
 							</children>
 						</HBox>
             						<TableView fx:id="tableBill" layoutX="14.0" layoutY="55.0" prefHeight="590.0" prefWidth="397.0">
@@ -1047,7 +1047,7 @@
             								<ContextMenu>
             									<items>
             										<MenuItem mnemonicParsing="false" onAction="#delBillDeltais" text="Xóa" />
-            										<MenuItem fx:id="openDialog" mnemonicParsing="false" onAction="#updateDataBillDeltais" text="Cập Nhật" />
+            										<MenuItem mnemonicParsing="false" onAction="#updateDataBillDeltais" text="Cập Nhật" />
             									</items>
             								</ContextMenu>
             							</contextMenu>
