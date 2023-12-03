@@ -69,7 +69,6 @@ public class IHDCT implements DAOInterface<HDCTModel> {
 			pst.close();
 			JDBCUtil.closeConnection(conn);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -78,7 +77,6 @@ public class IHDCT implements DAOInterface<HDCTModel> {
 
 	@Override
 	public HDCTModel selectByID(HDCTModel generic) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -207,15 +207,20 @@
 
 #IDSer:focused,
 #nameSer:focused,
-#priceSer:focused {
+#priceSer:focused,
+#txtFindStaffOfBill:focused {
 	-fx-background-color: none;
 	-fx-text-inner-color: #000;
 	-fx-border-color: #0066FF;
 }
 
+#txtMax,
+#txtMin,
+#txtAvg,
 #IDBill,
 #nameStaffOfBill,
-#nameClientOfBill {
+#nameClientOfBill,
+#txtFindStaffOfBill {
 	-fx-font-size: 14.0px;
     -fx-background-color: none;
     -fx-border-width: 1.0px;
@@ -293,6 +298,42 @@
 	-fx-effect: dropshadow(three-pass-box, #FF00FF, 10.0, 0.0, 1.0, 4.0);
 	-fx-cursor: hand;
 }
+
+#btnRevenue,
+#removeRevButton,
+#exportExcel {
+	-fx-pref-height: 35.0;
+    -fx-pref-width: 135.0;
+    -fx-background-color: #fff;
+    -fx-background-radius: 7px;
+    -fx-font-size: 16.0px;
+    -fx-cursor: hand;
+    -fx-border-width: 1.0px;
+    -fx-border-color: #0066FF;
+    -fx-text-fill: #0066FF;
+    -fx-border-radius: 6.0px;
+}
+#btnRevenue:focused,
+#removeRevButton:focused,
+#exportExcel:focused {
+	-fx-background-color: #00FFFF;
+}
+
+
+#btnRevenue:hover,
+#removeRevButton:hover,
+#exportExcel:hover {
+	-fx-effect: dropshadow(three-pass-box, #FF00FF, 10.0, 0.0, 1.0, 4.0);
+	-fx-cursor: hand;
+}
+
+#rbtnFrom:selected .radio .dot,
+#rbtnMonth:selected .radio .dot,
+#rbtnYear:selected .radio .dot {
+    -fx-background-color: #FF00FF;
+     -fx-background-insets: 0;
+}
+
 
 
 

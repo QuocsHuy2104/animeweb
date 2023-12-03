@@ -17,14 +17,17 @@ import java.util.ResourceBundle;
 
 import com.aspose.pdf.Document;
 import com.aspose.pdf.FontRepository;
+import com.aspose.pdf.HtmlFragment;
 import com.aspose.pdf.Page;
 import com.aspose.pdf.Position;
 import com.aspose.pdf.TextBuilder;
 import com.aspose.pdf.TextFragment;
 
+import IDAO.IChiTietDV;
 import IDAO.IDichVu;
 import IDAO.IHDCT;
 import IDAO.IHoaDon;
+import IDAO.IHoaDonDV;
 import IDAO.IKhachHang;
 import IDAO.INhanVien;
 import IDAO.ISanPham;
@@ -89,7 +92,7 @@ public class HomeController implements Initializable {
 
 	@FXML
 	private Pane MenuPane, ContentPane, paneSetting, paneStaff, paneHome, paneClient, paneProduct, paneService,
-			paneBill, paneRevenue;
+			paneBill, paneRevenue, paneHDDV;
 
 	@FXML
 	private Rectangle recHome, recStaff, recPaid, recProduct, recBill, recClient, recService;
@@ -269,7 +272,7 @@ public class HomeController implements Initializable {
 
 	@FXML
 	private TextField nameStaffOfBill, nameClientOfBill, phoneClientOfBill, quantity, mydate, sumMoney, clientMoney,
-			changeMoney, IDBill;
+			changeMoney, IDBill, txtFindStaffOfBill;
 
 	@FXML
 	private Button btnRemove;
@@ -347,7 +350,16 @@ public class HomeController implements Initializable {
 	private TableColumn<ThongKeModel, Float> priceBillOfRev;
 
 	@FXML
+	private Button btnRevenue;
+
+	@FXML
+	private Label lblTongTien;
+
+	@FXML
 	private TextField txtFindStaff, txtFindClient, txtFindProduct, txtFindBill;
+
+	@FXML
+	private TextField txtMax, txtMin, txtAvg;
 
 	private ObservableList<HoaDonModel> bill;
 
@@ -364,8 +376,105 @@ public class HomeController implements Initializable {
 	private ObservableList<SanPhamModel> proBill;
 
 	private ObservableList<ThongKeModel> revenue2;
+	
+	private ObservableList<HDDVModel> billSer;
+	
+	private ObservableList<DichVuModel> serOfBillSer;
+	
+	private ObservableList<ChiTietDVModel> billSerDeltais;
 
 	private ObservableList revenue;
+
+	// Export File PDF
+
+	@FXML
+	private Pane printPane, paneChidrent;
+
+	@FXML
+	private Button btnPrint, btnBackPrint, printButton;
+
+	@FXML
+	private TableView<HDCTModel> tablePrint;
+
+	@FXML
+	private TableColumn<HDCTModel, String> sanPhamCol;
+
+	@FXML
+	private TableColumn<HDCTModel, Float> dongiaCol;
+
+	@FXML
+	private TableColumn<HDCTModel, Integer> soLuongCol;
+
+	@FXML
+	private TableColumn<HDCTModel, Float> thanhTienCol;
+
+	ObservableList<HDCTModel> print;
+	
+	// hóa đơn dịch vụ
+	
+	@FXML
+    private TableView<HDDVModel> tableHDDV;
+	
+	@FXML
+    private TableColumn<HDDVModel, String> IDHDDVCol;
+	
+	@FXML
+    private TableColumn<HDDVModel, Date> dateHDDVCol;
+	
+	@FXML
+    private TableColumn<HDDVModel, Float> paidHDDVCol;
+	
+	@FXML
+    private TableColumn<HDDVModel, String> storyHDDVCol;
+	
+	@FXML
+	private TextField IDBillSer, nameStaffOfBillSer, findSerOfBillSer, nameClientOfbillSer, phoneOfBillSer;
+	
+	@FXML
+	private DatePicker  dateBillSer, ngayTraCT, ngayTraDK;
+
+	@FXML
+	private Label lblIDBill, lblDateBill, lblnameStaff, lblnameClient, lblphoneClient, lblSum, lblTK, lblTL;
+	
+	// Table dich vu trong hoa don dich vu
+	
+	@FXML
+	private TableView<DichVuModel> tableSerOfBillSer;
+	
+	@FXML
+	private TableColumn<DichVuModel, String> IDSerOfBilSerCol;
+	
+	@FXML
+	private TableColumn<DichVuModel, String> nameSerOfBillSerCol;
+	
+	@FXML
+	private TableColumn<DichVuModel, String> nameProOfBillSercol;
+	
+	@FXML
+	private TableColumn<DichVuModel, Float> priceSerOfBillSerCol;
+	
+	// Table chi tiet dich vu
+	
+	@FXML
+	private TableView<ChiTietDVModel> tableSerDeltais;
+	
+	@FXML
+	private TableColumn<ChiTietDVModel, String> IDSerOfDeltaisCol;
+	
+	@FXML
+	private TableColumn<ChiTietDVModel, String> namSerOfDeltaisCol;
+	
+	@FXML
+	private TableColumn<ChiTietDVModel, Float> priceSerOfDeltaisCol;
+	
+	@FXML
+	private TableColumn<ChiTietDVModel, Date> ngayThue;
+	
+	@FXML
+	private TableColumn<ChiTietDVModel, Date> ngayTra;
+	
+	@FXML
+	private TableColumn<ChiTietDVModel, Float> paidBillSerOfDeltaisCol;
 
 	Stage stage;
 	Scene scene;
@@ -380,6 +489,7 @@ public class HomeController implements Initializable {
 
 	public void setting() {
 		paneSetting.setVisible(true);
+		printPane.setVisible(false);
 	}
 
 	public void closeSetting() {
@@ -397,8 +507,10 @@ public class HomeController implements Initializable {
 		paneService.setVisible(false);
 		paneBill.setVisible(false);
 		paneRevenue.setVisible(false);
-
+		paneHDDV.setVisible(false);
+		
 		hiddenRecControl();
+		
 		recHome.setVisible(true);
 		btnHome.setStyle("-fx-text-fill: #33b0f2; -fx-background-color: none");
 		imgHome.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\home-page.png"));
@@ -415,6 +527,7 @@ public class HomeController implements Initializable {
 			paneService.setVisible(false);
 			paneBill.setVisible(false);
 			paneRevenue.setVisible(false);
+			paneHDDV.setVisible(false);
 
 			hiddenRecControl();
 			recStaff.setVisible(true);
@@ -438,6 +551,7 @@ public class HomeController implements Initializable {
 		paneService.setVisible(false);
 		paneBill.setVisible(false);
 		paneRevenue.setVisible(false);
+		paneHDDV.setVisible(false);
 
 		hiddenRecControl();
 		recProduct.setVisible(true);
@@ -456,6 +570,7 @@ public class HomeController implements Initializable {
 		paneService.setVisible(false);
 		paneBill.setVisible(false);
 		paneRevenue.setVisible(true);
+		paneHDDV.setVisible(false);
 
 		hiddenRecControl();
 
@@ -471,6 +586,7 @@ public class HomeController implements Initializable {
 		paneService.setVisible(true);
 		paneBill.setVisible(false);
 		paneRevenue.setVisible(false);
+		paneHDDV.setVisible(false);
 
 		hiddenRecControl();
 		recService.setVisible(true);
@@ -490,6 +606,7 @@ public class HomeController implements Initializable {
 		paneProduct.setVisible(false);
 		paneService.setVisible(false);
 		paneRevenue.setVisible(false);
+		paneHDDV.setVisible(false);
 
 		hiddenRecControl();
 		recBill.setVisible(true);
@@ -511,6 +628,7 @@ public class HomeController implements Initializable {
 		paneService.setVisible(false);
 		paneBill.setVisible(false);
 		paneRevenue.setVisible(false);
+		paneHDDV.setVisible(false);
 
 		hiddenRecControl();
 		recClient.setVisible(true);
@@ -537,6 +655,7 @@ public class HomeController implements Initializable {
 		btnService.setTextFill(Color.BLACK);
 		btnBill.setTextFill(Color.BLACK);
 		btnBillDeltais.setTextFill(Color.BLACK);
+		btnRev.setTextFill(Color.BLACK);
 
 		imgHome.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\home.png"));
 		imgStaff.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\manager.png"));
@@ -556,20 +675,20 @@ public class HomeController implements Initializable {
 		paneService.setVisible(false);
 		paneBill.setVisible(false);
 		paneRevenue.setVisible(false);
+		paneHDDV.setVisible(true);
 
 		hiddenRecControl();
 
 		recPaid.setVisible(true);
 		btnBillDeltais.setStyle("-fx-text-fill: #33b0f2; -fx-background-color: none");
 		imgPaid.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\bill-service1.png"));
+		
+		loadDataTableSerOfBillSer();
 	}
 
 	// Controll Setting
 
 	public void showDatabase() {
-		// 190
-		// 64
-
 		new Thread(new Runnable() {
 
 			@Override
@@ -590,8 +709,6 @@ public class HomeController implements Initializable {
 	}
 
 	public void hiddenDatabase() {
-		// 190
-		// 64
 
 		new Thread(new Runnable() {
 
@@ -704,21 +821,6 @@ public class HomeController implements Initializable {
 		}
 	}
 
-	// open screen music
-
-	public void openMusic() {
-
-		try {
-			Parent music = FXMLLoader.load(getClass().getResource("Music.fxml"));
-			stage = new Stage();
-			scene = new Scene(music);
-			stage.setScene(scene);
-			stage.show();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}
 
 	// End code show Stage
 
@@ -757,14 +859,33 @@ public class HomeController implements Initializable {
 
 		setCellRevenue2();
 
-		btnRev.setOnAction(e -> {
+		setCellTablePrint();
+
+		btnPrint.setOnAction(e -> {
+			printPane.setVisible(true);
+			loadTablePrint();
+
+		});
+
+		btnBackPrint.setOnAction(e -> {
+			printPane.setVisible(false);
+		});
+
+		btnRevenue.setOnAction(e -> {
 			if (rbtnFrom.isSelected()) {
 				loadDataRevenueFromTo();
-				dateFrom.requestFocus();
-			} else if (rbtnMonth.isSelected())
+				sumFromTo();
+			} else if (rbtnMonth.isSelected()) {
 				loadDataRevenueMonth();
-			else
+				sumMonth();
+			} else {
 				loadDataRevenueYear();
+				sumYear();
+			}
+		});
+
+		printButton.setOnAction(e -> {
+			printBill();
 		});
 
 		tableProduct.setOnMouseClicked(e -> {
@@ -798,7 +919,18 @@ public class HomeController implements Initializable {
 		loadCbbTrademark();
 
 		loadCbbSer();
-
+		
+		// hoa don dich vu
+		setCellTableSerOfBillSer();
+		loadDataTableSerOfBillSer();
+		
+		setCellTableSerOfBillSer();
+		loadDataTableSerOfBillSer();
+		
+		setCellTableBillSerDeltais();
+		loadTableBilSerDeltais();
+		
+		
 		// loadLineChart();
 
 		ToggleGroup group = new ToggleGroup();
@@ -808,6 +940,11 @@ public class HomeController implements Initializable {
 		ToggleGroup group1 = new ToggleGroup();
 		rbtnMan.setToggleGroup(group1);
 		rbtnWoman.setToggleGroup(group1);
+
+		ToggleGroup group2 = new ToggleGroup();
+		rbtnFrom.setToggleGroup(group2);
+		rbtnMonth.setToggleGroup(group2);
+		rbtnYear.setToggleGroup(group2);
 
 	}
 
@@ -1443,6 +1580,7 @@ public class HomeController implements Initializable {
 	// Hiển thị khách hàng theo số điện thoại
 	public void getClient() {
 		nameClientOfBill.setText(IKhachHang.getInstance().selectByPhone(phoneClientOfBill.getText()));
+		nameClientOfbillSer.setText(IKhachHang.getInstance().selectByPhone(phoneOfBillSer.getText()));
 	}
 
 	// Lấy ra ngày hiện tại
@@ -1453,6 +1591,11 @@ public class HomeController implements Initializable {
 
 		dateBill.setValue(ld);
 		dateTo.setValue(ld);
+		
+		dateBillSer.setValue(ld);
+		ngayTraCT.setValue(ld);
+		nameStaffOfBillSer.setText(LoginController.nameStaff);
+		IDBillSer.setText(IHoaDonDV.getInstance().selectMaxID());
 
 		nameStaffOfBill.setText(LoginController.nameStaff);
 		IDBill.setText(IHDCT.getInstance().selectMaxID());
@@ -1530,10 +1673,10 @@ public class HomeController implements Initializable {
 			HDCTModel model = new HDCTModel(mahdct, money, quantity, mahd, tensp);
 			IHDCT.getInstance().insert(model);
 
-			loadDataBillDeltais();
-			sumMoney.setText(Float.valueOf(IHDCT.getInstance().selectPaid(mahd)).toString());
-
 		}
+		loadDataBillDeltais();
+		sumMoney.setText(Float.valueOf(IHDCT.getInstance().selectPaid(mahd)).toString());
+
 	}
 
 	// Thêm hóa đơn
@@ -1700,67 +1843,6 @@ public class HomeController implements Initializable {
 		IDBill.setText(IHDCT.getInstance().selectMaxID());
 	}
 
-	public void printBill() {
-
-		Document doc = new Document();
-
-		Page page = doc.getPages().add();
-
-		TextFragment header = new TextFragment("THE STUDIO BREAKFAST");
-		header.getTextState().setFontSize(14);
-		header.getTextState().setFont(FontRepository.findFont("TimesNewRoman"));
-		header.setPosition(new Position(10, 800));
-
-		TextFragment address = new TextFragment("Địa chỉ: FPT Polytechnic Casi Răng Cần Thơ");
-		address.getTextState().setFontSize(8);
-		address.getTextState().setFont(FontRepository.findFont("TimesNewRoman"));
-		address.setPosition(new Position(10, 790));
-
-		TextFragment title = new TextFragment("Hóa Đơn Bán Hàng");
-		title.getTextState().setFontSize(14);
-		title.getTextState().setFont(FontRepository.findFont("TimesNewRoman"));
-		title.setPosition(new Position(10, 782));
-
-		TextFragment IDBill = new TextFragment("Mã Hóa Đơn: \t" + mahoadon);
-		IDBill.getTextState().setFontSize(8);
-		IDBill.getTextState().setFont(FontRepository.findFont("TimesNewRoman"));
-		IDBill.setPosition(new Position(10, 770));
-
-		TextFragment dateCreate = new TextFragment("Ngày Lập Hóa Đơn: \t" + ngaylap);
-		dateCreate.getTextState().setFontSize(8);
-		dateCreate.getTextState().setFont(FontRepository.findFont("TimesNewRoman"));
-		dateCreate.setPosition(new Position(10, 760));
-
-		TextFragment staff = new TextFragment("Nhân Viên: \t" + LoginController.nameStaff);
-		staff.getTextState().setFontSize(8);
-		staff.getTextState().setFont(FontRepository.findFont("TimesNewRoman"));
-		staff.setPosition(new Position(10, 750));
-
-		TextFragment client = new TextFragment("Tên Khách Hàng: \t" + tenkhachhang);
-		client.getTextState().setFontSize(8);
-		client.getTextState().setFont(FontRepository.findFont("TimesNewRoman"));
-		client.setPosition(new Position(10, 740));
-
-		TextFragment phone = new TextFragment("Số điện thoại: \t" + sodienthoai);
-		phone.getTextState().setFontSize(8);
-		phone.getTextState().setFont(FontRepository.findFont("TimesNewRoman"));
-		phone.setPosition(new Position(10, 730));
-
-		TextBuilder builder = new TextBuilder(page);
-
-		builder.appendText(header);
-		builder.appendText(address);
-		builder.appendText(title);
-		builder.appendText(IDBill);
-		builder.appendText(dateCreate);
-		builder.appendText(staff);
-		builder.appendText(client);
-		builder.appendText(phone);
-
-		doc.save("Bill2.pdf");
-
-	}
-
 	// load line chart
 
 	public void loadLineChart() {
@@ -1913,18 +1995,29 @@ public class HomeController implements Initializable {
 
 		LocalDate ldto = dateTo.getValue();
 		String to = ldto.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		ArrayList<ThongKeModel> list = IThongKe.getInstance().selectFromTo(from.toString(), to.toString());
-		if (list == null) {
-			Notification.alert(AlertType.INFORMATION, "Không có hóa đơn phù hợp");
-			return;
-		} else {
-			for (ThongKeModel thongKeModel : list) {
-				revenue2.add(thongKeModel);
-			}
 
-			tableRevenue2.setItems(revenue2);
+		ArrayList<ThongKeModel> model = IThongKe.getInstance().selectFromTo(from.toString(), to.toString());
+
+		for (ThongKeModel thongKeModel : model) {
+			revenue2.add(thongKeModel);
 		}
 
+		tableRevenue2.setItems(revenue2);
+
+		txtMax.setText(Float.valueOf(IThongKe.getInstance().getMaxBill(from.toString(), to.toString())).toString());
+		txtMin.setText(Float.valueOf(IThongKe.getInstance().getMinBill(from.toString(), to.toString())).toString());
+		txtAvg.setText(Float.valueOf(IThongKe.getInstance().getAVGBill(from.toString(), to.toString())).toString());
+	}
+
+	public void sumFromTo() {
+		LocalDate ldfrom = dateFrom.getValue();
+		String from = ldfrom.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+		LocalDate ldto = dateTo.getValue();
+		String to = ldto.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+		lblTongTien.setText(
+				Float.valueOf(IThongKe.getInstance().sumPaidFromTo(from.toString(), to.toString())).toString());
 	}
 
 	public void loadDataRevenueMonth() {
@@ -1986,6 +2079,56 @@ public class HomeController implements Initializable {
 
 			tableRevenue2.setItems(revenue2);
 		}
+
+		txtMax.setText(Float.valueOf(IThongKe.getInstance().getMaxMonthBill(thang, year)).toString());
+		txtMin.setText(Float.valueOf(IThongKe.getInstance().getMinMonthBill(thang, year)).toString());
+		txtAvg.setText(Float.valueOf(IThongKe.getInstance().getAVGMonthBill(thang, year)).toString());
+	}
+
+	public void sumMonth() {
+		String month = cbbMonth.getValue();
+		String thang = "";
+		switch (month) {
+		case "January":
+			thang = "01";
+			break;
+		case "February":
+			thang = "02";
+			break;
+		case "March":
+			thang = "03";
+			break;
+		case "April":
+			thang = "04";
+			break;
+		case "May":
+			thang = "05";
+			break;
+		case "June":
+			thang = "06";
+			break;
+		case "July":
+			thang = "07";
+			break;
+		case "August":
+			thang = "08";
+			break;
+		case "September":
+			thang = "09";
+			break;
+		case "October":
+			thang = "10";
+			break;
+		case "November":
+			thang = "11";
+			break;
+		default:
+			thang = "12";
+			break;
+		}
+		String year = cbbYear.getValue();
+
+		lblTongTien.setText(Float.valueOf(IThongKe.getInstance().sumPaidMonth(thang, year)).toString());
 	}
 
 	public void loadDataRevenueYear() {
@@ -2005,6 +2148,15 @@ public class HomeController implements Initializable {
 			}
 			tableRevenue2.setItems(revenue2);
 		}
+
+		txtMax.setText(Float.valueOf(IThongKe.getInstance().getMaxYearBill(year)).toString());
+		txtMin.setText(Float.valueOf(IThongKe.getInstance().getMinYearBill(year)).toString());
+		txtAvg.setText(Float.valueOf(IThongKe.getInstance().getAVGYearBill(year)).toString());
+	}
+
+	public void sumYear() {
+		String year = cbbYear2.getValue();
+		lblTongTien.setText(Float.valueOf(IThongKe.getInstance().sumPaidYear(year)).toString());
 	}
 
 	public void loadCbbDate() {
@@ -2021,6 +2173,222 @@ public class HomeController implements Initializable {
 		for (String string : year) {
 			cbbYear.getItems().add(string);
 			cbbYear2.getItems().add(string);
+		}
+	}
+
+	public void findProOfBill() {
+
+		if (tableProBill.getItems().size() >= 1) {
+			tableProBill.getItems().clear();
+		}
+
+		String masp = txtFindStaffOfBill.getText();
+		String tensp = txtFindStaffOfBill.getText();
+
+		ArrayList<SanPhamModel> list = ISanPham.getInstance().selectByName(masp, "%" + tensp + "%");
+
+		for (SanPhamModel sanPhamModel : list) {
+			proBill.add(sanPhamModel);
+		}
+		tableProBill.setItems(proBill);
+	}
+
+	public void printBill() {
+
+		ArrayList<HDCTModel> list = IHDCT.getInstance().selectAllByIDBill(lblIDBill.getText());
+		for (HDCTModel hdctModel : list) {
+
+		}
+		try (Document doc = new Document()) {
+			Page page = doc.getPages().add();
+
+			HtmlFragment frag = new HtmlFragment("<ol>"
+					+ "<li style =\"list-style-type:none; text-align:center; font-size: 28px; font-weight: bold; font-family: \"Times New Roman\", Times, serif;\">THE STUDIO BREAKFAST</li>"
+					+ "<li style =\"list-style-type:none; text-align:center; font-size: 18px; font-weight: 300;\">Địa chỉ: FPT Polytechnic Cái Răng Cần Thơ</li>"
+					+ "<li style =\"list-style-type:none; text-align:center; font-size: 23px; font-weight: bold; font-family: \"Times New Roman\", Times, serif;\">Hóa Đơn Bán Hàng</li>"
+					+ "<li style =\"list-style-type:none; text-align:center; font-size: 18px; font-weight: 300;\">Mã Hóa Đơn: "
+					+ IDBill.getText() + " </li>"
+					+ "<li style =\"list-style-type:none; text-align:center; font-size: 18px; font-weight: 300;\">Ngày Lập HĐ: "
+					+ dateBill.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString() + " </li>"
+					+ "<li style =\"list-style-type:none; text-align:left; font-size: 18px; font-weight: 300;\">Tên Nhân Viên: "
+					+ nameStaffOfBill.getText() + " </li>"
+					+ "<li style =\"list-style-type:none; text-align:left; font-size: 18px; font-weight: 300;\">Tên Khách Hàng: "
+					+ nameClientOfBill.getText() + " </li>"
+					+ "<li style =\"list-style-type:none; text-align:left; font-size: 18px; font-weight: 300;\">Số Điện Thoại: "
+					+ phoneClientOfBill.getText() + " </li>" + "<li></li>" + "<li></li>"
+					+ "<li style = \"text-align:center;\">"
+					+ "-------------------------------------------------------------------------" + "</li>"
+					+ "<li></li>" + " <li style=\"list-style-type:none;\">\r\n"
+					+ "    <table style=\"text-align: center;\">\r\n" + "      <tr>\r\n"
+					+ "        <th style=\"padding: 15px;\">\r\n" + "          Tên Sản Phẩm\r\n" + "        </th>\r\n"
+					+ "        <th style=\"padding: 15px;\">\r\n" + "          Giá Bán\r\n" + "        </th>\r\n"
+					+ "        <th style=\"padding: 15px;\">\r\n" + "          Số Lượng\r\n" + "        </th>\r\n"
+					+ "        <th style=\"padding: 15px;\">\r\n" + "          Thanh Toán\r\n" + "        </th>\r\n"
+					+ "      </tr>\r\n" + "\r\n" + "      <tr>\r\n" + "      </tr>\r\n" + "</table>\r\n" + "  </li>"
+					+ "</ol>");
+
+			doc.getPages().get_Item(1).getParagraphs().add(frag);
+
+			doc.save("Bill2.pdf");
+		}
+
+	}
+
+	public void setCellTablePrint() {
+		print = FXCollections.observableArrayList();
+		sanPhamCol.setCellValueFactory(new PropertyValueFactory<HDCTModel, String>("tenSP"));
+		dongiaCol.setCellValueFactory(new PropertyValueFactory<HDCTModel, Float>("donGia"));
+		soLuongCol.setCellValueFactory(new PropertyValueFactory<HDCTModel, Integer>("soLuong"));
+		thanhTienCol.setCellValueFactory(new PropertyValueFactory<HDCTModel, Float>("thanhTien"));
+	}
+
+	public void loadTablePrint() {
+		if (tablePrint.getItems().size() >= 1) {
+			tablePrint.getItems().clear();
+		}
+
+		String mahd = IDBill.getText();
+
+		ArrayList<HDCTModel> list = IHDCT.getInstance().selectAllByIDBill(mahd);
+		for (HDCTModel hdctModel : list) {
+			print.add(hdctModel);
+		}
+		tablePrint.setItems(print);
+
+		lblIDBill.setText(mahd);
+		lblDateBill.setText(dateBill.getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
+		lblnameStaff.setText(nameStaffOfBill.getText());
+		lblnameClient.setText(nameClientOfBill.getText());
+		lblphoneClient.setText(phoneClientOfBill.getText());
+		lblSum.setText(Float.valueOf(sumMoney.getText()).toString());
+		lblTK.setText(clientMoney.getText());
+		lblTL.setText(changeMoney.getText());
+	}
+	
+	
+	// HOA DON DICH VU
+	public void setCellTableBillSer() {
+		billSer = FXCollections.observableArrayList();
+		IDHDDVCol.setCellValueFactory(new PropertyValueFactory<HDDVModel, String>("maHDDV"));
+		dateHDDVCol.setCellValueFactory(new PropertyValueFactory<HDDVModel, Date>("ngayLap"));
+		paidHDDVCol.setCellValueFactory(new PropertyValueFactory<HDDVModel, Float>("thanhToan"));
+		storyHDDVCol.setCellValueFactory(new PropertyValueFactory<HDDVModel, String>("trangThai"));
+	}
+	
+	public void loadDataBillSer() {
+		if (tableHDDV.getItems().size() >= 1) {
+			tableHDDV.getItems().clear();
+		}
+		
+		ArrayList<HDDVModel> list = IHoaDonDV.getInstance().selectAll();
+		for (HDDVModel hddvModel : list) {
+			billSer.add(hddvModel);
+		}
+		tableHDDV.setItems(billSer);
+	}
+	
+	public void insertBillSer() {
+		String mahddv = IDBillSer.getText();
+		
+		java.sql.Date ngayLap = java.sql.Date.valueOf(dateBillSer.getValue());
+		String tenkh = nameClientOfbillSer.getText();
+		String tennv = nameStaffOfBillSer.getText();
+		
+		HDDVModel model = new HDDVModel(mahddv, ngayLap, 0, tenkh, tennv, "Chưa Thanh Toán");
+		IHoaDonDV.getInstance().insert(model);
+	}
+	
+	
+	//load table dich vu trong hoa don dich vu
+	public void setCellTableSerOfBillSer() {
+		serOfBillSer = FXCollections.observableArrayList();
+		IDSerOfBilSerCol.setCellValueFactory(new PropertyValueFactory<DichVuModel, String>("maDV"));
+		nameSerOfBillSerCol.setCellValueFactory(new PropertyValueFactory<DichVuModel, String>("tenDV"));
+		nameProOfBillSercol.setCellValueFactory(new PropertyValueFactory<DichVuModel, String>("tenSp"));
+		priceSerOfBillSerCol.setCellValueFactory(new PropertyValueFactory<DichVuModel, Float>("giaDV"));
+	}
+	
+	public void loadDataTableSerOfBillSer() {
+		if(tableSerOfBillSer.getItems().size() >= 1) {
+			tableSerOfBillSer.getItems().clear();
+		}
+		
+		ArrayList<DichVuModel> list = IDichVu.getInstance().selectAll();
+		for (DichVuModel dichVuModel : list) {
+			serOfBillSer.add(dichVuModel);
+		}
+		
+		tableSerOfBillSer.setItems(serOfBillSer);
+	}
+	
+	String madv = "";
+	String tendv = "";
+	float giadv = 0;
+	public void clickItemSerOfBill(MouseEvent event) {
+		if (event.getClickCount() == 1) {
+			DichVuModel col = tableSerOfBillSer.getSelectionModel().getSelectedItem();
+			madv = col.getMaDV();
+			tendv = col.getTenDV();
+			giadv = col.getGiaDV();
+		}
+	}
+	// load table chi tiet dich vu
+	
+	public void setCellTableBillSerDeltais() {
+		billSerDeltais = FXCollections.observableArrayList();
+		IDSerOfDeltaisCol.setCellValueFactory(new PropertyValueFactory<ChiTietDVModel, String> ("maDV"));
+		namSerOfDeltaisCol.setCellValueFactory(new PropertyValueFactory<ChiTietDVModel, String> ("tenDV"));
+		priceSerOfDeltaisCol.setCellValueFactory(new PropertyValueFactory<ChiTietDVModel, Float> ("giaDV"));
+		ngayThue.setCellValueFactory(new PropertyValueFactory<ChiTietDVModel, Date> ("ngayThue"));
+		ngayTra.setCellValueFactory(new PropertyValueFactory<ChiTietDVModel, Date> ("ngayTraCT"));
+		paidBillSerOfDeltaisCol.setCellValueFactory(new PropertyValueFactory<ChiTietDVModel, Float> ("thanhTien"));
+	}
+	
+	public void loadTableBilSerDeltais() {
+		if (tableSerDeltais.getItems().size() >= 1) {
+			tableSerDeltais.getItems().clear();
+		}
+		
+		ArrayList<ChiTietDVModel> list = IChiTietDV.getInstance().selectAllByID(IDBillSer.getText());
+		for (ChiTietDVModel model : list) {
+			billSerDeltais.add(model);
+		}
+		tableSerDeltais.setItems(billSerDeltais);
+	}
+	
+	public void inserBillSerDeltais() {
+		String macthddv = AutoString.autoID("CTHDDV", "MaCTHDDV", "CHITIETHOADONDV");
+		
+		if (dateBillSer.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString().equals("") 
+				|| ngayTraDK.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString().equals("")
+				|| ngayTraCT.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString().equals("")) {
+			Notification.alert(AlertType.INFORMATION, "Vui lòng chọn ngày");
+			return;
+		}
+		
+		java.sql.Date ngayThue = java.sql.Date.valueOf(dateBillSer.getValue());
+		java.sql.Date ngaydk = java.sql.Date.valueOf(ngayTraDK.getValue());
+		java.sql.Date ngayct = java.sql.Date.valueOf(ngayTraCT.getValue());
+		
+		ChiTietDVModel model = new ChiTietDVModel(macthddv, giadv, ngayThue, ngaydk, ngayct, macthddv, IDBillSer.getText());
+		IChiTietDV.getInstance().insert(model);
+		
+		loadTableBilSerDeltais();
+	}
+	
+	public void delBillSerDeltais() {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Thông Báo");
+		alert.setHeaderText("Thông báo đến bạn");
+		alert.setContentText("Bạn có muốn xóa hông");
+		alert.showAndWait();
+		
+		if (alert.getResult() == ButtonType.OK) {
+			ChiTietDVModel model = new ChiTietDVModel(null, 0, null, null, null, tendv, null);
+			IChiTietDV.getInstance().del(model);
+			
+			Message msg = new Message();
+			msg.start(stage);
 		}
 	}
 

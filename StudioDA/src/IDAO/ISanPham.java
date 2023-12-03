@@ -89,7 +89,7 @@ public class ISanPham implements DAOInterface<SanPhamModel> {
 				String name = rs.getString("Tensp");
 				String maTH = rs.getString("TenTH");
 				Float donGia = rs.getFloat("dongia");
-				result = new SanPhamModel(id, name, donGia, maTH);
+				result = new SanPhamModel(id,name, donGia, maTH);
 			}
 			pst.close();
 			rs.close();
@@ -170,5 +170,31 @@ public class ISanPham implements DAOInterface<SanPhamModel> {
 		}
 		return result;
 	}
-
+	
+	public ArrayList<SanPhamModel> selectByName(String id, String name) {
+		ArrayList<SanPhamModel> result = new ArrayList<SanPhamModel>();
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("select MaSP, tensp, DonGia, tenth from SANPHAM\r\n"
+					+ "inner join THUONGHIEU on SANPHAM.MaTH = THUONGHIEU.MaTH where MaSP like ? or tensp like ?");
+			pst.setString(1, id);
+			pst.setString(2, name);
+			ResultSet rs = pst.executeQuery();
+			while(rs.next()) {
+				String idsp = rs.getString("Masp");
+				String namesp = rs.getString("Tensp");
+				Float donGia = rs.getFloat("dongia");
+				String tenth = rs.getString("tenth");
+				
+				SanPhamModel sp = new SanPhamModel(idsp, namesp, donGia, tenth);
+				result.add(sp);
+			}
+			pst.close();
+			rs.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }
