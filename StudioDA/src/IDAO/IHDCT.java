@@ -120,7 +120,7 @@ public class IHDCT implements DAOInterface<HDCTModel> {
 		Connection conn = JDBCUtil.getConnection();
 		try {
 			PreparedStatement ps = conn
-					.prepareStatement("select sum(dongia * soluong) as thanhtona from HDCT where MaHD like ?");
+					.prepareStatement("select sum(dongia * soluong) as thanhtoan from HDCT where MaHD like ?");
 			ps.setString(1, mahd);
 
 			ResultSet rs = ps.executeQuery();

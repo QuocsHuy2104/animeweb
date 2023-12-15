@@ -23,9 +23,9 @@ public class IChiTietDV implements DAOInterface<ChiTietDVModel> {
 		Connection conn = JDBCUtil.getConnection();
 		try {
 			PreparedStatement pst = conn.prepareStatement(
-					"insert into CHITIETHOADONDV values (?, ?, ?, ?, ?, (select madv where tendv like ?), ?)");
+					"insert into CHITIETHOADONDV values (?, ?, ?, ?, ?, (select madv from DICHVU where TenDV like ?), ?)");
 			pst.setString(1, reneric.getMaHDCTDV());
-			pst.setString(2, reneric.getMaDV());
+			pst.setFloat(2, reneric.getGiaDV());
 			pst.setDate(3, reneric.getNgayThue());
 			pst.setDate(4, reneric.getNgayTraDK());
 			pst.setDate(5, reneric.getNgayTraCT());
@@ -47,7 +47,7 @@ public class IChiTietDV implements DAOInterface<ChiTietDVModel> {
 		int result = 0;
 		Connection conn = JDBCUtil.getConnection();
 		try {
-			PreparedStatement ps = conn.prepareStatement("delete from chitiethoadondv where madv like (select madv where tendv like ?))");
+			PreparedStatement ps = conn.prepareStatement("delete from chitiethoadondv where madv like (select madv from DICHVU where tendv like ?)");
 			ps.setString(1, reneric.getTenDV());
 
 			result = ps.executeUpdate();
@@ -66,9 +66,14 @@ public class IChiTietDV implements DAOInterface<ChiTietDVModel> {
 		Connection conn = JDBCUtil.getConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement(
-					"update CHITIETHOADONDV set NgayTraCT = ?, NgayTraDK = ? where MaCTHDDV = (select MaCTHDDV from CHITIETHOADONDV where MaDV like ?)");
-			ps.setDate(1, reneric.getNgayTraCT());
-			ps.setDate(2, reneric.getNgayTraDK());
+					"update CHITIETHOADONDV\r\n"
+					+ "set NgayTraDK = ?,\r\n"
+					+ "NgayTraCT = ?\r\n"
+					+ "where MaCTHDDV = (\r\n"
+					+ "select MaCTHDDV from CHITIETHOADONDV\r\n"
+					+ "where MaDV = ?)");
+			ps.setDate(1, reneric.getNgayTraDK());
+			ps.setDate(2, reneric.getNgayTraCT());
 			ps.setString(3, reneric.getMaDV());
 
 			result = ps.executeUpdate();
@@ -141,6 +146,68 @@ public class IChiTietDV implements DAOInterface<ChiTietDVModel> {
 
 			ps.close();
 			rs.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	public int delBillSerByID(String mahddv) {
+		int result = 0;
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("delete from chitiethoadondv where mahddv like ?");
+			ps.setString(1, mahddv);
+			
+			result = ps.executeUpdate();
+			ps.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public float selectPaid(String mahddv, Date ngaytract, Date ngaythue) {
+		float result = 0;
+
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement ps = conn
+					.prepareStatement("select sum(giadv * (day(?) - DAY(?))) as thanhtoan from CHITIETHOADONDV where MaHDDV like ?");
+			ps.setDate(1, ngaytract);
+			ps.setDate(2, ngaythue);
+			ps.setString(3, mahddv);
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				result = rs.getFloat(1);
+			}
+			ps.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	public float sumPriceSer(String mahddv) {
+		float result = 0;
+
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement ps = conn
+					.prepareStatement("select sum(giadv) as thanhtoan from CHITIETHOADONDV where MaHDDV like ?");
+			ps.setString(1, mahddv);
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				result = rs.getFloat(1);
+			}
+			ps.close();
 			JDBCUtil.closeConnection(conn);
 		} catch (SQLException e) {
 			e.printStackTrace();

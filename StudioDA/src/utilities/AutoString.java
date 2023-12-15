@@ -40,7 +40,7 @@ public class AutoString {
 				makh += rs.getString(1);
 			}
 
-			String[] split = makh.split("000");
+			String[] split = makh.split("00");
 			for (int i = 1; i < split.length; i++) {
 				id = Integer.parseInt(split[i]);
 

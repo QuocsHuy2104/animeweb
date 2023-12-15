@@ -181,5 +181,33 @@ public class IDichVu implements DAOInterface<DichVuModel> {
 		}
 		return result;
 	}
+	
+	public ArrayList<DichVuModel> selectAllByIDName(String id, String name) {
+		ArrayList<DichVuModel> result = new ArrayList<DichVuModel>();
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("select MaDV,TenDV,TenSP,GiaDV from DICHVU A \r\n"
+					+ "INNER JOIN SANPHAM B ON A.MaSP = B.MaSP\r\n"
+					+ "WHERE MADV like ? or TenDV LIKE ?");
+			pst.setString(1, id);
+			pst.setString(2, name);
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				String madv = rs.getString("MaDV");
+				String tendv = rs.getString("TenDV");
+				String tensp = rs.getString("TenSP");
+				Float giadv = rs.getFloat("Giadv");
+
+				DichVuModel sp = new DichVuModel(madv, tendv, giadv, null, tensp);
+				result.add(sp);
+			}
+			pst.close();
+			rs.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 }

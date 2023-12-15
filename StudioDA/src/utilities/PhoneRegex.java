@@ -1,5 +1,7 @@
 package utilities;
 
+import javafx.scene.control.Alert.AlertType;
+
 public class PhoneRegex extends Exception {
 
 	/**
@@ -17,7 +19,7 @@ public class PhoneRegex extends Exception {
 		boolean kt = str.matches(reg);
 
 		if (kt == false) {
-			throw new PhoneRegex("Loi: Khong dung dinh dang!");
+			Notification.alert(AlertType.CONFIRMATION, "Lỗi, số điện thoại không đúng định dạng");
 		} 
 	}
 }

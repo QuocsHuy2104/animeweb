@@ -20,6 +20,7 @@ public class Email {
 		
 		int code = (int) Math.floor(((Math.random() * 899999) + 100000));
 		String otp = String.valueOf(code);
+		
 		return otp;
 	}
 	

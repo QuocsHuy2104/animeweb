@@ -83,8 +83,8 @@ public class IKhachHang implements DAOInterface<KhachHangModel> {
 		KhachHangModel result = null;
 		Connection conn = JDBCUtil.getConnection();
 		try {
-			PreparedStatement pst = conn.prepareStatement("Select * from khachhang where makh = ?");
-			pst.setString(1, generic.getMaKH());
+			PreparedStatement pst = conn.prepareStatement("SELECT * FROM KHACHHANG WHERE SDT LIKE ?");
+			pst.setString(1, generic.getSdt());
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 				String id = rs.getString("TenKH");

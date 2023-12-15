@@ -22,6 +22,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import utilities.MessageDigest;
+import utilities.Notification;
 import utilities.PasswordRegex;
 import application.ErrorForm;
 
@@ -42,6 +43,7 @@ public class ChangePassController implements Initializable {
 	private Stage stage;
 
 	public void changePass(ActionEvent event) {
+		
 		String username = LoginController.user;
 		String currentPass = txtCurrentPass.getText().trim();
 		String newPass = txtNewPass.getText().trim();
@@ -59,8 +61,7 @@ public class ChangePassController implements Initializable {
 
 		PasswordRegex passwordRegex = new PasswordRegex();
 		if (passwordRegex.validate(newPass) == false) {
-			WarningForm wn = new WarningForm();
-			wn.start(stage);
+			Notification.alert(AlertType.CONFIRMATION, "Mật khẩu không đúng định dạng !");
 			return;
 		}
 
@@ -79,8 +80,6 @@ public class ChangePassController implements Initializable {
 
 		try {
 			String auth = MessageDigest.getMD5(authPass);
-
-			INhanVien.getInstance().changePassword(auth, currentPass, username);
 
 			stage = (Stage) parent.getScene().getWindow();
 			stage.close();

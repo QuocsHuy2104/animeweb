@@ -60,7 +60,7 @@ public class ISanPham implements DAOInterface<SanPhamModel> {
 		int result = 0;
 		Connection conn = JDBCUtil.getConnection();
 		try {
-			PreparedStatement pst = conn.prepareStatement("update sanpham set tensp = ?, dongia = ? where masp = ?");
+			PreparedStatement pst = conn.prepareStatement("update sanpham set tensp = ?, dongia = ?where masp = ?");
 			pst.setString(1, reneric.getTenSp());
 			pst.setFloat(2, reneric.getDonGia());
 			pst.setString(3, reneric.getMaSP());
@@ -81,8 +81,9 @@ public class ISanPham implements DAOInterface<SanPhamModel> {
 		Connection conn = JDBCUtil.getConnection();
 		try {
 			PreparedStatement pst = conn.prepareStatement("select MaSP, tensp, DonGia, tenth from SANPHAM\r\n"
-					+ "inner join THUONGHIEU on SANPHAM.MaTH = THUONGHIEU.MaTH where MaSP like ?");
+					+ "inner join THUONGHIEU on SANPHAM.MaTH = THUONGHIEU.MaTH where MaSP like ? or tensp like ?");
 			pst.setString(1, generic.getMaSP());
+			pst.setString(2, generic.getTenSp());
 			ResultSet rs = pst.executeQuery();
 			while(rs.next()) {
 				String id = rs.getString("Masp");
@@ -171,22 +172,22 @@ public class ISanPham implements DAOInterface<SanPhamModel> {
 		return result;
 	}
 	
-	public ArrayList<SanPhamModel> selectByName(String id, String name) {
+	public ArrayList<SanPhamModel> selectAllByID(String masp, String tensp) {
 		ArrayList<SanPhamModel> result = new ArrayList<SanPhamModel>();
 		Connection conn = JDBCUtil.getConnection();
 		try {
 			PreparedStatement pst = conn.prepareStatement("select MaSP, tensp, DonGia, tenth from SANPHAM\r\n"
 					+ "inner join THUONGHIEU on SANPHAM.MaTH = THUONGHIEU.MaTH where MaSP like ? or tensp like ?");
-			pst.setString(1, id);
-			pst.setString(2, name);
+			pst.setString(1, masp);
+			pst.setString(2, tensp);
 			ResultSet rs = pst.executeQuery();
 			while(rs.next()) {
-				String idsp = rs.getString("Masp");
-				String namesp = rs.getString("Tensp");
+				String id = rs.getString("Masp");
+				String name = rs.getString("Tensp");
+				String maTH = rs.getString("TenTH");
 				Float donGia = rs.getFloat("dongia");
-				String tenth = rs.getString("tenth");
-				
-				SanPhamModel sp = new SanPhamModel(idsp, namesp, donGia, tenth);
+
+				SanPhamModel sp = new SanPhamModel(id, name, donGia, maTH);
 				result.add(sp);
 			}
 			pst.close();

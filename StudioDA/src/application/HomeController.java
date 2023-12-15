@@ -1,5 +1,7 @@
 package application;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
@@ -14,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
 import com.aspose.pdf.Document;
 import com.aspose.pdf.FontRepository;
@@ -22,6 +25,12 @@ import com.aspose.pdf.Page;
 import com.aspose.pdf.Position;
 import com.aspose.pdf.TextBuilder;
 import com.aspose.pdf.TextFragment;
+
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 
 import IDAO.IChiTietDV;
 import IDAO.IDichVu;
@@ -78,6 +87,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.*;
 import utilities.AutoString;
+import utilities.EmailRegex;
 import utilities.MessageDigest;
 import utilities.Notification;
 import utilities.PasswordRegex;
@@ -113,21 +123,6 @@ public class HomeController implements Initializable {
 
 	@FXML
 	private AreaChart myAreaChart;
-
-	@FXML
-	private TableView tblRevenue;
-
-	@FXML
-	private TableColumn<SanPhamModel, String> productCol;
-
-	@FXML
-	private TableColumn<SanPhamModel, Float> priceCol;
-
-	@FXML
-	private TableColumn discountCol;
-
-	@FXML
-	private TableColumn salesCol;
 
 	@FXML
 	private AnchorPane root;
@@ -376,14 +371,12 @@ public class HomeController implements Initializable {
 	private ObservableList<SanPhamModel> proBill;
 
 	private ObservableList<ThongKeModel> revenue2;
-	
-	private ObservableList<HDDVModel> billSer;
-	
-	private ObservableList<DichVuModel> serOfBillSer;
-	
-	private ObservableList<ChiTietDVModel> billSerDeltais;
 
-	private ObservableList revenue;
+	private ObservableList<HDDVModel> billSer;
+
+	private ObservableList<DichVuModel> serOfBillSer;
+
+	private ObservableList<ChiTietDVModel> billSerDeltais;
 
 	// Export File PDF
 
@@ -409,72 +402,84 @@ public class HomeController implements Initializable {
 	private TableColumn<HDCTModel, Float> thanhTienCol;
 
 	ObservableList<HDCTModel> print;
-	
+
 	// hóa đơn dịch vụ
-	
+
 	@FXML
-    private TableView<HDDVModel> tableHDDV;
-	
+	private TableView<HDDVModel> tableHDDV;
+
 	@FXML
-    private TableColumn<HDDVModel, String> IDHDDVCol;
-	
+	private TableColumn<HDDVModel, String> IDHDDVCol;
+
 	@FXML
-    private TableColumn<HDDVModel, Date> dateHDDVCol;
-	
+	private TableColumn<HDDVModel, Date> dateHDDVCol;
+
 	@FXML
-    private TableColumn<HDDVModel, Float> paidHDDVCol;
-	
+	private TableColumn<HDDVModel, Float> paidHDDVCol;
+
 	@FXML
-    private TableColumn<HDDVModel, String> storyHDDVCol;
-	
+	private TableColumn<HDDVModel, String> storyHDDVCol;
+
 	@FXML
-	private TextField IDBillSer, nameStaffOfBillSer, findSerOfBillSer, nameClientOfbillSer, phoneOfBillSer;
-	
+	private TextField IDBillSer, nameStaffOfBillSer, findSerOfBillSer, nameClientOfbillSer, phoneOfBillSer, txtTongTien,
+			txtTKD, txtTienThua;
+
 	@FXML
-	private DatePicker  dateBillSer, ngayTraCT, ngayTraDK;
+	private DatePicker dateBillSer, ngayTraCT, ngayTraDK;
 
 	@FXML
 	private Label lblIDBill, lblDateBill, lblnameStaff, lblnameClient, lblphoneClient, lblSum, lblTK, lblTL;
-	
+
 	// Table dich vu trong hoa don dich vu
-	
+
 	@FXML
 	private TableView<DichVuModel> tableSerOfBillSer;
-	
+
 	@FXML
 	private TableColumn<DichVuModel, String> IDSerOfBilSerCol;
-	
+
 	@FXML
 	private TableColumn<DichVuModel, String> nameSerOfBillSerCol;
-	
+
 	@FXML
 	private TableColumn<DichVuModel, String> nameProOfBillSercol;
-	
+
 	@FXML
 	private TableColumn<DichVuModel, Float> priceSerOfBillSerCol;
-	
+
 	// Table chi tiet dich vu
-	
+
 	@FXML
 	private TableView<ChiTietDVModel> tableSerDeltais;
-	
+
 	@FXML
 	private TableColumn<ChiTietDVModel, String> IDSerOfDeltaisCol;
-	
+
 	@FXML
 	private TableColumn<ChiTietDVModel, String> namSerOfDeltaisCol;
-	
+
 	@FXML
 	private TableColumn<ChiTietDVModel, Float> priceSerOfDeltaisCol;
-	
+
 	@FXML
 	private TableColumn<ChiTietDVModel, Date> ngayThue;
-	
+
 	@FXML
 	private TableColumn<ChiTietDVModel, Date> ngayTra;
-	
+
 	@FXML
 	private TableColumn<ChiTietDVModel, Float> paidBillSerOfDeltaisCol;
+
+	private Pattern pattern;
+	private static final String USERNAME_PATTERN = "^[0-9!@#$%^&*()_+-=]$";
+
+	public void UsernameValidator() {
+		pattern = Pattern.compile(USERNAME_PATTERN);
+	}
+
+	public boolean validate(final String username) {
+		return pattern.matcher(username).matches();
+	}
 
 	Stage stage;
 	Scene scene;
@@ -508,9 +513,9 @@ public class HomeController implements Initializable {
 		paneBill.setVisible(false);
 		paneRevenue.setVisible(false);
 		paneHDDV.setVisible(false);
-		
+
 		hiddenRecControl();
-		
+
 		recHome.setVisible(true);
 		btnHome.setStyle("-fx-text-fill: #33b0f2; -fx-background-color: none");
 		imgHome.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\home-page.png"));
@@ -668,22 +673,28 @@ public class HomeController implements Initializable {
 	}
 
 	public void openPaid() {
-		paneStaff.setVisible(false);
-		paneHome.setVisible(false);
-		paneClient.setVisible(false);
-		paneProduct.setVisible(false);
-		paneService.setVisible(false);
-		paneBill.setVisible(false);
-		paneRevenue.setVisible(false);
-		paneHDDV.setVisible(true);
 
-		hiddenRecControl();
+		if (LoginController.roles == 1) {
+			paneStaff.setVisible(false);
+			paneHome.setVisible(false);
+			paneClient.setVisible(false);
+			paneProduct.setVisible(false);
+			paneService.setVisible(false);
+			paneBill.setVisible(false);
+			paneRevenue.setVisible(false);
+			paneHDDV.setVisible(true);
 
-		recPaid.setVisible(true);
-		btnBillDeltais.setStyle("-fx-text-fill: #33b0f2; -fx-background-color: none");
-		imgPaid.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\bill-service1.png"));
-		
-		loadDataTableSerOfBillSer();
+			hiddenRecControl();
+
+			recPaid.setVisible(true);
+			btnBillDeltais.setStyle("-fx-text-fill: #33b0f2; -fx-background-color: none");
+			imgPaid.setImage(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\bill-service1.png"));
+
+			loadDataTableSerOfBillSer();
+		} else {
+			ErrorForm errorForm = new ErrorForm();
+			errorForm.start(stage);
+		}
 	}
 
 	// Controll Setting
@@ -802,6 +813,7 @@ public class HomeController implements Initializable {
 	}
 
 	// screen open Change password ('ĐỔI MẬT KHẨU')
+
 	public void changepass() {
 
 		stage = (Stage) root.getScene().getWindow();
@@ -820,7 +832,6 @@ public class HomeController implements Initializable {
 			e1.printStackTrace();
 		}
 	}
-
 
 	// End code show Stage
 
@@ -842,9 +853,6 @@ public class HomeController implements Initializable {
 
 		setBillDeltaislTable();
 		loadDataBillDeltais();
-
-		setCellRevenue();
-		loadDataRevenue();
 
 		setServiceTable();
 		loadService();
@@ -875,12 +883,6 @@ public class HomeController implements Initializable {
 			if (rbtnFrom.isSelected()) {
 				loadDataRevenueFromTo();
 				sumFromTo();
-			} else if (rbtnMonth.isSelected()) {
-				loadDataRevenueMonth();
-				sumMonth();
-			} else {
-				loadDataRevenueYear();
-				sumYear();
 			}
 		});
 
@@ -901,14 +903,17 @@ public class HomeController implements Initializable {
 			removeAll();
 		});
 
-		loadCbbDate();
-
 		circleLogo
 				.setFill(new ImagePattern(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\logo.png")));
 
 		recLogo.setFill(new ImagePattern(new Image("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\logo.png")));
 		lblMail.setText(LoginController.email);
 		lblNameStaff.setText(LoginController.nameStaff);
+
+		txtTongTien.setText(Float
+				.valueOf(IChiTietDV.getInstance().selectPaid(IDBillSer.getText(),
+						java.sql.Date.valueOf(ngayTraCT.getValue()), java.sql.Date.valueOf(dateBillSer.getValue())))
+				.toString());
 
 //		try {
 //			ReadExcel.downDB();
@@ -919,18 +924,17 @@ public class HomeController implements Initializable {
 		loadCbbTrademark();
 
 		loadCbbSer();
-		
+
 		// hoa don dich vu
+		setCellTableBillSer();
+		loadDataBillSer();
+
 		setCellTableSerOfBillSer();
 		loadDataTableSerOfBillSer();
-		
-		setCellTableSerOfBillSer();
-		loadDataTableSerOfBillSer();
-		
+
 		setCellTableBillSerDeltais();
 		loadTableBilSerDeltais();
-		
-		
+
 		// loadLineChart();
 
 		ToggleGroup group = new ToggleGroup();
@@ -943,38 +947,13 @@ public class HomeController implements Initializable {
 
 		ToggleGroup group2 = new ToggleGroup();
 		rbtnFrom.setToggleGroup(group2);
-		rbtnMonth.setToggleGroup(group2);
-		rbtnYear.setToggleGroup(group2);
 
 	}
 
-	// Home Controll
+// Code for Staff Controller --------------------------------------------------------------------------------------------------------------------------------
 
-	public void setCellRevenue() {
-		revenue = FXCollections.observableArrayList();
-		productCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, String>("tenSp"));
-		priceCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, Float>("donGia"));
+// set column table Staff ('NHÂN VIÊN')
 
-	}
-
-	public void loadDataRevenue() {
-		if (tblRevenue.getItems().size() >= 1) {
-			tblRevenue.getItems().clear();
-		}
-
-		ArrayList<SanPhamModel> list = ISanPham.getInstance().selectAll();
-		for (SanPhamModel sanPhamModel : list) {
-
-			revenue.add(sanPhamModel);
-
-		}
-
-		tblRevenue.setItems(revenue);
-	}
-
-	// Staff Controll
-
-	// set column table Staff ('NHÂN VIÊN')
 	public void setCellTable() {
 		staff = FXCollections.observableArrayList();
 		idCol.setCellValueFactory(new PropertyValueFactory<NhanVienModel, String>("maNV"));
@@ -984,7 +963,7 @@ public class HomeController implements Initializable {
 		emailStaffCol.setCellValueFactory(new PropertyValueFactory<NhanVienModel, String>("email"));
 	}
 
-	// load data from database enter table in screen
+// load data from database enter table in screen
 
 	public void loadDataStaff() {
 
@@ -999,36 +978,55 @@ public class HomeController implements Initializable {
 		tableStaff.setItems(staff);
 	}
 
+// Function insert staff into database
+
 	public void insertStaff() {
+
 		String id = IDStaff.getText().trim();
 		String ten = nameStaff.getText().trim();
 		String diachi = addressStaff.getText();
 		String sdt = phoneStaff.getText().trim();
 		String email = emailStaff.getText();
+
+		// Check phone
 		try {
 			PhoneRegex.checkPhone(sdt);
 		} catch (PhoneRegex e) {
 			e.printStackTrace();
 		}
+
+		// Check input value
 		String pass = password.getText();
 		if (id.equals("") || ten.equals("") || diachi.equals("") || sdt.equals("") || pass.equals("")) {
 			Notification.alert(AlertType.WARNING, "Vui lòng nhập đầy đủ thông tin");
 			return;
 		}
+
+		// Create new Password Regex
 		PasswordRegex passwordRegex = new PasswordRegex();
 
 		if (passwordRegex.validate(pass) == false) {
-			Notification.alert(AlertType.ERROR, "Tối thiểu 8 ký tự, ít nhất 1 chữ cái, 1 số và 1 ký tự đặc biệt:");
+			Notification.alert(AlertType.ERROR,
+					"Tối thiểu 8 ký tự, ít nhất 1 chữ cái in hoa và thường, 1 số và 1 ký tự đặc biệt:");
 		} else {
 			try {
+
+				// MD5
 				String passMD = MessageDigest.getMD5(pass);
 				boolean roles = rbtnManage.isSelected() ? true : false;
 
+				// Insert NhanVien ==> INhanVien for package IDAO
 				NhanVienModel model = new NhanVienModel(id, ten, diachi, sdt, email, passMD, roles, true);
 				INhanVien.getInstance().insert(model);
+
+				// Load values on table
 				loadDataStaff();
+
+				// Notify insert successfully
 				Message msg = new Message();
 				msg.start(stage);
+
+				// Resfresh
 				cleanStaff();
 			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
@@ -1046,6 +1044,7 @@ public class HomeController implements Initializable {
 		}
 	}
 
+//Function to update staff
 	public void updateStaff() {
 		String id = IDStaff.getText().trim();
 		String ten = nameStaff.getText().trim();
@@ -1084,32 +1083,44 @@ public class HomeController implements Initializable {
 		rbtnStaff.setSelected(false);
 	}
 
+// Funciton auto generated email
 	public void gmailStaff() {
 		emailStaff.setText(AutoString.convertString(AutoString.autoEmail(nameStaff.getText())));
 	}
 
-	// DELETE Staff
-
+//Function delete staff
 	public void deleteStaff() {
-		NhanVienModel col = tableStaff.getSelectionModel().getSelectedItem();
-		NhanVienModel model = new NhanVienModel(col.getMaNV(), col.getTenNV(), col.getDiaChi(), col.getSdt(),
-				col.getEmail(), col.getMatKhau(), col.isVaiTro(), col.isTrangThai());
+		try {
+			NhanVienModel col = tableStaff.getSelectionModel().getSelectedItem();
 
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Studio Thông Báo");
-		alert.setHeaderText("Thông báo");
-		alert.setContentText("Bạn có chắc chắc muốn xóa hông");
-		alert.showAndWait();
+			if (col.getMaNV().toLowerCase().equals(LoginController.user)) {
+				Notification.alert(AlertType.INFORMATION, "Bạn không thể xóa chính bản thân");
+				return;
+			}
 
-		if (alert.getResult() == ButtonType.OK) {
-			INhanVien.getInstance().del(model);
+			NhanVienModel model = new NhanVienModel(col.getMaNV(), col.getTenNV(), col.getDiaChi(), col.getSdt(),
+					col.getEmail(), col.getMatKhau(), col.isVaiTro(), col.isTrangThai());
 
-			loadDataStaff();
-			cleanStaff();
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Studio Thông Báo");
+			alert.setHeaderText("Thông báo");
+			alert.setContentText("Bạn có chắc chắc muốn xóa hông");
+			alert.showAndWait();
+
+			if (alert.getResult() == ButtonType.OK) {
+				INhanVien.getInstance().del(model);
+
+				loadDataStaff();
+				cleanStaff();
+			}
+
+		} catch (Exception e) {
+			Notification.alert(AlertType.WARNING, "Nhân Viên này hiện đang bán hàng");
 		}
 
 	}
 
+//Function click Items for Staff
 	public void clickItem(MouseEvent arg0) {
 		if (arg0.getClickCount() == 2) {
 			NhanVienModel col = tableStaff.getSelectionModel().getSelectedItem();
@@ -1123,7 +1134,23 @@ public class HomeController implements Initializable {
 		}
 	}
 
-	// Client Controll
+// Tìm kiếm nhân viên
+	public void findStaff() {
+
+		String manv = txtFindStaff.getText();
+		NhanVienModel model = new NhanVienModel(manv, "%" + manv + "%", null, null, null, null, false, false);
+
+		if (tableStaff.getItems().size() >= 1) {
+			tableStaff.getItems().clear();
+		}
+
+		NhanVienModel model1 = INhanVien.getInstance().selectByID(model);
+		staff.add(model1);
+		tableStaff.setItems(staff);
+
+	}
+
+// Code for Client Controller -----------------------------------------------------------------------------------------------------------------------------
 
 	// set column table Client ('Khách Hàng')
 
@@ -1151,15 +1178,21 @@ public class HomeController implements Initializable {
 	}
 
 	public void saveClient() {
-		int select = tableClient.getSelectionModel().getSelectedIndex();
 
-		if (select < 0) {
-			insertClient();
-			cleanClient();
-		} else if (select > 0) {
-			updateClient();
-			cleanClient();
+		ArrayList<KhachHangModel> list = IKhachHang.getInstance().selectAll();
+		for (KhachHangModel khachHangModel : list) {
+			if (khachHangModel.getMaKH().equals(IDClient.getText())) {
+				updateClient();
+				loadDataClient();
+
+				cleanClient();
+				return;
+			}
 		}
+
+		insertClient();
+		loadDataClient();
+		cleanClient();
 	}
 
 	public void insertClient() {
@@ -1174,10 +1207,20 @@ public class HomeController implements Initializable {
 			Notification.alert(AlertType.WARNING, "Nhập đầy đủ thông tin");
 			return;
 		}
+
+		// check number phone
 		try {
 			PhoneRegex.checkPhone(phone);
 		} catch (PhoneRegex e) {
 			e.printStackTrace();
+		}
+
+		// check format email
+
+		EmailRegex emailRegex = new EmailRegex();
+		if (!emailRegex.validate(email)) {
+			Notification.alert(AlertType.CONFIRMATION, "Email không đúng định dạng");
+			return;
 		}
 
 		KhachHangModel kh = new KhachHangModel(id, name, address, phone, gender, email, true);
@@ -1255,6 +1298,8 @@ public class HomeController implements Initializable {
 			addressClient.setText(col.getDiachi());
 			emailClient.setText(col.getEmail());
 			phoneClient.setText(col.getSdt());
+			rbtnMan.setSelected(col.getGioiTinh() == "Nam" ? true : false);
+			rbtnManage.setSelected(col.getGioiTinh() == "Nữ" ? true : false);
 		}
 	}
 
@@ -1263,67 +1308,96 @@ public class HomeController implements Initializable {
 		IDClient.setText(AutoString.autoID("KH", "makh", "KhachHang"));
 	}
 
-	// Product Controll
+// Tìm Kiến khách hàng
+
+	public void findClient() {
+		String makh = txtFindClient.getText();
+
+		KhachHangModel model = new KhachHangModel(null, null, null, "%" + makh + "%", null, null, false);
+
+		if (tableClient.getItems().size() >= 1) {
+			tableClient.getItems().clear();
+		}
+
+		KhachHangModel kh = IKhachHang.getInstance().selectByID(model);
+		client.add(kh);
+		tableClient.setItems(client);
+	}
+
+// Product Controller ----------------------------------------------------------------------------------------------------------------------------------------
 
 	public void insertPro() {
 		String id = IDProduct.getText();
 		String name = nameProduct.getText();
-		Float price = Float.parseFloat(priceProduct.getText());
-		String tenth = trademark.getValue();
 
 		if (id.equals("") || name.equals("")) {
 			Notification.alert(AlertType.WARNING, "Vui lòng nhập đầy đủ thông tin");
 			return;
 		}
 
+		Float price = Float.parseFloat(priceProduct.getText());
+		String tenth = trademark.getValue();
+
 		if (price < 0) {
-			priceProduct.setText("0");
+			Notification.alert(AlertType.WARNING, "Giá không được là số âm");
 			return;
 		}
 
 		SanPhamModel model = new SanPhamModel(id, name, price, tenth);
 		ISanPham.getInstance().insert(model);
 
+		Message msg = new Message();
+		msg.start(stage);
+
 	}
 
+// update product
 	public void updatePro() {
-		String id = IDProduct.getText();
+
+		SanPhamModel click = tableProduct.getSelectionModel().getSelectedItem();
+
 		String name = nameProduct.getText();
 		Float price = Float.parseFloat(priceProduct.getText());
 		String th = trademark.getValue();
 
-		if (id.equals("") || name.equals("")) {
+		if (name.equals("")) {
 			Notification.alert(AlertType.WARNING, "Vui lòng nhập đầy đủ thông tin");
 			return;
 		}
 
-		SanPhamModel model = new SanPhamModel(id, name, price, th);
+		if (price < 0) {
+			Notification.alert(AlertType.WARNING, "Giá Tiền không được âm");
+			return;
+		}
+
+		SanPhamModel model = new SanPhamModel(click.getMaSP(), name, giadv, th);
 		ISanPham.getInstance().update(model);
+
+		Message msg = new Message();
+		msg.start(stage);
 
 	}
 
 	public void savePro() {
-		int select = tableProduct.getSelectionModel().getSelectedIndex();
 
-		if (select < 0) {
-			insertPro();
+		SanPhamModel click = tableProduct.getSelectionModel().getSelectedItem();
 
-			Message msg = new Message();
-			msg.start(stage);
+		ArrayList<SanPhamModel> list = ISanPham.getInstance().selectAll();
 
-			loadDataProduct();
+		for (SanPhamModel sanPhamModel : list) {
+			if (sanPhamModel.getMaSP().equals(click.getTenSp())) {
+				updatePro();
+				loadDataProduct();
 
-			cleanPro();
-		} else if (select > 0) {
-			updatePro();
-
-			Message msg = new Message();
-			msg.start(stage);
-
-			loadDataProduct();
-
-			cleanPro();
+				cleanPro();
+				return;
+			}
 		}
+
+		insertPro();
+		loadDataProduct();
+
+		cleanPro();
 	}
 
 	public void cleanPro() {
@@ -1332,7 +1406,7 @@ public class HomeController implements Initializable {
 		priceProduct.setText("");
 	}
 
-	// Delete Product
+// Delete Product
 
 	public void deleteProduct() {
 		SanPhamModel col = tableProduct.getSelectionModel().getSelectedItem();
@@ -1367,7 +1441,7 @@ public class HomeController implements Initializable {
 
 	}
 
-	// set column table Product ('Sản Phẩm')
+// set column table Product ('Sản Phẩm')
 
 	public void setProductTable() {
 		product = FXCollections.observableArrayList();
@@ -1377,7 +1451,7 @@ public class HomeController implements Initializable {
 		markProCol.setCellValueFactory(new PropertyValueFactory<SanPhamModel, String>("tenTH"));
 	}
 
-	// load data from database enter table in screen
+// load data from database enter table in screen
 
 	public void loadDataProduct() {
 		if (tableProduct.getItems().size() >= 1) {
@@ -1391,7 +1465,41 @@ public class HomeController implements Initializable {
 		tableProduct.setItems(product);
 	}
 
-	// Service Controll
+// Tìm kiếm sản phẩm
+	public void findProduct() {
+
+		String masp = txtFindProduct.getText();
+
+		SanPhamModel model = new SanPhamModel("%" + masp + "%", "%" + masp + "%", 0, null);
+		SanPhamModel sp = ISanPham.getInstance().selectByID(model);
+
+		if (tableProduct.getItems().size() >= 1) {
+			tableProduct.getItems().clear();
+		}
+		product.add(sp);
+
+		tableProduct.setItems(product);
+	}
+
+// find product
+	public void findProOfBill() {
+
+		if (tableProBill.getItems().size() >= 1) {
+			tableProBill.getItems().clear();
+		}
+
+		String masp = txtFindStaffOfBill.getText();
+		String tensp = txtFindStaffOfBill.getText();
+
+		ArrayList<SanPhamModel> list = ISanPham.getInstance().selectAllByID(masp, "%" + tensp + "%");
+
+		for (SanPhamModel sanPhamModel : list) {
+			proBill.add(sanPhamModel);
+		}
+		tableProBill.setItems(proBill);
+	}
+
+// Service Controller -----------------------------------------------------------------------------------------------------------------------------------------
 
 	public void setServiceTable() {
 		service = FXCollections.observableArrayList();
@@ -1433,6 +1541,11 @@ public class HomeController implements Initializable {
 		Float priceService = Float.parseFloat(priceSer.getText());
 		String descript = descriptSer.getText();
 		String nameProd = nameProOfSer.getValue();
+
+		if (nameService.equals("")) {
+			Notification.alert(AlertType.CONFIRMATION, "Vui lòng nhập đầy đủ thông tin!");
+			return;
+		}
 
 		DichVuModel model = new DichVuModel(id, nameService, priceService, descript, nameProd);
 		IDichVu.getInstance().insert(model);
@@ -1519,7 +1632,7 @@ public class HomeController implements Initializable {
 
 	}
 
-	// Bill Controll
+// Bill Controller ------------------------------------------------------------------------------------------------------------------------------------
 
 	// set column table Bill ('Hóa Đơn')
 
@@ -1591,7 +1704,7 @@ public class HomeController implements Initializable {
 
 		dateBill.setValue(ld);
 		dateTo.setValue(ld);
-		
+
 		dateBillSer.setValue(ld);
 		ngayTraCT.setValue(ld);
 		nameStaffOfBillSer.setText(LoginController.nameStaff);
@@ -1668,6 +1781,9 @@ public class HomeController implements Initializable {
 			// Cập nhật lại số lượng nếu sản phẩm đó được thêm vào rồi
 			HDCTModel hdctModel = new HDCTModel(mahdct, 0, sum, mahd, masp);
 			IHDCT.getInstance().update(hdctModel);
+			sumMoney.setText(
+					Float.valueOf(IHDCT.getInstance().selectPaid(IHDCT.getInstance().selectMaxID())).toString());
+
 		} else {
 			// Thêm sản phẩm vào hóa đơn chi tiết
 			HDCTModel model = new HDCTModel(mahdct, money, quantity, mahd, tensp);
@@ -1765,6 +1881,7 @@ public class HomeController implements Initializable {
 		IHDCT.getInstance().update(model);
 
 		loadDataBillDeltais();
+		sumMoney.setText(Float.valueOf(IHDCT.getInstance().selectPaid(IDBill.getText())).toString());
 
 		Message msg = new Message();
 		msg.start(stage);
@@ -1779,7 +1896,7 @@ public class HomeController implements Initializable {
 		}
 
 		if (Float.valueOf(changeMoney.getText()) < 0) {
-			Notification.alert(AlertType.INFORMATION, "Thanh Toán thiếu tiền rồi ní ơi !!!");
+			Notification.alert(AlertType.INFORMATION, "Thanh Toán thiếu tiền !!!");
 			clientMoney.requestFocus();
 			return;
 		}
@@ -1872,65 +1989,20 @@ public class HomeController implements Initializable {
 		myLineChart.getData().add(series);
 	}
 
-	// Tìm kiếm nhân viên
-	public void findStaff() {
-
-		String manv = txtFindStaff.getText();
-		NhanVienModel model = new NhanVienModel(manv, null, null, null, null, null, false, false);
-
-		if (tableStaff.getItems().size() >= 1) {
-			tableStaff.getItems().clear();
-		}
-
-		NhanVienModel model1 = INhanVien.getInstance().selectByID(model);
-		staff.add(model1);
-		tableStaff.setItems(staff);
-
-	}
-
-	// Tìm Kiến khách hàng
-	public void findClient() {
-		String makh = txtFindClient.getText();
-
-		KhachHangModel model = new KhachHangModel(makh, null, null, null, null, null, false);
-
-		if (tableClient.getItems().size() >= 1) {
-			tableClient.getItems().clear();
-		}
-
-		KhachHangModel kh = IKhachHang.getInstance().selectByID(model);
-		client.add(kh);
-		tableClient.setItems(client);
-	}
-
-	// Tìm kiếm sản phẩm
-	public void findProduct() {
-
-		String masp = txtFindProduct.getText();
-
-		SanPhamModel model = new SanPhamModel(masp, null, 0, null);
-		SanPhamModel sp = ISanPham.getInstance().selectByID(model);
-
-		if (tableProduct.getItems().size() >= 1) {
-			tableProduct.getItems().clear();
-		}
-		product.add(sp);
-
-		tableProduct.setItems(product);
-	}
-
 	// Tìm kiếm dịch vụ
 	public void findService() {
 		String masp = txtFindSer.getText();
 
-		DichVuModel model = new DichVuModel(masp, null, null, null, null);
-		DichVuModel sp = IDichVu.getInstance().selectByID(model);
+		ArrayList<DichVuModel> sp = IDichVu.getInstance().selectAllByIDName(masp, masp);
 
 		if (tableSer.getItems().size() >= 1) {
 			tableSer.getItems().clear();
 		}
+		for (DichVuModel dichVuModel : sp) {
+			
+			service.add(dichVuModel);
+		}
 
-		service.add(sp);
 		tableSer.setItems(service);
 	}
 
@@ -2020,185 +2092,8 @@ public class HomeController implements Initializable {
 				Float.valueOf(IThongKe.getInstance().sumPaidFromTo(from.toString(), to.toString())).toString());
 	}
 
-	public void loadDataRevenueMonth() {
-		if (tableRevenue2.getItems().size() >= 1) {
-			tableRevenue2.getItems().clear();
-		}
-
-		String month = cbbMonth.getValue();
-		String thang = "";
-		switch (month) {
-		case "January":
-			thang = "01";
-			break;
-		case "February":
-			thang = "02";
-			break;
-		case "March":
-			thang = "03";
-			break;
-		case "April":
-			thang = "04";
-			break;
-		case "May":
-			thang = "05";
-			break;
-		case "June":
-			thang = "06";
-			break;
-		case "July":
-			thang = "07";
-			break;
-		case "August":
-			thang = "08";
-			break;
-		case "September":
-			thang = "09";
-			break;
-		case "October":
-			thang = "10";
-			break;
-		case "November":
-			thang = "11";
-			break;
-		default:
-			thang = "12";
-			break;
-		}
-
-		String year = cbbYear.getValue();
-
-		ArrayList<ThongKeModel> list = IThongKe.getInstance().selectMonth(thang, year);
-		if (list == null) {
-			Notification.alert(AlertType.INFORMATION, "Không có hóa đơn phù hợp");
-			return;
-		} else {
-			for (ThongKeModel thongKeModel : list) {
-				revenue2.add(thongKeModel);
-			}
-
-			tableRevenue2.setItems(revenue2);
-		}
-
-		txtMax.setText(Float.valueOf(IThongKe.getInstance().getMaxMonthBill(thang, year)).toString());
-		txtMin.setText(Float.valueOf(IThongKe.getInstance().getMinMonthBill(thang, year)).toString());
-		txtAvg.setText(Float.valueOf(IThongKe.getInstance().getAVGMonthBill(thang, year)).toString());
-	}
-
-	public void sumMonth() {
-		String month = cbbMonth.getValue();
-		String thang = "";
-		switch (month) {
-		case "January":
-			thang = "01";
-			break;
-		case "February":
-			thang = "02";
-			break;
-		case "March":
-			thang = "03";
-			break;
-		case "April":
-			thang = "04";
-			break;
-		case "May":
-			thang = "05";
-			break;
-		case "June":
-			thang = "06";
-			break;
-		case "July":
-			thang = "07";
-			break;
-		case "August":
-			thang = "08";
-			break;
-		case "September":
-			thang = "09";
-			break;
-		case "October":
-			thang = "10";
-			break;
-		case "November":
-			thang = "11";
-			break;
-		default:
-			thang = "12";
-			break;
-		}
-		String year = cbbYear.getValue();
-
-		lblTongTien.setText(Float.valueOf(IThongKe.getInstance().sumPaidMonth(thang, year)).toString());
-	}
-
-	public void loadDataRevenueYear() {
-		if (tableRevenue2.getItems().size() >= 1) {
-			tableRevenue2.getItems().clear();
-		}
-
-		String year = cbbYear2.getValue();
-
-		ArrayList<ThongKeModel> list = IThongKe.getInstance().selectYear(year);
-		if (list == null) {
-			Notification.alert(AlertType.INFORMATION, "Không có hóa đơn phù hợp");
-			return;
-		} else {
-			for (ThongKeModel thongKeModel : list) {
-				revenue2.add(thongKeModel);
-			}
-			tableRevenue2.setItems(revenue2);
-		}
-
-		txtMax.setText(Float.valueOf(IThongKe.getInstance().getMaxYearBill(year)).toString());
-		txtMin.setText(Float.valueOf(IThongKe.getInstance().getMinYearBill(year)).toString());
-		txtAvg.setText(Float.valueOf(IThongKe.getInstance().getAVGYearBill(year)).toString());
-	}
-
-	public void sumYear() {
-		String year = cbbYear2.getValue();
-		lblTongTien.setText(Float.valueOf(IThongKe.getInstance().sumPaidYear(year)).toString());
-	}
-
-	public void loadCbbDate() {
-		String[] month = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
-				"October", "November", "December" };
-
-		for (String string : month) {
-			cbbMonth.getItems().add(string);
-		}
-
-		String[] year = { "2020", "2021", "2022", "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030",
-				"2031", "2032", "2033", "2034", "2035", "2036" };
-
-		for (String string : year) {
-			cbbYear.getItems().add(string);
-			cbbYear2.getItems().add(string);
-		}
-	}
-
-	public void findProOfBill() {
-
-		if (tableProBill.getItems().size() >= 1) {
-			tableProBill.getItems().clear();
-		}
-
-		String masp = txtFindStaffOfBill.getText();
-		String tensp = txtFindStaffOfBill.getText();
-
-		ArrayList<SanPhamModel> list = ISanPham.getInstance().selectByName(masp, "%" + tensp + "%");
-
-		for (SanPhamModel sanPhamModel : list) {
-			proBill.add(sanPhamModel);
-		}
-		tableProBill.setItems(proBill);
-	}
-
 	public void printBill() {
 
-		ArrayList<HDCTModel> list = IHDCT.getInstance().selectAllByIDBill(lblIDBill.getText());
-		for (HDCTModel hdctModel : list) {
-
-		}
 		try (Document doc = new Document()) {
 			Page page = doc.getPages().add();
 
@@ -2215,8 +2110,8 @@ public class HomeController implements Initializable {
 					+ "<li style =\"list-style-type:none; text-align:left; font-size: 18px; font-weight: 300;\">Tên Khách Hàng: "
 					+ nameClientOfBill.getText() + " </li>"
 					+ "<li style =\"list-style-type:none; text-align:left; font-size: 18px; font-weight: 300;\">Số Điện Thoại: "
-					+ phoneClientOfBill.getText() + " </li>" + "<li></li>" + "<li></li>"
-					+ "<li style = \"text-align:center;\">"
+					+ phoneClientOfBill.getText() + " </li>" + "<li \"list-style-type:none;></li>" + "<li \"list-style-type:none;></li>"
+					+ "<li style =\"list-style-type:none; \"text-align:center;\">"
 					+ "-------------------------------------------------------------------------" + "</li>"
 					+ "<li></li>" + " <li style=\"list-style-type:none;\">\r\n"
 					+ "    <table style=\"text-align: center;\">\r\n" + "      <tr>\r\n"
@@ -2228,8 +2123,16 @@ public class HomeController implements Initializable {
 					+ "</ol>");
 
 			doc.getPages().get_Item(1).getParagraphs().add(frag);
-
-			doc.save("Bill2.pdf");
+			
+			
+			ArrayList<HDCTModel> list = IHDCT.getInstance().selectAllByIDBill(lblIDBill.getText());
+			for (HDCTModel hdctModel : list) {
+				HtmlFragment frag1 = new HtmlFragment("<p> " + hdctModel.getTenSP() + "		" + hdctModel.getDonGia() + "		" + hdctModel.getSoLuong() + "		" + hdctModel.getThanhTien() + " </p>");
+				doc.getPages().get_Item(1).getParagraphs().add(frag1);
+			}
+			doc.save("Bill.pdf");
+			
+			Notification.alert(null, "In Hóa Đơn Thành Công");
 		}
 
 	}
@@ -2264,8 +2167,7 @@ public class HomeController implements Initializable {
 		lblTK.setText(clientMoney.getText());
 		lblTL.setText(changeMoney.getText());
 	}
-	
-	
+
 	// HOA DON DICH VU
 	public void setCellTableBillSer() {
 		billSer = FXCollections.observableArrayList();
@@ -2274,32 +2176,70 @@ public class HomeController implements Initializable {
 		paidHDDVCol.setCellValueFactory(new PropertyValueFactory<HDDVModel, Float>("thanhToan"));
 		storyHDDVCol.setCellValueFactory(new PropertyValueFactory<HDDVModel, String>("trangThai"));
 	}
-	
+
 	public void loadDataBillSer() {
 		if (tableHDDV.getItems().size() >= 1) {
 			tableHDDV.getItems().clear();
 		}
-		
+
 		ArrayList<HDDVModel> list = IHoaDonDV.getInstance().selectAll();
 		for (HDDVModel hddvModel : list) {
 			billSer.add(hddvModel);
 		}
 		tableHDDV.setItems(billSer);
 	}
-	
+
 	public void insertBillSer() {
-		String mahddv = IDBillSer.getText();
-		
+		String mahddv = AutoString.autoID("HDDV", "maHDDV", "HOADONDV");
+
 		java.sql.Date ngayLap = java.sql.Date.valueOf(dateBillSer.getValue());
 		String tenkh = nameClientOfbillSer.getText();
 		String tennv = nameStaffOfBillSer.getText();
-		
+
 		HDDVModel model = new HDDVModel(mahddv, ngayLap, 0, tenkh, tennv, "Chưa Thanh Toán");
 		IHoaDonDV.getInstance().insert(model);
+
+		loadDataBillSer();
 	}
-	
-	
-	//load table dich vu trong hoa don dich vu
+
+	public void delBillSer() {
+		HDDVModel model = new HDDVModel(IDBillSer.getText(), null, 0, null, null, null);
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Thông Báo");
+		alert.setHeaderText("Vui lòng xác nhận");
+		alert.setContentText("Bạn có muốn xóa hông ?");
+		alert.showAndWait();
+		if (alert.getResult() == ButtonType.OK) {
+			IChiTietDV.getInstance().delBillSerByID(IDBillSer.getText());
+			loadTableBilSerDeltais();
+
+			IHoaDonDV.getInstance().del(model);
+			loadDataBillSer();
+		}
+	}
+
+	public void updateBillSer() { // Button thanh toán
+		String mahddv = IDBillSer.getText();
+		Float thanhtoan = Float.parseFloat(txtTongTien.getText());
+
+		HDDVModel model = new HDDVModel(mahddv, null, thanhtoan, null, null, "Đã Thanh Toán");
+		IHoaDonDV.getInstance().update(model);
+
+		Notification.alert(AlertType.INFORMATION, "Thanh Toán Thành Công");
+
+		loadDataBillSer();
+	}
+
+	public void clickBillSer() {
+		HDDVModel col = tableHDDV.getSelectionModel().getSelectedItem();
+		IDBillSer.setText(col.getMaHDDV());
+
+		txtTongTien.setText(Float.valueOf(IChiTietDV.getInstance().sumPriceSer(IDBillSer.getText())).toString());
+
+		loadTableBilSerDeltais();
+	}
+
+	// load table dich vu trong hoa don dich vu
 	public void setCellTableSerOfBillSer() {
 		serOfBillSer = FXCollections.observableArrayList();
 		IDSerOfBilSerCol.setCellValueFactory(new PropertyValueFactory<DichVuModel, String>("maDV"));
@@ -2307,23 +2247,24 @@ public class HomeController implements Initializable {
 		nameProOfBillSercol.setCellValueFactory(new PropertyValueFactory<DichVuModel, String>("tenSp"));
 		priceSerOfBillSerCol.setCellValueFactory(new PropertyValueFactory<DichVuModel, Float>("giaDV"));
 	}
-	
+
 	public void loadDataTableSerOfBillSer() {
-		if(tableSerOfBillSer.getItems().size() >= 1) {
+		if (tableSerOfBillSer.getItems().size() >= 1) {
 			tableSerOfBillSer.getItems().clear();
 		}
-		
+
 		ArrayList<DichVuModel> list = IDichVu.getInstance().selectAll();
 		for (DichVuModel dichVuModel : list) {
 			serOfBillSer.add(dichVuModel);
 		}
-		
+
 		tableSerOfBillSer.setItems(serOfBillSer);
 	}
-	
+
 	String madv = "";
 	String tendv = "";
 	float giadv = 0;
+
 	public void clickItemSerOfBill(MouseEvent event) {
 		if (event.getClickCount() == 1) {
 			DichVuModel col = tableSerOfBillSer.getSelectionModel().getSelectedItem();
@@ -2333,63 +2274,187 @@ public class HomeController implements Initializable {
 		}
 	}
 	// load table chi tiet dich vu
-	
+
 	public void setCellTableBillSerDeltais() {
 		billSerDeltais = FXCollections.observableArrayList();
-		IDSerOfDeltaisCol.setCellValueFactory(new PropertyValueFactory<ChiTietDVModel, String> ("maDV"));
-		namSerOfDeltaisCol.setCellValueFactory(new PropertyValueFactory<ChiTietDVModel, String> ("tenDV"));
-		priceSerOfDeltaisCol.setCellValueFactory(new PropertyValueFactory<ChiTietDVModel, Float> ("giaDV"));
-		ngayThue.setCellValueFactory(new PropertyValueFactory<ChiTietDVModel, Date> ("ngayThue"));
-		ngayTra.setCellValueFactory(new PropertyValueFactory<ChiTietDVModel, Date> ("ngayTraCT"));
-		paidBillSerOfDeltaisCol.setCellValueFactory(new PropertyValueFactory<ChiTietDVModel, Float> ("thanhTien"));
+		IDSerOfDeltaisCol.setCellValueFactory(new PropertyValueFactory<ChiTietDVModel, String>("maDV"));
+		namSerOfDeltaisCol.setCellValueFactory(new PropertyValueFactory<ChiTietDVModel, String>("tenDV"));
+		priceSerOfDeltaisCol.setCellValueFactory(new PropertyValueFactory<ChiTietDVModel, Float>("giaDV"));
+		ngayThue.setCellValueFactory(new PropertyValueFactory<ChiTietDVModel, Date>("ngayThue"));
+		ngayTra.setCellValueFactory(new PropertyValueFactory<ChiTietDVModel, Date>("ngayTraCT"));
+		paidBillSerOfDeltaisCol.setCellValueFactory(new PropertyValueFactory<ChiTietDVModel, Float>("thanhTien"));
 	}
-	
+
 	public void loadTableBilSerDeltais() {
 		if (tableSerDeltais.getItems().size() >= 1) {
 			tableSerDeltais.getItems().clear();
 		}
-		
+
 		ArrayList<ChiTietDVModel> list = IChiTietDV.getInstance().selectAllByID(IDBillSer.getText());
 		for (ChiTietDVModel model : list) {
 			billSerDeltais.add(model);
 		}
 		tableSerDeltais.setItems(billSerDeltais);
 	}
-	
+
 	public void inserBillSerDeltais() {
 		String macthddv = AutoString.autoID("CTHDDV", "MaCTHDDV", "CHITIETHOADONDV");
-		
-		if (dateBillSer.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString().equals("") 
-				|| ngayTraDK.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString().equals("")
-				|| ngayTraCT.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString().equals("")) {
+		try {
+
+			if (dateBillSer.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString().equals("")
+					|| ngayTraDK.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString().equals("")
+					|| ngayTraCT.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString().equals("")) {
+				return;
+			}
+
+			boolean exsit = false;
+			ArrayList<ChiTietDVModel> list = IChiTietDV.getInstance().selectAllByID(IDBillSer.getText());
+			for (ChiTietDVModel chiTietDVModel : list) {
+				if (chiTietDVModel.getTenDV().equals(tendv)) {
+					exsit = true;
+				}
+			}
+
+			java.sql.Date ngaythue = java.sql.Date.valueOf(dateBillSer.getValue());
+			java.sql.Date ngaydk = java.sql.Date.valueOf(ngayTraDK.getValue());
+			java.sql.Date ngayct = java.sql.Date.valueOf(ngayTraCT.getValue());
+
+			if (exsit) {
+				Notification.alert(AlertType.CONFIRMATION, "Dịch vụ này bạn đã thuê vui lòng cập nhật lại ngày");
+				return;
+			}
+
+			ChiTietDVModel model = new ChiTietDVModel(macthddv, giadv, ngaythue, ngaydk, ngayct, tendv,
+					IDBillSer.getText());
+			IChiTietDV.getInstance().insert(model);
+
+			loadTableBilSerDeltais();
+		} catch (Exception e) {
 			Notification.alert(AlertType.INFORMATION, "Vui lòng chọn ngày");
-			return;
 		}
-		
-		java.sql.Date ngayThue = java.sql.Date.valueOf(dateBillSer.getValue());
-		java.sql.Date ngaydk = java.sql.Date.valueOf(ngayTraDK.getValue());
-		java.sql.Date ngayct = java.sql.Date.valueOf(ngayTraCT.getValue());
-		
-		ChiTietDVModel model = new ChiTietDVModel(macthddv, giadv, ngayThue, ngaydk, ngayct, macthddv, IDBillSer.getText());
-		IChiTietDV.getInstance().insert(model);
-		
-		loadTableBilSerDeltais();
+
+		txtTongTien.setText(Float
+				.valueOf(IChiTietDV.getInstance().selectPaid(IDBillSer.getText(),
+						java.sql.Date.valueOf(ngayTraCT.getValue()), java.sql.Date.valueOf(dateBillSer.getValue())))
+				.toString());
+
 	}
-	
+
 	public void delBillSerDeltais() {
+		ChiTietDVModel col = tableSerDeltais.getSelectionModel().getSelectedItem();
+		ChiTietDVModel model = new ChiTietDVModel(null, 0, null, null, null, col.getTenDV(), null);
+
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Thông Báo");
 		alert.setHeaderText("Thông báo đến bạn");
 		alert.setContentText("Bạn có muốn xóa hông");
 		alert.showAndWait();
-		
+
 		if (alert.getResult() == ButtonType.OK) {
-			ChiTietDVModel model = new ChiTietDVModel(null, 0, null, null, null, tendv, null);
+
 			IChiTietDV.getInstance().del(model);
-			
+
 			Message msg = new Message();
 			msg.start(stage);
+
+			loadTableBilSerDeltais();
+
+			txtTongTien.setText(Float
+					.valueOf(IChiTietDV.getInstance().selectPaid(IDBillSer.getText(),
+							java.sql.Date.valueOf(ngayTraCT.getValue()), java.sql.Date.valueOf(dateBillSer.getValue())))
+					.toString());
+
 		}
+	}
+
+	public void updateDateBillSerDeltais() {
+
+		if (dateBillSer.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString().equals("")
+				|| ngayTraDK.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString().equals("")
+				|| ngayTraCT.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString().equals("")) {
+			return;
+		}
+
+		java.sql.Date ngaydk = java.sql.Date.valueOf(ngayTraDK.getValue());
+		java.sql.Date ngayct = java.sql.Date.valueOf(ngayTraCT.getValue());
+
+		ChiTietDVModel col = tableSerDeltais.getSelectionModel().getSelectedItem();
+		ChiTietDVModel model = new ChiTietDVModel(null, 0, null, ngaydk, ngayct, col.getTenDV(), col.getMaDV());
+
+		IChiTietDV.getInstance().update(model);
+
+		loadTableBilSerDeltais();
+
+		txtTongTien.setText(Float
+				.valueOf(IChiTietDV.getInstance().selectPaid(IDBillSer.getText(),
+						java.sql.Date.valueOf(ngayTraCT.getValue()), java.sql.Date.valueOf(dateBillSer.getValue())))
+				.toString());
+
+		Message msg = new Message();
+		msg.start(stage);
+	}
+
+	public void findSerOfBillSer() {
+		if (tableSerOfBillSer.getItems().size() >= 1) {
+			tableSerOfBillSer.getItems().clear();
+		}
+		String madv = findSerOfBillSer.getText();
+
+		ArrayList<DichVuModel> list = IDichVu.getInstance().selectAllByIDName(madv, "%" + madv + "%");
+		for (DichVuModel dichVuModel : list) {
+			serOfBillSer.add(dichVuModel);
+		}
+
+		tableSerOfBillSer.setItems(serOfBillSer);
+	}
+
+	public static void excel(TableView<ThongKeModel> tableRevenue22, File file) {
+		try {
+			XSSFWorkbook workbook = new XSSFWorkbook();
+			XSSFSheet sheet = workbook.createSheet("sheet1");
+			XSSFRow row = null;
+			Cell cell = null;
+			row = sheet.createRow(2);
+			cell = row.createCell(0, CellType.STRING);
+			cell.setCellValue("DANH SÁCH THỐNG KÊ DOANH THU");
+
+			row = (XSSFRow) sheet.createRow(3);
+			cell = row.createCell(0, CellType.STRING);
+			cell.setCellValue("Mã sản phẩm");
+
+			cell = row.createCell(1, CellType.STRING);
+			cell.setCellValue("Mã hóa đơn");
+
+			cell = row.createCell(2, CellType.STRING);
+			cell.setCellValue("Số lượng");
+
+			cell = row.createCell(3, CellType.STRING);
+			cell.setCellValue("Giá bán");
+
+			for (int i = 0; i < tableRevenue22.getColumns().size(); i++) {
+                XSSFRow excelRow = (XSSFRow) sheet.createRow(i + 4);
+                for (int j = 0; j < tableRevenue22.getColumns().size(); j++) {
+                    Cell excelCell = excelRow.createCell(j, CellType.STRING);
+                    Object value = tableRevenue22.getColumns().get(j).getCellData(i);
+                    excelCell.setCellValue(value != null ? value.toString() : "");
+                }
+            }
+
+			FileOutputStream fos = new FileOutputStream(file);
+			workbook.write(fos);
+			fos.close();
+			Notification.alert(AlertType.INFORMATION, "Xuất thành công");
+
+		} catch (IOException e) {
+			Notification.alert(AlertType.INFORMATION, "Xuất thất bại");
+			e.printStackTrace();
+		}
+	}
+
+	public void print() {
+
+		File f = new File("E:\\thongKe.xlsx");
+		excel(tableRevenue2, f);
 	}
 
 }

@@ -22,7 +22,7 @@ public class IHoaDonDV implements DAOInterface<HDDVModel> {
 		int result = 0;
 		Connection conn = JDBCUtil.getConnection();
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO VALUES (?, ?, ?, (select makh where tenkh = ?), (select manv where tennv = ?), ?)");
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO HOADONDV VALUES (?, ?, ?, (select makh from khachhang where tenkh = ?), (select manv from nhanvien where tennv = ?), ?)");
 			ps.setString(1, reneric.getMaHDDV());
 			ps.setDate(2, reneric.getNgayLap());
 			ps.setFloat(3, reneric.getThanhToan());
@@ -62,9 +62,10 @@ public class IHoaDonDV implements DAOInterface<HDDVModel> {
 		int result = 0;
         Connection conn = JDBCUtil.getConnection();
         try {
-			PreparedStatement pst = conn.prepareStatement("update HOADONDV set thanhtoan = ? trangthai = ? where MaHDDV = ? and trangthai = 0");
+			PreparedStatement pst = conn.prepareStatement("update HOADONDV set thanhtoan = ?, trangthai = ? where MaHDDV = ? and trangthai = 0");
 			pst.setFloat(1, reneric.getThanhToan());
 			pst.setInt(2, reneric.getTrangThai() == "Đã Thanh Toán" ? 1 : 0);
+			pst.setString(3, reneric.getMaHDDV());
 			
 			result = pst.executeUpdate();
 			

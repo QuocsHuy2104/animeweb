@@ -189,9 +189,9 @@ public class IThongKe {
 		float result = 0;
 		Connection conn = JDBCUtil.getConnection();
 		try {
-			PreparedStatement pst = conn.prepareStatement("SELECT TOP 1 DonGia FROM HOADON A \r\n"
+			PreparedStatement pst = conn.prepareStatement("SELECT TOP 1 WITH TIES DonGia FROM HOADON A \r\n"
 					+ "INNER JOIN HDCT B ON A.MaHD = B.MaHD\r\n"
-					+ "WHERE TrangThai = 1 AND NgayLapHD >= ? AND NgayLapHD <= ?");
+					+ "WHERE TrangThai = 1 AND NgayLapHD >= ? AND NgayLapHD <= ? ORDER BY DonGia DESC ");
 			pst.setString(1, from);
 			pst.setString(2, to);
 			ResultSet rs = pst.executeQuery();

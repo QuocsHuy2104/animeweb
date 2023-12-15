@@ -72,10 +72,12 @@ public class ForgotPassController implements Initializable {
 	public PreparedStatement pst = null;
 
 	public static String mail;
-	
+
 	private Stage stage;
 
 	public void sendMail() {
+
+		int cnt = 0;
 
 		if (txtEmail.getText().equals("")) {
 			txtEmail.setPromptText("Nhập Email");
@@ -94,10 +96,36 @@ public class ForgotPassController implements Initializable {
 				} catch (MessagingException e) {
 					e.printStackTrace();
 				}
-			} else if (txtCodeAuth.getText().equals(email.messageMail)) {
+			}
+
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					for (int i = 60; i <= 0; i --) {
+						
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						if (i == 0) {
+							email.messageMail = null;
+						}
+					}
+				}
+			}).start();
+			
+			if (txtCodeAuth.getText().equals(email.messageMail)) {
 				pane1.setVisible(false);
 				pane2.setVisible(true);
+			} else if (email.messageMail == null) {
+				Notification.alert(AlertType.CONFIRMATION, "Mã xác đã hết hạn");
+				cnt++;
+				if (cnt == 2) {
+					sendMail();
+				}
 			}
+
 		} else {
 			Notification.alert(AlertType.ERROR, "Không thuộc email nhân viên");
 		}
@@ -105,6 +133,9 @@ public class ForgotPassController implements Initializable {
 	}
 
 	public void cancel() {
+		Stage stage = (Stage) root.getScene().getWindow();
+		stage.close();
+		
 		Main main = new Main();
 		main.start(stage);
 	}
@@ -144,15 +175,15 @@ public class ForgotPassController implements Initializable {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-				
+
 				Notification.alert(AlertType.INFORMATION, "Đổi mật khẩu thành công");
-				
+
 				Stage stage = (Stage) root.getScene().getWindow();
 				stage.close();
-				
+
 				Main main = new Main();
 				main.start(stage);
-				
+
 			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
 			}
