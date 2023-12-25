@@ -101,8 +101,8 @@ public class ForgotPassController implements Initializable {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					for (int i = 60; i <= 0; i --) {
-						
+					for (int i = 60; i >= 0; i--) {
+
 						try {
 							Thread.sleep(1000);
 						} catch (InterruptedException e) {
@@ -114,16 +114,13 @@ public class ForgotPassController implements Initializable {
 					}
 				}
 			}).start();
-			
+
 			if (txtCodeAuth.getText().equals(email.messageMail)) {
 				pane1.setVisible(false);
 				pane2.setVisible(true);
 			} else if (email.messageMail == null) {
-				Notification.alert(AlertType.CONFIRMATION, "Mã xác đã hết hạn");
-				cnt++;
-				if (cnt == 2) {
-					sendMail();
-				}
+				Notification.alert(AlertType.CONFIRMATION, "Mã xác đã hết hạn " + cnt);
+				return;
 			}
 
 		} else {
@@ -135,7 +132,7 @@ public class ForgotPassController implements Initializable {
 	public void cancel() {
 		Stage stage = (Stage) root.getScene().getWindow();
 		stage.close();
-		
+
 		Main main = new Main();
 		main.start(stage);
 	}
@@ -152,41 +149,41 @@ public class ForgotPassController implements Initializable {
 
 		if (!txtConfirm.getText().equals(txtNewPass.getText())) {
 			Notification.alert(AlertType.INFORMATION, "Mật khẩu không trùng khớp");
+			return;
 		}
 
 		PasswordRegex regex = new PasswordRegex();
-		if (regex.validate(txtNewPass.getText()) == false) {
+		if (regex.validate(txtConfirm.getText()) == false) {
 			Notification.alert(AlertType.ERROR, "Mật khẩu không đúng định dạng");
-		} else {
+			return;
+		}
+		
+		try {
+			String passMD = MessageDigest.getMD5(txtConfirm.getText());
+			Connection conn = JDBCUtil.getConnectionDefault();
 			try {
-				String passMD = MessageDigest.getMD5(txtConfirm.getText());
-				Connection conn = JDBCUtil.getConnectionDefault();
-				try {
-					PreparedStatement pst = conn.prepareStatement("select manv from nhanvien where email like ?");
-					pst.setString(1, txtEmail.getText());
-					ResultSet rs = pst.executeQuery();
-					while (rs.next()) {
-						String manv = rs.getString("manv");
-						INhanVien.getInstance().updatePass(passMD, manv);
-					}
-					rs.close();
-					pst.close();
-					JDBCUtil.closeConnection(conn);
-				} catch (SQLException e) {
-					e.printStackTrace();
+				PreparedStatement pst = conn.prepareStatement("select manv from nhanvien where email like ?");
+				pst.setString(1, txtEmail.getText());
+				ResultSet rs = pst.executeQuery();
+				while (rs.next()) {
+					String manv = rs.getString("manv");
+					INhanVien.getInstance().forgotPassword(passMD, txtEmail.getText(), manv);
 				}
-
-				Notification.alert(AlertType.INFORMATION, "Đổi mật khẩu thành công");
-
-				Stage stage = (Stage) root.getScene().getWindow();
-				stage.close();
-
-				Main main = new Main();
-				main.start(stage);
-
-			} catch (NoSuchAlgorithmException e) {
+				rs.close();
+				pst.close();
+				JDBCUtil.closeConnection(conn);
+			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+
+			Stage stage = (Stage) root.getScene().getWindow();
+			stage.close();
+
+			Main main = new Main();
+			main.start(stage);
+
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
 		}
 
 	}

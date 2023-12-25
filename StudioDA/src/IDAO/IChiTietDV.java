@@ -98,7 +98,7 @@ public class IChiTietDV implements DAOInterface<ChiTietDVModel> {
 		Connection conn = JDBCUtil.getConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement(
-					"select DICHVU.madv, tendv, dichvu.giadv, ngaythue, ngaytract, dichvu.giadv * (day(ngaytract) - day(ngaythue)) as thanhtoan from CHITIETHOADONDV\r\n"
+					"select DICHVU.madv, tendv, dichvu.giadv, ngaythue, ngaytract, dichvu.giadv * (day(ngaytract) - day(ngaythue) + 1) as thanhtoan from CHITIETHOADONDV\r\n"
 							+ "inner join DICHVU on CHITIETHOADONDV.MaDV = DICHVU.MaDV");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -128,7 +128,7 @@ public class IChiTietDV implements DAOInterface<ChiTietDVModel> {
 		Connection conn = JDBCUtil.getConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement(
-					"select DICHVU.madv, tendv, dichvu.giadv, ngaythue, ngaytract, dichvu.giadv * (day(ngaytract) - day(ngaythue)) as thanhtoan from CHITIETHOADONDV\r\n"
+					"select DICHVU.madv, tendv, dichvu.giadv, ngaythue, ngaytract, dichvu.giadv * (day(ngaytract) - day(ngaythue) + 1) as thanhtoan from CHITIETHOADONDV\r\n"
 							+ "inner join DICHVU on CHITIETHOADONDV.MaDV = DICHVU.MaDV\r\n" + "where MaHDDV like ?");
 			ps.setString(1, mahddv);
 			ResultSet rs = ps.executeQuery();
@@ -200,7 +200,7 @@ public class IChiTietDV implements DAOInterface<ChiTietDVModel> {
 		Connection conn = JDBCUtil.getConnection();
 		try {
 			PreparedStatement ps = conn
-					.prepareStatement("select sum(giadv) as thanhtoan from CHITIETHOADONDV where MaHDDV like ?");
+					.prepareStatement("select sum(giadv * (day(ngaytract) - day(ngaythue) + 1)) as thanhtoan from CHITIETHOADONDV where MaHDDV like ?");
 			ps.setString(1, mahddv);
 
 			ResultSet rs = ps.executeQuery();

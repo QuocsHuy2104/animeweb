@@ -61,7 +61,7 @@ public class ChangePassController implements Initializable {
 
 		PasswordRegex passwordRegex = new PasswordRegex();
 		if (passwordRegex.validate(newPass) == false) {
-			Notification.alert(AlertType.CONFIRMATION, "Mật khẩu không đúng định dạng !");
+			Notification.alert(AlertType.ERROR, "Mật khẩu không đúng định dạng !");
 			return;
 		}
 
@@ -71,15 +71,14 @@ public class ChangePassController implements Initializable {
 		}
 
 		if (!authPass.equals(newPass)) {
-			Alert alert = new Alert(AlertType.CONFIRMATION);
-			alert.setTitle("Thông Báo");
-			alert.setHeaderText("Thông Báo");
-			alert.setContentText("Mật khẩu không trùng khớp");
+			Notification.alert(AlertType.ERROR, "Mật Khẩu không trùng khớp");
 			return;
 		}
 
 		try {
 			String auth = MessageDigest.getMD5(authPass);
+			String currentPassMD5 = MessageDigest.getMD5(currentPass);
+			INhanVien.getInstance().changePassword(auth, currentPassMD5, username);
 
 			stage = (Stage) parent.getScene().getWindow();
 			stage.close();

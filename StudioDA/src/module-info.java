@@ -11,6 +11,8 @@ module StudioDA {
 	requires org.apache.poi.poi;
 	requires org.apache.poi.ooxml;
 	requires org.hibernate.orm.core;
+	requires javafx.media;
+	requires de.jensd.fx.glyphs.fontawesome;
 	
 	opens application to javafx.graphics,javafx.fxml,javafx.controls;
 	opens model to javafx.base;

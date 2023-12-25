@@ -1,6 +1,6 @@
 #root,
 #paneSetting {
-	-fx-background-color: #E8E8E8;
+	-fx-background-color: #F6F8FA;
 }
 
 #tableBillDeltais,
@@ -62,6 +62,7 @@
 #delClientButton:hover,
 #saveSer:hover,
 #delSer:hover {
+	-fx-scale-y: 1.07;
 	-fx-effect: dropshadow(three-pass-box, #FF00FF, 10.0, 0.0, 1.0, 4.0);
 }
 
@@ -99,14 +100,15 @@
 #saveSer,
 #delSer {
 	-fx-pref-height: 35.0;
-	-fx-pref-width: 95.0;
-	-fx-background-color: none;
-	-fx-font-size: 16.0px;
+	-fx-pref-width: 145.0;
+	-fx-background-color: #3248F2;
+	-fx-font-size: 18.0px;
 	-fx-cursor: hand;
 	-fx-border-width: 1.0px;
-	-fx-border-color: #0066FF;
-	-fx-text-fill: #0066FF;
-	-fx-border-radius: 6.0px;
+	-fx-border-color: #3248F2;
+	-fx-text-fill: #ffffff;
+	-fx-border-radius: 8.0px;
+	-fx-background-radius: 8.0px;
 }
 
 #rbtnStaff,
@@ -271,7 +273,7 @@
 #btnPaidBill,
 #btnPrint {
 	-fx-pref-height: 35.0;
-    -fx-pref-width: 135.0;
+    -fx-pref-width: 145.0;
     -fx-background-color: #fff;
     -fx-background-radius: 7px;
     -fx-font-size: 16.0px;
@@ -327,9 +329,7 @@
 	-fx-cursor: hand;
 }
 
-#rbtnFrom:selected .radio .dot,
-#rbtnMonth:selected .radio .dot,
-#rbtnYear:selected .radio .dot {
+#rbtnFrom:selected .radio .dot {
     -fx-background-color: #FF00FF;
      -fx-background-insets: 0;
 }
@@ -405,5 +405,48 @@
 	-fx-cursor: hand;
 }
 
+.tableBill .table-cell{
+    -fx-border-color: transparent;
+    -fx-padding: 2 0 2 10px;
+}
+.table-row-cell:hover {
+    -fx-background-color: #93f9b911;
+    -fx-text-background-color: blue;
+}
+.table-row-cell:odd{
+    -fx-background-color: #93f9b911;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}
+.table-row-cell:even{
+    -fx-background-color: #1dbbdd11;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}
 
+.table-row-cell:focused{
+	 -fx-text-background-color: red;
+}
+
+.table-view .virtual-flow .scroll-bar:vertical,
+.table-view .virtual-flow .scroll-bar:vertical .track,
+.table-view .virtual-flow .scroll-bar:vertical .track-background,
+.table-view .virtual-flow .scroll-bar:horizontal,
+.table-view .virtual-flow .scroll-bar:horizontal .track,
+.table-view .virtual-flow .scroll-bar:horizontal .track-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .virtual-flow .scroll-bar .increment-button,
+.table-view .virtual-flow .scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-padding: 2;
+}
+
+.table-view .virtual-flow .scroll-bar:vertical .thumb{
+    -fx-background-color:  linear-gradient(to bottom, #1dbbdd44, #93f9b944);
+}
+.table-view .virtual-flow .scroll-bar:horizontal .thumb {
+    -fx-background-color:  linear-gradient(to right, #1dbbdd44, #93f9b944);
+}
 

@@ -29,7 +29,7 @@ public class IKhachHang implements DAOInterface<KhachHangModel> {
 			int gender = reneric.getGioiTinh().equals("Nữ") ? 1 : 0;
 			pst.setInt(5, gender);
 			pst.setString(6, reneric.getEmail());
-			pst.setBoolean(7, true);
+			pst.setBoolean(7, true); 
 			result = pst.executeUpdate();
 
 			pst.close();
@@ -164,7 +164,26 @@ public class IKhachHang implements DAOInterface<KhachHangModel> {
 		Connection conn = JDBCUtil.getConnection();
 		try {
 			PreparedStatement pst = conn.prepareStatement("select tenkh from khachhang where sdt like ?");
-			pst.setString(1, "%" + numberPhone + "%");
+			pst.setString(1,numberPhone);
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+                tenkh = rs.getString(1);
+            }
+			pst.close();
+			rs.close();
+			JDBCUtil.closeConnection(conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return tenkh;
+	}
+	
+	public String selectByName(String name) {
+		String tenkh = "";
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("select sdt from khachhang where tenkh like ?");
+			pst.setString(1, name);
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
                 tenkh = rs.getString(1);

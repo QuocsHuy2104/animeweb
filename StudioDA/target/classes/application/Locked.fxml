@@ -13,7 +13,7 @@
             <Font name="System Bold" size="22.0" />
          </font>
       </Label>
-      <Label fx:id="lbl1" alignment="CENTER" contentDisplay="CENTER" layoutY="92.0" prefHeight="29.0" prefWidth="538.0" text="Tài Khoản của Bạn đã bị khóa. Tài Khoản sẻ được mở lại sau 24h" textAlignment="CENTER" textFill="#828282">
+      <Label fx:id="lbl1" alignment="CENTER" contentDisplay="CENTER" layoutY="92.0" prefHeight="29.0" prefWidth="538.0" text="Tài Khoản của Bạn đã bị khóa. Liên hệ trưởng phòng để mở lại" textAlignment="CENTER" textFill="#828282">
          <font>
             <Font size="16.0" />
          </font>

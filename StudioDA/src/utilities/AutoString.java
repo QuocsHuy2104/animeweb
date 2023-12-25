@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.Normalizer;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 import connectJDBC.JDBCUtil;
@@ -56,8 +58,10 @@ public class AutoString {
 	}
 	
 	public static String formatMoney(float value) {
-		DecimalFormat df = new DecimalFormat("###,##0.000");
-		return df.format(Float.valueOf(value).toString());
+		NumberFormat df = new DecimalFormat("###,##0.0");
+		String str = df.format(value);
+		return str;
 	}
+	
 
 }

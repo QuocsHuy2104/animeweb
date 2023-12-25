@@ -30,8 +30,8 @@ public class INhanVien implements DAOInterface<NhanVienModel> {
 			pst.setString(4, reneric.getSdt());
 			pst.setString(5, reneric.getEmail());
 			pst.setString(6, reneric.getMatKhau());
-			pst.setBoolean(7, reneric.isVaiTro());
-			pst.setBoolean(8, reneric.isTrangThai());
+			pst.setInt(7, reneric.isVaiTro() == true ? 1 : 0);
+			pst.setInt(8, reneric.isTrangThai() == true ? 1 : 0);
 
 			result = pst.executeUpdate();
 			pst.close();
@@ -144,14 +144,15 @@ public class INhanVien implements DAOInterface<NhanVienModel> {
 		return result;
 	}
 
-	public int updatePass(String pass, String manv) {
+	public int forgotPassword(String pass, String email, String manv) {
 		int result = 0;
 
 		Connection conn = JDBCUtil.getConnectionDefault();
 		try {
-			PreparedStatement pst = conn.prepareStatement("Update nhanvien set pass = ? where manv like ?");
+			PreparedStatement pst = conn.prepareStatement("Update nhanvien set pass = ? where email = ? and manv = ?");
 			pst.setString(1, pass);
-			pst.setString(2, manv);
+			pst.setString(2, email);
+			pst.setString(3, manv);
 			result = pst.executeUpdate();
 			pst.close();
 			JDBCUtil.closeConnection(conn);
@@ -216,6 +217,50 @@ public class INhanVien implements DAOInterface<NhanVienModel> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+	}
+	
+	public void locked(String manv) {
+		Connection conn = JDBCUtil.getConnection();
+        try {
+            PreparedStatement pst = conn.prepareStatement("Update nhanvien set trangthai = 0 where manv = ?");
+            pst.setString(1, manv);
+            pst.executeUpdate();
+            pst.close();
+            JDBCUtil.closeConnection(conn);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+	}
+	
+	public ArrayList<NhanVienModel> listLocked() {
+		ArrayList<NhanVienModel> result = new ArrayList<NhanVienModel>();
+		Connection conn = JDBCUtil.getConnection();
+		try {
+			PreparedStatement pst = conn.prepareStatement("select TenNV, MaNV, vaitro from nhanvien where trangthai = 0");
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				String tennv = rs.getString(1);
+				String manv = rs.getString(2);
+				String vaitro = rs.getInt(3) == 0 ? "Nhan Vien" : "Truong Phong";
+				
+				result.add(new NhanVienModel(tennv, manv, vaitro));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public int openLock(String manv) throws SQLException {
+		int result = 0;
+		Connection conn = JDBCUtil.getConnection();
+		PreparedStatement ps = conn.prepareStatement("update nhanvien set trangthai = 1 where manv = ?");
+		ps.setString(1, manv);
+		result = ps.executeUpdate();
+		
+		ps.close();
+		JDBCUtil.closeConnection(conn);
+		return result;
 	}
 
 }

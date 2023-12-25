@@ -24,7 +24,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Label fx:id="lblTitle" alignment="CENTER" layoutX="747.0" layoutY="56.0" prefHeight="58.0" prefWidth="262.0" text="Quên mật khẩu" textAlignment="CENTER" textFill="WHITE">
+      <Label fx:id="lblTitle" alignment="CENTER" layoutX="747.0" layoutY="56.0" prefHeight="58.0" prefWidth="262.0" text="Đổi Mật Khẩu" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font size="24.0" />
          </font>

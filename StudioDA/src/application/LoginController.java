@@ -1,5 +1,8 @@
 package application;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
@@ -15,6 +18,7 @@ import java.util.Set;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
 
+import IDAO.INhanVien;
 import connectJDBC.JDBCUtil;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,11 +33,18 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import utilities.MessageDigest;
 
 public class LoginController implements Initializable {
+
+	@FXML
+	private MediaView mediaView;
 
 	@FXML
 	public TextField txtUser;
@@ -61,6 +72,10 @@ public class LoginController implements Initializable {
 
 	Set<String> posibles = new HashSet<String>();
 	private AutoCompletionBinding<String> autoCompletionBindings;
+
+	private File file;
+	private Media media;
+	private MediaPlayer mediaPlayer;
 
 	String[] users = {};
 
@@ -94,15 +109,36 @@ public class LoginController implements Initializable {
 		Connection conn = JDBCUtil.getConnection();
 
 		try {
-			PreparedStatement pst = conn.prepareStatement("select * from nhanvien where manv = ? and pass = ?");
+			PreparedStatement pst = conn.prepareStatement("select * from nhanvien where manv = ?");
 			pst.setString(1, txtUser.getText());
-			pst.setString(2, password);
 			ResultSet rs = pst.executeQuery();
 			if (rs.next()) {
+
+				if (!password.equals(rs.getString("pass"))) {
+					cnt++;
+
+					if (cnt < 5) {
+						MessageLocked ml = new MessageLocked();
+						ml.start(stage);
+						return;
+					}
+
+					INhanVien.getInstance().locked(user);
+					locked();
+					return;
+				}
+				
+				if (rs.getInt("trangthai") == 0) {
+					INhanVien.getInstance().locked(user);
+					locked();
+					return;
+				}
 
 				roles = rs.getInt("vaitro");
 				nameStaff = rs.getString("TenNV");
 				email = rs.getString("email");
+
+				mediaPlayer.pause();
 
 				stage = (Stage) root.getScene().getWindow();
 				stage.close();
@@ -119,31 +155,24 @@ public class LoginController implements Initializable {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+
 				return;
 
 			} else {
-				try {
-					cnt++;
-
-					MessageLocked ml = new MessageLocked();
-					ml.start(stage);
-					
-					if (cnt == 5) {
-						locked();
-					}
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				MessageLocked ml = new MessageLocked();
+				ml.start(stage);
 			}
 
 		} catch (SQLException ex) {
 			ex.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
 	}
 
 	public void openForgotPassword() {
+		mediaPlayer.pause();
 		stage = (Stage) root.getScene().getWindow();
 		stage.close();
 
@@ -167,6 +196,7 @@ public class LoginController implements Initializable {
 	}
 
 	public void exitForm() {
+		
 		stage = (Stage) root.getScene().getWindow();
 		stage.close();
 	}
@@ -195,11 +225,11 @@ public class LoginController implements Initializable {
 
 		autoCompletionBindings = TextFields.bindAutoCompletion(txtUser, posibles);
 	}
-	
+
 	public void check() {
 		if (myCheckBox.isSelected()) {
-           saveLogin();
-        }
+			saveLogin();
+		}
 	}
 
 	@Override
@@ -212,8 +242,17 @@ public class LoginController implements Initializable {
 			check();
 		});
 
+		file = new File("C:\\Users\\HP\\workspage-udpm\\StudioDA\\src\\image\\video2.mp4");
+		media = new Media(file.toURI().toString());
+		mediaPlayer = new MediaPlayer(media);
+		mediaView.setMediaPlayer(mediaPlayer);
+
+		try {
+			playMedia();
+		} catch (IOException e) {
+		}
 	}
-	
+
 	public void locked() {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("Locked.fxml"));
@@ -221,9 +260,33 @@ public class LoginController implements Initializable {
 			scene = new Scene(root);
 			stage.setScene(scene);
 			stage.show();
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+
+	public void playMedia() throws IOException {
+		mediaPlayer.setCycleCount(javafx.scene.media.MediaPlayer.INDEFINITE);
+		mediaPlayer.play();
+	}
+	
+	public void rememberPassword() {
+		BufferedReader reader;
+
+		try {
+			reader = new BufferedReader(new FileReader("RememberPassword.txt"));
+			String line = reader.readLine();
+
+			while (line != null) {
+				System.out.println(line);
+				line = reader.readLine();
+			}
+
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 }

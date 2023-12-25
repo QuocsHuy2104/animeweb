@@ -5,6 +5,8 @@ public class NhanVienModel {
 	private boolean vaiTro;
 	private boolean trangThai;
 	
+	private String chucVu;
+	
 	public NhanVienModel(String maNV, String tenNV, String diaChi, String sdt, String email, String matKhau,
 			boolean vaiTro, boolean trangThai) {
 		super();
@@ -16,6 +18,21 @@ public class NhanVienModel {
 		this.matKhau = matKhau;
 		this.vaiTro = vaiTro;
 		this.trangThai = trangThai;
+	}
+
+	public NhanVienModel(String maNV, String tenNV, String chucVu) {
+		super();
+		this.maNV = maNV;
+		this.tenNV = tenNV;
+		this.chucVu = chucVu;
+	}
+
+	public String getChucVu() {
+		return chucVu;
+	}
+
+	public void setChucVu(String chucVu) {
+		this.chucVu = chucVu;
 	}
 
 	public String getMaNV() {

@@ -10,6 +10,7 @@ import java.util.Date;
 import DAO.DAOInterface;
 import connectJDBC.JDBCUtil;
 import model.HoaDonModel;
+import utilities.AutoString;
 
 public class IHoaDon implements DAOInterface<HoaDonModel> {
 
