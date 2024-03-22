@@ -1,0 +1,131 @@
+body {
+    margin: 0;
+    box-sizing: border-box;
+    background-color: #111;
+    font-family: monospace;
+}
+
+.login-header {
+    font-size: 45px;
+    font-weight: bold;
+    font-family: monospace;
+    background: linear-gradient( #ff61ef, #740000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-top: 40px;
+}
+
+.login-body {
+    position: relative;
+}
+
+.login-img {
+    max-width: 800px;
+    position: absolute;
+    top: 70px;
+    left: 240px;
+}
+
+.login-form {
+    top: 74px;
+    position: absolute;
+    background-color: #333;
+    border-radius: 12px;
+    width: 500px;
+    height: 450px;
+    right: 220px;
+}
+
+.login-group {
+    position: relative;
+}
+
+.login-group > input {
+    background-color: transparent;
+    border: 1px solid #585858;
+    width: 80%;
+    height: 50px;
+    border-radius: 7px;
+    margin: 10px 50px;
+    padding: 7px 12px;
+    color: #fff;
+}
+
+.login-group > input[type="text"] {
+    margin-top: 50px;
+}
+
+.login-group > input:focus ~ span {
+    translate: 0 -25px;
+    background-color: #333;
+}
+
+.login-group > span {
+    position: absolute;
+    color: #d0d0d0;
+    left: 64px;
+    top: 23px;
+    font-size: 14px;
+    transition: .7s;
+}
+
+.login-submit {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.login-submit > button {
+    height: 45px;
+    width: 175px;
+    border: none;
+    border-radius: 7px;
+    background-image: linear-gradient(#f343db, rgb(239, 51, 51));
+    margin-bottom: 30px;
+    transition: .5s;
+}
+
+.login-submit > button:hover {
+    box-shadow: 7px 7px 10px #585858;
+    translate: -2px -5px;
+}
+
+.login-submit button > span {
+    font-size: 18px;
+    color: white;
+    font-weight: bold;
+}
+
+.login-line {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.login-line > p {
+    font-size: 30px;
+    color: #dedede;
+    text-align: center;
+}
+
+.login-line .line {
+    height: .1em;
+    background: linear-gradient(#f343db, #740000);
+    width: 35%;
+    display: block;
+    position: absolute;
+    top: 25px;
+    left: 30px;
+    border-radius: 12px;
+}
+
+.login-line .line::before {
+    content: '';
+    background: linear-gradient(#f343db, #740000);
+    width: 100%;
+    height: .1em;
+    display: block;
+    position: absolute;
+    left: 260px;
+    border-radius: 12px;
+}
+
