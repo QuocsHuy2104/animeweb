@@ -1,0 +1,36 @@
+body {
+    margin: 0;
+    box-sizing: border-box;
+    background-color: #000;
+    font-family: monospace;
+}
+
+
+#myVideo {
+    max-height: 650px;
+    border-radius: 12px;
+}
+
+.thumnail {
+    display: flex;
+    margin: 10px 0;
+}
+
+.thumnail:hover {
+    background-color: #333;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+.poster {
+    height: 95px;
+    width: 167px;
+    margin: 5px;
+    border-radius: 12px;
+}
+
+.title,
+.sub-title { 
+    color: #ffffff;
+    margin: 10px 20px 0 20px;
+}

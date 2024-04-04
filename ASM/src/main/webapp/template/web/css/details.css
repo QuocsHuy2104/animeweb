@@ -1,0 +1,64 @@
+body {
+    margin: 0;
+    box-sizing: border-box;
+    background-color: #000;
+    font-family: monospace;
+}
+
+
+.video-wrap {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 60px;
+}
+
+.video-title {
+    color: #fff;
+}
+
+.btn-like,
+.btn-unlike {
+    border: none;
+    height: 35px;
+    width: 75px;
+    background-color: #333;
+    color: #fff;
+    transition: .5s;
+}
+
+.btn-like {
+    border-radius: 40px 0 0 40px;
+}
+
+.btn-unlike {
+    border-radius: 0 40px 40px 0;
+}
+
+.btn-like:hover,
+.btn-unlike:hover {
+    box-shadow: 0px 0px 5px #ccc;
+}
+
+.thumnail {
+    display: flex;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.poster {
+    height: 96px;
+    width: 167px;
+    border-radius: 7px;
+}
+
+.thumnail-title {
+    color: azure;
+    margin-left: 20px;
+}
+
+.video-des {
+    width: 1050px;
+    height: 109px;
+    background-color: #333;
+    border-radius: 7px;
+}
