@@ -3,9 +3,9 @@
 	<persistence-unit name="ASM" transaction-type="RESOURCE_LOCAL">
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost;database=animeweb;integratedSecurity=false;encrypt=true;trustServerCertificate=true;"/>
 			<property name="javax.persistence.jdbc.user" value="sa"/>
 			<property name="javax.persistence.jdbc.password" value="0398948675"/>
-			<property name="javax.persistence.schema-generation.database.action" value="create"/>
 		</properties>
 	</persistence-unit>
 </persistence>

@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebFilter("/trang-chu")
+@WebFilter({"/trang-chu", "/common-change-page"})
 public class UserFilter extends HttpFilter {
 
 	private static final long serialVersionUID = 1L;

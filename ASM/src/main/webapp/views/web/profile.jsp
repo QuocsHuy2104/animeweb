@@ -10,7 +10,7 @@
 	<div id="root"></div>
     <script type="text/babel">
         var element =
-            <div className='profile-page container'>
+            <div className='profile-page container' style={{marginTop: "120px"}}>
                 <div className="row">
                     <div className="col-4">
                         <div className="wrap">

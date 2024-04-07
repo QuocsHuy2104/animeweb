@@ -1,0 +1,99 @@
+body {
+    margin: 0;
+    box-sizing: border-box;
+    background: #000;
+    font-family: monospace;
+}
+
+.change-page {}
+
+.change-header {
+    font-size: 45px;
+    font-weight: bold;
+    font-family: monospace;
+    background: linear-gradient( #ffffff, #ff1dbb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+}
+
+.change-body {
+    position: relative;
+}
+
+.change-img > img {
+    max-height: 800px;
+    position: absolute;
+    left: 33.5em;
+}
+
+.change-form {
+    position: absolute;
+    right: 33em;
+    top: 146px;
+}
+
+.change-group {
+    position: absolute;
+}
+
+.change-group:first-child {
+    top: 100px;
+}
+
+.change-group:nth-child(2) {
+    top: 100px;
+    right: 0;
+}
+
+.change-group:nth-child(3) {
+    top: 200px;
+    left: 0;
+}
+
+.change-group:nth-child(4) {
+    top: 200px;
+    right: 0;
+}
+
+.change-title {
+    color: #fff;
+    font-size: 17px;
+    position: absolute;
+    top: -23px;
+    left: 20px;
+}
+
+.change-input > input {
+    height: 40px;
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #fff;
+    border-top: 0px;
+    border-radius: 7px;
+    background-color: transparent;
+    outline: none;
+    color: #fff;
+}
+
+.change-submit > button {
+    position: absolute;
+    top: 318px;
+    left: 15.5em;
+    height: 45px;
+    width: 150px;
+    border: 1px solid #fff;
+    border-radius: 7px;
+    background-color: transparent;
+    transition: .7s;
+}
+
+.change-submit > button:hover {
+    box-shadow: 0px 0px 5px #fff,
+    0px 0px 15px #fff,
+    0px 0px 25px #fff;
+}
+
+.change-submit > button > span {
+    font-size: 20px;
+}

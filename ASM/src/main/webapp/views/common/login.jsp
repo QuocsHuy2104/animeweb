@@ -31,7 +31,7 @@
                     <img src="${pageContext.request.contextPath}/template/web/assets/icon/kokushibou.png" className='login-img' />
 
                     <div className='login-form'>
-                        <form action="/common-login-page" method="post">
+                        <form action="${pageContext.request.contextPath}/common-login-page" method="post">
                             <div className="login-group">
                                 <input type="text" className="" name='txtUsername'/>
                                 <span style={{ marginTop: "40px" }}> Username or email </span>

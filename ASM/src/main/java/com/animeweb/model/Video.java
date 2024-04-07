@@ -8,74 +8,68 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Video")
+@Table(name = "video")
 public class Video {
-
 	@Id
-	private String id;
-	private String title, poster, description;
-	private Integer views;
-	private Boolean active = true;
-	
+	String id;
+	String title;
+	String poster;
+	String link;
+	String description;
+	Boolean active;
+	int views;
 	@OneToMany(mappedBy = "video")
 	List<Favorite> favorites;
-
+	public Video() {
+	}
 	public String getId() {
 		return id;
 	}
-
 	public void setId(String id) {
 		this.id = id;
 	}
-
 	public String getTitle() {
 		return title;
 	}
-
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
 	public String getPoster() {
 		return poster;
 	}
-
 	public void setPoster(String poster) {
 		this.poster = poster;
 	}
-
+	public String getLink() {
+		return link;
+	}
+	public void setLink(String link) {
+		this.link = link;
+	}
 	public String getDescription() {
 		return description;
 	}
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public Integer getViews() {
-		return views;
-	}
-
-	public void setViews(Integer views) {
-		this.views = views;
-	}
-
 	public Boolean getActive() {
 		return active;
 	}
-
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-
+	public int getViews() {
+		return views;
+	}
+	public void setViews(int views) {
+		this.views = views;
+	}
 	public List<Favorite> getFavorites() {
 		return favorites;
 	}
-
 	public void setFavorites(List<Favorite> favorites) {
 		this.favorites = favorites;
 	}
-	
 	
 	
 }

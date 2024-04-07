@@ -23,25 +23,25 @@
                         </video>
                     </div>
 
-                    <form action="" method="post">
+                    <form action="${pageContext.request.contextPath}/common-regis-page" method="post">
                         <div className="regis-form">
                             <div className="regis-gruop">
-                                <input type="text" className='regis-input' />
+                                <input type="text" className='regis-input' name='txtUsername' />
                                 <span> Username </span>
                             </div>
 
                             <div className="regis-gruop">
-                                <input type="password" className='regis-input' />
+                                <input type="password" className='regis-input' name='txtPassword' />
                                 <span> Password </span>
                             </div>
 
                             <div className="regis-gruop">
-                                <input type="text" className='regis-input' />
+                                <input type="text" className='regis-input' name='txtFullname' />
                                 <span> Fullname </span>
                             </div>
 
                             <div className="regis-gruop">
-                                <input type="text" className='regis-input' />
+                                <input type="text" className='regis-input' name='txtEmail' />
                                 <span> Email </span>
                             </div>
 

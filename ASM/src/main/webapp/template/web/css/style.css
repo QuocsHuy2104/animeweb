@@ -363,5 +363,39 @@ footer > p {
     bottom: -33px;
 }
 
-    
+.content-video  {
 
+}
+
+.content-video .poster-img {
+    max-width: 235px;
+    border-radius: 12px;
+}
+
+.content-video .card {
+    align-items: center !important;
+    background-color: transparent;
+}
+
+.content-video a {
+    text-decoration: none;
+}
+
+.content-video .title {
+    color: #fff;
+    margin:12px 0;
+}
+
+.content-video  button {
+    width: 75px;
+    height: 35px;
+    border-radius: 7px;
+    background-color: transparent;
+    border: 1px solid #ff00d0;
+    color: #ff00d0;
+    transition: .7s;
+}
+
+.content-video  button:hover {
+    background-color: #db11ff;
+}

@@ -1,0 +1,107 @@
+body {
+    margin: 0;
+    box-sizing: border-box;
+    background-color: black;
+    font-family: monospace;
+}
+
+.regis-header {
+    font-size: 45px;
+    font-weight: bold;
+    font-family: monospace;
+    background: linear-gradient( #ff61ef, #740000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-top: 40px;
+    text-align: center;
+}
+
+.regis-body {
+    position: relative;
+}
+
+.regis-body .regis-mp4 > video {
+    max-height: 600px;
+    position: fixed;
+    right: 734px;
+}
+
+.regis-form {
+    position: absolute;
+    top: 110px;
+    right: 200px;
+    background-color: #333;
+    height: 430px;
+    width: 500px;
+    border-radius: 12px;
+}
+
+.regis-gruop {
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin-top: 10px;
+}
+
+.regis-gruop .regis-input {
+    width: 70%;
+    height: 39px;
+    border: none;
+    border-radius: 7px;
+    margin: 10px 20px;
+    padding: 10px 20px;
+    background-color: transparent;
+}
+
+.regis-gruop .regis-input:focus ~ span::before {
+    width: 0;
+    transition: .3s linear;
+}
+
+.regis-gruop .regis-input:focus ~ span {
+    translate: 0px -20px;
+    transition: .3s linear;
+    background-color: #333;
+}
+
+.regis-gruop > span {
+    color: #d0d0d0;
+    font-size: 18px;
+    position: absolute;
+    top: 15px;
+    left: 90px;
+}
+
+.regis-gruop > span::before {
+    content: '';
+    height: .1em;
+    width: 350px;
+    background-color: #fff;
+    bottom: -8px;
+    left: -15px;
+    position: absolute;
+    border-radius: 7px;
+}
+
+.regis-submit {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.regis-submit > button {
+    height: 45px;
+    width: 150px;
+    background-color: #fff;
+    border-radius: 7px;
+    border: none;
+    background-image: linear-gradient(#fff,  red);
+}
+
+.regis-submit span {
+    color: #d0d0d0;
+    font-size: 18px;
+}
+
+

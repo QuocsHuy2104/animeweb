@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ include file="/common/taglib.jsp" %>
 <!DOCTYPE html>
 <html>
@@ -9,7 +8,6 @@
 <title>Change password Kyuubi</title>
 </head>
 <body>
-
 	<div id="root"></div>
 	<script type="text/babel">
         var element =
@@ -23,22 +21,13 @@
                         <div className="change-header">
                             Change Password for Kyuubi
                         </div>
-                        <form action="#">
-                            <div className="change-group">
-                                <div className="change-title">
-                                    Username
-                                </div>
-                                <div className="change-input">
-                                    <input type="text" />
-                                </div>
-                            </div>
-
+                        <form action='${pageContext.request.contextPath}/common-change-page' method='post'>
                             <div className="change-group">
                                 <div className="change-title">
                                     Current Password
                                 </div>
                                 <div className="change-input">
-                                    <input type="password" required />
+                                    <input type="password" name='txtCurrentPass' required />
                                 </div>
                             </div>
 
@@ -47,7 +36,7 @@
                                     New Password
                                 </div>
                                 <div className="change-input">
-                                    <input type="text" required />
+                                    <input type="text" name='txtNewPass' required />
                                 </div>
                             </div>
 
@@ -56,7 +45,7 @@
                                     Confirm Password
                                 </div>
                                 <div className="change-input">
-                                    <input type="text" required />
+                                    <input type="text" name='txtConfirmPass' required />
                                 </div>
                             </div>
 

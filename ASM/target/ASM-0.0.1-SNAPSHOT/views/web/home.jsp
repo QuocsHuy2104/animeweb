@@ -13,7 +13,7 @@
 
 	let element3 = <main>
             <div className="banner">
-                <video autoPlay muted loop id="myVideo">
+                <video autoPlay muted loop>
                     <source src="${pageContext.request.contextPath}/template/web/assets/video/banner-video.mp4" type="video/mp4" />
                 </video>
                 <div className="banner-content">

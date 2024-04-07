@@ -13,13 +13,63 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
   <servlet>
-    <description></description>
-    <display-name>WebController</display-name>
-    <servlet-name>WebController</servlet-name>
-    <servlet-class>com.animeweb.controller.web.WebController</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>WebController</servlet-name>
-    <url-pattern>/home-page</url-pattern>
-  </servlet-mapping>
+		<servlet-name>WebController</servlet-name>
+		<servlet-class>com.animeweb.controller.web.WebController</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>WebController</servlet-name>
+		<url-pattern>/trang-chu</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>AdminController</servlet-name>
+		<servlet-class>com.animeweb.controller.admin.AdminController</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AdminController</servlet-name>
+		<url-pattern>/admin-home</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>LoginController</servlet-name>
+		<servlet-class>com.animeweb.controller.common.LoginController</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>LoginController</servlet-name>
+		<url-pattern>/common-login-page</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>RegisController</servlet-name>
+		<servlet-class>com.animeweb.controller.common.RegisController</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>RegisController</servlet-name>
+		<url-pattern>/common-regis-page</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ForgotController</servlet-name>
+		<servlet-class>com.animeweb.controller.common.ForgotController</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ForgotController</servlet-name>
+		<url-pattern>/common-forgot-page</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ChangePassController</servlet-name>
+		<servlet-class>com.animeweb.controller.common.ChangePassController</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ChangePassController</servlet-name>
+		<url-pattern>/common-change-page</url-pattern>
+	</servlet-mapping>
+	
 </web-app>

@@ -20,6 +20,10 @@
 	<servlet-mapping>
 		<servlet-name>WebController</servlet-name>
 		<url-pattern>/trang-chu</url-pattern>
+		<url-pattern>/detail</url-pattern>
+		<url-pattern>/detail/*</url-pattern>
+		<url-pattern>/profile</url-pattern>
+		<url-pattern>/common-change-page</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -40,6 +44,7 @@
 	<servlet-mapping>
 		<servlet-name>LoginController</servlet-name>
 		<url-pattern>/common-login-page</url-pattern>
+		<url-pattern>/common-logout-page</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -60,16 +65,6 @@
 	<servlet-mapping>
 		<servlet-name>ForgotController</servlet-name>
 		<url-pattern>/common-forgot-page</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
-		<servlet-name>ChangePassController</servlet-name>
-		<servlet-class>com.animeweb.controller.common.ChangePassController</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>ChangePassController</servlet-name>
-		<url-pattern>/common-change-page</url-pattern>
 	</servlet-mapping>
 	
 </web-app>

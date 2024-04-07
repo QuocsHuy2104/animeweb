@@ -28,25 +28,34 @@
                 </div>
 
                 <div className="header-list">
-			 		<a href="${pageContext.request.contextPath}/common-login-page">
-                        <button className='btn-login'>
-                            <span>Login</span>
-                        </button>
-                    </a>
+					<c:choose>
+						<c:when test="${!empty sessionScope.user}"></c:when>
+						<c:otherwise>
+			 				<a href="${pageContext.request.contextPath}/common-login-page">
+                        		<button className='btn-login'>
+                           			 <span>Login</span>
+                        		</button>
+                    		</a>
+
+						</c:otherwise>
+					</c:choose>
+
 
 					
                     <button className='btn-logout'>
-                  		<span>Logout</span>
+                  		<span>
+							<a href="/ASM/common-logout-page">Logout </a>
+						</span>
                     </button>
 
 
                     <div className="list d-inline-block" onClick={showMenu}>
                         <i className="bi bi-list"></i>
                         <ul className='list-items d-none' id='menu-item'>
-                            <li><a href="#"> Profile </a></li>
+                            <li><a href="/ASM/profile"> Profile </a></li>
                             <li><a href="#"> Help </a></li>
                             <li><a href="#"> Feedback </a></li>
-                            <li><a href="#"> Change Password </a></li>
+                            <li><a href="/ASM/common-change-page"> Change Password </a></li>
                             <li><a href="#"> Favtory </a></li>
                         </ul>
                     </div>

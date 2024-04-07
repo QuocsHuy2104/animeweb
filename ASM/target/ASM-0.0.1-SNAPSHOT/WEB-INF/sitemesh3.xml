@@ -3,4 +3,5 @@
   <mapping path="/*" decorator="web.jsp"/>
   <mapping path="/admin*" decorator="admin.jsp"/>
   <mapping path="/common*" decorator="common.jsp"/>
+  <mapping path="404-page.html" exclude="true"/>
 </sitemesh>

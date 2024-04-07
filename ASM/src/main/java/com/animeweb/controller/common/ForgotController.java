@@ -16,4 +16,8 @@ public class ForgotController extends HttpServlet {
 		req.getRequestDispatcher("/views/common/forgot.jsp").forward(req, resp);
 	}
 
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+	}
 }

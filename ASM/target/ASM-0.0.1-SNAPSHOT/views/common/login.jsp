@@ -31,14 +31,14 @@
                     <img src="${pageContext.request.contextPath}/template/web/assets/icon/kokushibou.png" className='login-img' />
 
                     <div className='login-form'>
-                        <form action="" method="post">
+                        <form action="${pageContext.request.contextPath}/common-login-page" method="post">
                             <div className="login-group">
-                                <input type="text" className="" />
+                                <input type="text" className="" name='txtUsername'/>
                                 <span style={{ marginTop: "40px" }}> Username or email </span>
                             </div>
 
                             <div className="login-group">
-                                <input type="password" className="" />
+                                <input type="password" className="" name='txtPassword' />
                                 <span > Password </span>
                             </div>
 

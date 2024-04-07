@@ -1,0 +1,169 @@
+body {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: monospace;
+    background-color: #f4f6f8;
+}
+
+.header-page {
+    height: 62px;
+    width: 100%;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+}
+
+.header-right,
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.btn-menu {
+    border: none;
+    background-color: transparent;
+}
+
+
+.btn-menu > i {
+    font-size: 30px;
+}
+
+.inp-search {
+    height: 40px;
+    width: 240px;
+    outline: none;
+    background-color: #fff;
+    color: #626262;
+    padding: 10px 20px;
+    font-family: monospace;
+    font-size: 17px;
+    border-radius: 7px;
+    border: 1px solid #626262;
+    margin: 0 20px;
+}
+
+.avarta {
+    height: 42px;
+    width: 42px;
+    border: 1px solid #626262;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+/* 
+    Menubar
+*/
+
+.menu-page {
+    background-color: #212b36;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 15%;
+    color: #fff;
+}
+
+.menu-page .logo .logo-name {
+    padding: 1rem 1.5rem 1.5rem;
+    color: #fff;
+}
+
+.menu-page .menu-items {
+    padding: .5rem 1.5rem;
+    display: flex;
+    align-items: center;
+    color: #919eab;
+    font-weight: 500;
+    line-height: 1.8;
+    white-space: nowrap;
+    transition: all .5s;
+    font-size: 23px;
+    text-decoration: none;
+}   
+
+.menu-page .menu-items > h6 {
+    margin: 5px 0 0 10px;
+}
+
+.menu-heading  {
+    color: #454f5b;
+    padding: 1rem 1.5rem;
+    font-size: .75rem;
+    text-transform: uppercase;
+    letter-spacing: .08rem;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.accordion-button {
+    background-color: #212b36;
+    color: #454f5b;
+}
+
+.accordion-item {
+    border: none;   
+    background-color: transparent;
+    color: #454f5b;
+}
+
+.accordion-button:hover {
+    color: #919eab;
+}
+
+.pt-10 {
+    padding-top: 4rem !important;
+}
+
+.pb-21 {
+    padding-bottom: 9.5rem !important;
+}
+
+.content-left {
+    padding-left: 15% !important;
+}
+
+.px-6 {
+    padding-right: 2rem !important;
+    padding-left: 2rem !important;
+}
+
+.mt-n22 {
+    margin-top: -10rem !important;
+}
+
+.row {
+    margin-right: 0;
+}
+
+.btn-white {
+    background-color: #fff;
+}
+
+.icon-shape {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.icon-md {
+    width: 2.5rem;
+    height: 2.5rem;
+    line-height: 2.5rem;
+}
+
+.bg-light-primary {
+    background-color: #e0dcfe !important;
+}
+
+.poster {
+    height: 300px;
+    width: 300px;
+    border: 1px solid #e0dcfe !important;
+    overflow: hidden;
+    justify-content: center;
+    display: flex;
+}
