@@ -27,7 +27,7 @@
                                     Current Password
                                 </div>
                                 <div className="change-input">
-                                    <input type="password" name='txtCurrentPass' required />
+                                    <input type="password" name='txtCurrentPass' id="crrPass" required />
                                 </div>
                             </div>
 
@@ -36,7 +36,7 @@
                                     New Password
                                 </div>
                                 <div className="change-input">
-                                    <input type="text" name='txtNewPass' required />
+                                    <input type="text" name='txtNewPass' id="newPass" required />
                                 </div>
                             </div>
 
@@ -45,12 +45,12 @@
                                     Confirm Password
                                 </div>
                                 <div className="change-input">
-                                    <input type="text" name='txtConfirmPass' required />
+                                    <input type="text" name='txtConfirmPass' id="confirm" required />
                                 </div>
                             </div>
 
                             <div className="change-submit">
-                                <button>
+                                <button onClick={requiredInput}>
                                     <span>
                                         Submit
                                     </span>
@@ -62,5 +62,15 @@
             </div>
         ReactDOM.createRoot(document.getElementById("root")).render(element)
     </script>
+
+	<script type="text/javascript">
+		var crPass = document.getElementById("crrPass")
+		var newPass = document.getElementById("newPass")
+		var confirm = document.getElementById("confirm")
+		let requiredInput = function () {
+			if (!newPass === confirm)
+				alert("Xác nhận mật khẩu không trùng khớp")
+		}
+	</script>
 </body>
 </html>

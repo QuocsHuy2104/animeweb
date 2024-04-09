@@ -22,6 +22,17 @@ public class Video {
 	List<Favorite> favorites;
 	public Video() {
 	}
+
+	public Video(int views, Boolean active, String description, String link, String poster, String title, String id) {
+		this.views = views;
+		this.active = active;
+		this.description = description;
+		this.link = link;
+		this.poster = poster;
+		this.title = title;
+		this.id = id;
+	}
+
 	public String getId() {
 		return id;
 	}

@@ -1,14 +1,17 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8" %>
-<%@include file="/common/taglib.jsp" %>
-<!DOCTYPE html>
+<%--
+  Created by IntelliJ IDEA.
+  User: HP
+  Date: 4/8/2024
+  Time: 8:14 PM
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/common/taglib.jsp"%>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Trang chu</title>
+    <title>Manage User</title>
 </head>
 <body>
-
 <main>
     <div class="bg-primary pt-10 pb-21"></div>
     <div class="px-6 mt-n22 container-fluid">
@@ -135,73 +138,38 @@
                                 </div>
 
                                 <div class="col-md-8 col-8">
-                                    <form action="/admin-home/index" method='post'>
+                                    <form action="/admin-manage/user-index" method='post'>
                                         <div class="mb-3">
-                                            <label for="txtId" class='form-label'>Youtobe ID:</label>
-                                            <input type="text" class='form-control' id='txtId' name='ytbId'
+                                            <label for="txtId" class='form-label'>Username:</label>
+                                            <input type="text" class='form-control' id='txtId' name='userID'
                                                    value="${form.id}"/>
                                         </div>
 
                                         <div class="mb-3">
-                                            <label for="txtTitle" class='form-label'>Youtobe Title:</label>
-                                            <input type="text" class='form-control' id='txtTitle'
-                                                   name='ytbTitle' value="${form.title}"/>
+                                            <label for="txtPassword" class='form-label'>Password:</label>
+                                            <input type="password" class='form-control' id='txtPassword'
+                                                   name='userPass' value="${form.passWord}"/>
                                         </div>
 
                                         <div class="mb-3">
-                                            <label for="txtLink" class='form-label'>Youtobe Link:</label>
-                                            <input type="text" class='form-control' id='txtLink'
-                                                   name='ytbLink' value="${form.link}"/>
+                                            <label for="txtFullname" class='form-label'>FullName:</label>
+                                            <input type="text" class='form-control' id='txtFullname'
+                                                   name='userFullname' value="${form.fullName}"/>
                                         </div>
 
                                         <div class="mb-3">
-                                            <label for="txtViews" class='form-label'>Views Count:</label>
-                                            <input type="number" class='form-control' id='txtViews'
-                                                   name='ytbViews' value="${form.views}"/>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class='form-label'></label>
-                                            <div class="form-check form-check-inline">
-                                                <input
-                                                        class="form-check-input"
-                                                        type="radio"
-                                                        value="true"
-                                                        name="active"
-                                                        ${form.active?'checked':''}
-                                                />
-                                                <label class="form-check-label">Active</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input
-                                                        class="form-check-input"
-                                                        type="radio"
-                                                        value="false"
-                                                        name="active"
-                                                        ${form.active?'':'checked'}
-                                                />
-                                                <label class="form-check-label">InActive</label>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-floating mb-3">
-                                                <textarea class="form-control" placeholder="Leave a comment here"
-                                                          id="floatingTextarea2" style="height: 100px" name="ytbDescription"></textarea>
-                                            <label for="floatingTextarea2">Description${form.description}</label>
+                                            <label for="txtEmail" class='form-label'>Email:</label>
+                                            <input type="email" class='form-control' id='txtEmail'
+                                                   name='userEmail' value="${form.email}"/>
                                         </div>
 
                                         <div>
-                                            <button class="btn btn-outline-primary" formaction='/ASM/admin-home/create'>
-                                                Create
+                                            <button class="btn btn-outline-primary"
+                                                    formaction='/ASM/admin-manage/user-update'>Update
                                             </button>
                                             <button class="btn btn-outline-primary ms-3"
-                                                    formaction='/ASM/admin-home/update'>Update
-                                            </button>
-                                            <button class="btn btn-outline-primary ms-3" formaction='/ASM/admin-home/del'>
+                                                    formaction='/ASM/admin-manage/user-del'>
                                                 Delete
-                                            </button>
-                                            <button class="btn btn-outline-primary ms-3" formaction='/ASM/admin-home/index'>
-                                                Reset
                                             </button>
                                         </div>
                                     </form>
@@ -213,22 +181,25 @@
                                     <table class="table">
                                         <thead>
                                         <tr>
-                                            <th scope="col">Youtobe ID</th>
-                                            <th scope="col">Youtobe Title</th>
-                                            <th scope="col">Views Count</th>
-                                            <th scope="col">Status</th>
+                                            <th scope="col">Username</th>
+                                            <th scope="col">Password</th>
+                                            <th scope="col">Fullname</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">Roles</th>
                                             <th scope="col"></th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach var="item" items="${videos}">
+                                        <c:forEach var="item" items="${users}">
                                             <tr>
                                                 <td>${item.id}</td>
-                                                <td>${item.title}</td>
-                                                <td>${item.views}</td>
-                                                <td>${item.description}</td>
-                                                <td>${item.active == true ? "Đang hoạt động" : "Ngừng hoạt động"}</td>
-                                                <td><a href="/ASM/admin-home/edit/${item.id}">Edit</a></td>
+                                                <td>${item.passWord}</td>
+                                                <td>${item.fullName}</td>
+                                                <td>${item.email}</td>
+                                                <td>${item.admin == true ? "Admin" : "User"}</td>
+                                                <td>
+                                                    <a href="/ASM/admin-manage/user-edit/${item.id}">Edit</a>
+                                                </td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>
@@ -242,6 +213,5 @@
         </div>
     </div>
 </main>
-
 </body>
 </html>

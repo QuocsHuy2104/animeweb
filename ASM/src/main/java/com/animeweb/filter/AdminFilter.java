@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 
-@WebFilter("/admin-home")
+@WebFilter({"/admin-home/*", "/admin-manage/*", "/admin-favorites", "/admin-fav-user", "/admin-share-friend"})
 public class AdminFilter extends HttpFilter {
 	private static final long serialVersionUID = 1L;
 

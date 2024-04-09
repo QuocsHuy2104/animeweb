@@ -20,7 +20,7 @@
 					<div class="video-wrap">
 						<div class="video-title"></div>
 						<div>
-							<button class="btn-like">Like</button>
+							<button class="btn-like"  >Like</button>
 							<button class="btn-unlike">Unlike</button>
 						</div>
 					</div>

@@ -35,6 +35,8 @@
 		<%@ include file="/common/admin/header.jsp" %>
 		<sitemesh:write property="body" />
 	</div>
+	
+	<%@ include file="/common/admin/footer.jsp"%>
 
 	<script
 		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"

@@ -56,7 +56,7 @@
                             <li><a href="#"> Help </a></li>
                             <li><a href="#"> Feedback </a></li>
                             <li><a href="/ASM/common-change-page"> Change Password </a></li>
-                            <li><a href="#"> Favtory </a></li>
+                            <li><a href="/ASM/fav"> Favtory </a></li>
                         </ul>
                     </div>
                 </div>

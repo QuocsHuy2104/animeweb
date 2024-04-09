@@ -26,34 +26,6 @@ public class LoginController extends HttpServlet {
 		RequestDispatcher rd = request.getRequestDispatcher("/views/common/login.jsp");
 		rd.forward(request, response);
 	}
-
-//	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-//			throws ServletException, IOException {
-//		
-//		String username = request.getParameter("txtUsername");
-//		String password = request.getParameter("txtPassword");
-//
-//		try (EntityManager em = JDBCConnect.getManager()) {
-//			String jpql = "Select o From User o where o.id = :username and o.passWord = :password";
-//			TypedQuery<User> query = em.createQuery(jpql, User.class);
-//			query.setParameter("username", username);
-//			query.setParameter("password", password);
-//
-//			try {
-//				User foundUser = query.getSingleResult();
-//				request.getSession().setAttribute("user", foundUser);
-//
-//				if (foundUser.getAdmin())
-//					response.sendRedirect(request.getContextPath() + "/admin-home");
-//				else
-//					response.sendRedirect(request.getContextPath() + "/trang-chu");
-//
-//			} catch (NoResultException e) {
-//				request.getRequestDispatcher("/views/common/login.jsp").forward(request, response);
-//			}
-//
-//		}
-//	}
 	
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -75,7 +47,7 @@ public class LoginController extends HttpServlet {
 					request.getSession().setAttribute("user", foundUser);
 
 					if (foundUser.getAdmin())
-						response.sendRedirect(request.getContextPath() + "/admin-home");
+						response.sendRedirect(request.getContextPath() + "/admin-home/index");
 					else
 						response.sendRedirect(request.getContextPath() + "/trang-chu");
 

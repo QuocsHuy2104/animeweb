@@ -102,9 +102,9 @@ body {
     color: #454f5b;
 }
 
-.accordion-item {
+.accordion-item-cover {
     border: none;   
-    background-color: transparent;
+    background-color: transparent !important;
     color: #454f5b;
 }
 

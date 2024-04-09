@@ -26,26 +26,26 @@
                     </div>
                     <div className="col-8">
                         <div className="profile-form">
-                            <form action="">
+                            <form action="/ASM/profile" method="post">
                                 <div className="profile-group">
                                     <div className="profile-title">
                                         Username
                                     </div>
-                                    <input type="text" className="profile-input" required />
+                                    <input type="text" className="profile-input" name="username" value="${username}" required />
                                 </div>
 
                                 <div className="profile-group">
                                     <div className="profile-title">
                                         FullName
                                     </div>
-                                    <input type="text" className="profile-input" required />
+                                    <input type="text" className="profile-input" name="fullname" value="${fullname}" required />
                                 </div>
 
                                 <div className="profile-group">
                                     <div className="profile-title">
                                         Email
                                     </div>
-                                    <input type="email" className="profile-input" required />
+                                    <input type="email" className="profile-input" name="email" value="${email}" required />
                                 </div>
 
                                 <div className="profile-submit">
